@@ -39,6 +39,8 @@ void Escena::inicializar( int UI_window_width, int UI_window_height )
 
 	glEnable( GL_DEPTH_TEST );	// se habilita el z-bufer
 
+  glEnable(GL_CULL_FACE); // Se habilita el Cull Face
+
 	Width  = UI_window_width/10;
 	Height = UI_window_height/10;
 
@@ -57,38 +59,113 @@ void Escena::inicializar( int UI_window_width, int UI_window_height )
 
 void Escena::dibujar()
 {
-	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); // Limpiar la pantalla
+  using namespace std ;
+
+  glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); // Limpiar la pantalla
 	change_observer();
 
+  //cout << "Función dibujar()" << endl;
+  ejes.draw();
+  // COMPLETAR
+  // Dibujar los diferentes elementos de la escena
+  // Habrá que tener en esta primera práctica una variable que indique qué objeto se ha de visualizar
+  // y hacer
+  // cubo.draw()
+  // o
+  // tetraedro.draw()
 
-    //cout << "Función dibujar()" << endl;
-    ejes.draw();
-    // COMPLETAR
-    // Dibujar los diferentes elementos de la escena
-    // Habrá que tener en esta primera práctica una variable que indique qué objeto se ha de visualizar
-    // y hacer
-    // cubo.draw()
-    // o
-    // tetraedro.draw()
+  // Ajustes
+  glShadeModel(GL_FLAT);
+  glPointSize(10);
+  glLineWidth(1.5);
 
-    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINES);
-    glShadeModel(GL_FLAT);
-    glPointSize(10);
-    glLineWidth(1.5);
+  if (visPuntos) {
+    glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
 
-    using namespace std ;
-    cout << "OBJETO A DIBUJAR: '" << objetoVisualizado << "'" << endl;
     switch (objetoVisualizado)
     {
       case 0 :
-        cout << "CUBO" << endl;
-        cubo->draw(0);
+        cubo->draw(modoDibujado);
         break;
       case 1 :
-        cout << "TETRAEDRO" << endl;
-        tetraedro->draw(0);
+        tetraedro->draw(modoDibujado);
+        break;
+      default :
+        cout << "Error, número incorrecto." << endl;
         break;
     }
+  }
+
+  if (visLineas) {
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+    switch (objetoVisualizado)
+    {
+      case 0 :
+        cubo->draw(modoDibujado);
+        break;
+      case 1 :
+        tetraedro->draw(modoDibujado);
+        break;
+      default :
+        cout << "Error, número incorrecto." << endl;
+        break;
+    }
+  }
+
+  if (visSolido) {
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+    switch (objetoVisualizado)
+    {
+      case 0 :
+        cubo->draw(modoDibujado);
+        break;
+      case 1 :
+        tetraedro->draw(modoDibujado);
+        break;
+      default :
+        cout << "Error, número incorrecto." << endl;
+        break;
+    }
+  }
+
+  if (visAjedrez) {
+    glPolygonMode(GL_FRONT_AND_BACK, modoVisualizacion);
+
+    switch (objetoVisualizado)
+    {
+      case 0 :
+        cubo->draw(modoDibujado);
+        break;
+      case 1 :
+        tetraedro->draw(modoDibujado);
+        break;
+      default :
+        cout << "Error, número incorrecto." << endl;
+        break;
+    }
+  }
+
+  /*
+  glPolygonMode(GL_FRONT_AND_BACK, modoVisualizacion);
+  glShadeModel(GL_FLAT);
+  glPointSize(10);
+  glLineWidth(1.5);
+
+  switch (objetoVisualizado)
+  {
+    case 0 :
+      cubo->draw(modoDibujado);
+      break;
+    case 1 :
+      tetraedro->draw(modoDibujado);
+      break;
+    default :
+      cout << "Error, número incorrecto." << endl;
+      break;
+  }
+  */
 }
 
 //**************************************************************************
@@ -149,21 +226,36 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
         if (modoMenu==SELVISUALIZACION) {
           cout << "Modo de visualización: Puntos." << endl;
           // Se activa/desactiva la visualización en modo puntos
-
+          modoVisualizacion = GL_POINT;
+          if (visPuntos) {
+            visPuntos = false;
+          } else {
+            visPuntos = true;
+          }
         }
         break ;
       case 'L' :
         if (modoMenu==SELVISUALIZACION) {
           cout << "Modo de visualización: Lineas." << endl;
           // Se activa/desactiva la visualización en modo líneas
-
+          modoVisualizacion = GL_LINE;
+          if (visLineas) {
+            visLineas = false;
+          } else {
+            visLineas = true;
+          }
         }
         break ;
       case 'S' :
         if (modoMenu==SELVISUALIZACION) {
           cout << "Modo de visualización: Sólido." << endl;
           // Se activa/desactiva la visualización en modo sólido (por defecto)
-
+          modoVisualizacion = GL_FILL;
+          if (visSolido) {
+            visSolido = false;
+          } else {
+            visSolido = true;
+          }
         }
         break ;
       case 'A' :
@@ -186,14 +278,14 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
         if (modoMenu==SELDIBUJADO) {
           cout << "Dibujado usando: glDrawElements." << endl;
           // Se activa la visualización usando glDrawElements
-
+          modoDibujado = 0;
         }
         break ;
       case '2' :
         if (modoMenu==SELDIBUJADO) {
           cout << "Dibujado usando: VBO." << endl;
           // Se activa la visualización usando Vertex Buffer Objects (VBOs)
-
+          modoDibujado = 1;
         }
         break ;
       // ----------------------------------------------

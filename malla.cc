@@ -12,9 +12,7 @@ using namespace std ;
 
 void Malla3D::draw_ModoInmediato()
 {
-  // visualizar la malla usando glDrawElements,
-  // completar (práctica 1)
-
+  // Visualizar la malla usando glDrawElements,
   glEnableClientState( GL_VERTEX_ARRAY );
   glVertexPointer( 3, GL_FLOAT, 0, v.data() );
   glDrawElements( GL_TRIANGLES, f.size()*3, GL_UNSIGNED_INT, f.data() );
@@ -25,9 +23,22 @@ void Malla3D::draw_ModoInmediato()
 
 void Malla3D::draw_ModoDiferido()
 {
-   // (la primera vez, se deben crear los VBOs y guardar sus identificadores en el objeto)
-   // completar (práctica 1)
-   // .....
+  // (la primera vez, se deben crear los VBOs y guardar sus identificadores en el objeto)
+  if (id_vbo_ver == 0) {
+    id_vbo_ver = CrearVBO(GL_ARRAY_BUFFER, v.size()*3, v.data() );
+    id_vbo_tri = CrearVBO(GL_ELEMENT_ARRAY_BUFFER, f.size()*3, f.data() );
+  }
+
+  // Especificar localización y formato de la tabla de vértices, habilitar tabla
+  glBindBuffer(GL_ARRAY_BUFFER,id_vbo_ver); // Activar VBO de vértices
+  glVertexPointer( 3,GL_FLOAT, 0, 0 ); // Especifica formato y offset (=0)
+  glBindBuffer(GL_ARRAY_BUFFER, 0 ); // Desactivar VBO de vértices.
+  glEnableClientState(GL_VERTEX_ARRAY); // Habilitar tabla de vértices
+
+  // Visualizar triángulos con glDrawElements(puntero a tabla == 0)
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,id_vbo_tri); // Activar VBO de triángulos
+  glDrawElements(GL_TRIANGLES, 3*f.size(),GL_UNSIGNED_INT, 0 ) ;
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0 ); // Desactivar VBO de triángulos
 }
 // -----------------------------------------------------------------------------
 // Función de visualización de la malla,
@@ -48,4 +59,15 @@ void Malla3D::draw(int modo)
       draw_ModoInmediato();
       break;
   }
+}
+
+GLuint Malla3D::CrearVBO (GLuint tipo_vbo, GLuint tamanio_bytes, GLvoid * puntero_ram) {
+  GLuint id_vbo; // Resultado: identificador de VBO
+  glGenBuffers (1, &id_vbo); // Crear nuevo VBO, obtener identificador (nunca 0)
+  glBindBuffer (tipo_vbo, id_vbo); // Activar el VBO usando su identificador
+
+  // Esta instrucción hace la transferencia de datos desde RAM hacia GPU
+  glBufferData (tipo_vbo, tamanio_bytes, puntero_ram, GL_STATIC_DRAW);
+  glBindBuffer (tipo_vbo, 0); // Desactivación del VBO (activar 0)
+  return id_vbo; // Devolver el identificador resultado
 }

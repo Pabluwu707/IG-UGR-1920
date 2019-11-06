@@ -36,6 +36,9 @@ class Escena
 
    //Variables para los menus
    int objetoVisualizado = 0;
+   GLenum modoVisualizacion = GL_FILL;
+   int modoDibujado = 0;
+   bool visPuntos = false, visLineas = false, visSolido = true, visAjedrez = false;
 
    // Objetos de la escena
    Ejes ejes;
