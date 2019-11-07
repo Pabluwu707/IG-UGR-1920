@@ -35,7 +35,7 @@ Escena::Escena()
 
 void Escena::inicializar( int UI_window_width, int UI_window_height )
 {
-	glClearColor( 1.0, 1.0, 1.0, 1.0 );// se indica cual sera el color para limpiar la ventana	(r,v,a,al)
+	glClearColor( 0.18, 0.15, 0.3, 0.0 );// se indica cual sera el color para limpiar la ventana	(r,v,a,al)
 
 	glEnable( GL_DEPTH_TEST );	// se habilita el z-bufer
 
@@ -65,7 +65,9 @@ void Escena::dibujar()
 	change_observer();
 
   //cout << "Función dibujar()" << endl;
+  glLineWidth(1);
   ejes.draw();
+
   // COMPLETAR
   // Dibujar los diferentes elementos de la escena
   // Habrá que tener en esta primera práctica una variable que indique qué objeto se ha de visualizar
@@ -74,25 +76,24 @@ void Escena::dibujar()
   // o
   // tetraedro.draw()
 
-  // Ajustes
+  // Ajustes de los modelos
   glShadeModel(GL_SMOOTH);
   glPointSize(10);
-  glLineWidth(1.5);
+  glLineWidth(5);
 
   if (visPuntos) {
-    cout << "VisPuntos && !visAjedrez" << endl;
     glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
 
     switch (objetoVisualizado)
     {
       case 0 :
-        cubo->draw(modoDibujado);
+        cubo->draw(modoDibujado, GL_POINT);
         break;
       case 1 :
-        tetraedro->draw(modoDibujado);
+        tetraedro->draw(modoDibujado, GL_POINT);
         break;
       default :
-        cout << "--- Error, el objeto introducido no existe. ---" << endl;
+        cout << "Error, número incorrecto." << endl;
         break;
     }
   }
@@ -103,10 +104,10 @@ void Escena::dibujar()
     switch (objetoVisualizado)
     {
       case 0 :
-        cubo->draw(modoDibujado);
+        cubo->draw(modoDibujado, GL_LINE);
         break;
       case 1 :
-        tetraedro->draw(modoDibujado);
+        tetraedro->draw(modoDibujado, GL_LINE);
         break;
       default :
         cout << "Error, número incorrecto." << endl;
@@ -120,10 +121,10 @@ void Escena::dibujar()
     switch (objetoVisualizado)
     {
       case 0 :
-        cubo->draw(modoDibujado);
+        cubo->draw(modoDibujado, GL_FILL);
         break;
       case 1 :
-        tetraedro->draw(modoDibujado);
+        tetraedro->draw(modoDibujado, GL_FILL);
         break;
       default :
         cout << "Error, número incorrecto." << endl;
@@ -137,10 +138,10 @@ void Escena::dibujar()
     switch (objetoVisualizado)
     {
       case 0 :
-        cubo->draw(modoDibujado);
+        cubo->draw(modoDibujado, GL_FILL);
         break;
       case 1 :
-        tetraedro->draw(modoDibujado);
+        tetraedro->draw(modoDibujado, GL_FILL);
         break;
       default :
         cout << "Error, número incorrecto." << endl;
@@ -148,11 +149,6 @@ void Escena::dibujar()
     }
   }
 
-
-  cout << "MODO AJEDREZ: " << visAjedrez << endl;
-  cout << "MODO PUNTOS: " << visPuntos << endl;
-  cout << "MODO LINEAS: " << visLineas << endl;
-  cout << "MODO SOLIDO: " << visSolido << endl << endl << endl;
 
   /*
   glPolygonMode(GL_FRONT_AND_BACK, modoVisualizacion);
