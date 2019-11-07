@@ -16,8 +16,8 @@ Tetraedro::Tetraedro()
    // (es importante en cada cara ordenar los vértices en sentido contrario
    //  de las agujas del reloj, cuando esa cara se observa desde el exterior del cubo)
    f.resize(100);
-   f[0] = Tupla3i (2,1,0); // Triangulo 0
+   f[0] = Tupla3i (1,2,0); // Triangulo 0
    f[1] = Tupla3i (3,2,1); // Triangulo 0
    f[2] = Tupla3i (0,2,3); // Triangulo 0
-   f[3] = Tupla3i (1,3,0); // Triangulo 0
+   f[3] = Tupla3i (0,3,1); // Triangulo 0
 }

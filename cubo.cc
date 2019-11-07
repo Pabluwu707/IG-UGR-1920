@@ -34,15 +34,5 @@ Cubo::Cubo(float lado)
    f[10] = Tupla3i (2,6,3); // Triangulo 8
    f[11] = Tupla3i (3,6,7); // Triangulo 9
 
-   // Inicializar colores inmediato y diferido
-   for (int i=0; i<v.size(); i=i+2) {
-     c.push_back({1.0,0.0,0.64});
-     c.push_back({0.28,0.25,0.4});
-   }
-
-   // Inicializar colores inmediato y diferido
-   for (int i=0; i<v.size(); i++) {
-     cA1.push_back({1.0,0.0,0.64});
-     cA2.push_back({0.28,0.25,0.4});
-   }
+   
 }
