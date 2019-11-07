@@ -27,13 +27,24 @@ void Malla3D::draw_ModoDiferido()
   // (la primera vez, se deben crear los VBOs y guardar sus identificadores en el objeto)
   if (id_vbo_ver == 0) {
     id_vbo_ver = CrearVBO(GL_ARRAY_BUFFER, v.size()*3, v.data() );
+  }
+  if (id_vbo_tri == 0) {
     id_vbo_tri = CrearVBO(GL_ELEMENT_ARRAY_BUFFER, f.size()*3, f.data() );
+  }
+  if (id_vbo_col == 0) {
+    id_vbo_col = CrearVBO(GL_ARRAY_BUFFER, c.size()*3, c.data() );
   }
 
   // Especificar localización y formato de la tabla de vértices, habilitar tabla
   glBindBuffer(GL_ARRAY_BUFFER,id_vbo_ver); // Activar VBO de vértices
   glVertexPointer( 3,GL_FLOAT, 0, 0 ); // Especifica formato y offset (=0)
   glBindBuffer(GL_ARRAY_BUFFER, 0 ); // Desactivar VBO de vértices.
+
+  // Especificar localización y formato de la tabla de vértices, habilitar tabla
+  glBindBuffer(GL_ARRAY_BUFFER,id_vbo_col); // Activar VBO de vértices
+  glVertexPointer( 3,GL_FLOAT, 0, 0 ); // Especifica formato y offset (=0)
+  glBindBuffer(GL_ARRAY_BUFFER, 0 ); // Desactivar VBO de vértices.
+
   glEnableClientState(GL_VERTEX_ARRAY); // Habilitar tabla de vértices
 
   // Visualizar triángulos con glDrawElements(puntero a tabla == 0)
@@ -61,14 +72,14 @@ void Malla3D::draw_ModoAjedrez()
   // Visualizar la malla usando glDrawElements,
   glEnableClientState( GL_VERTEX_ARRAY );
   glVertexPointer( 3, GL_FLOAT, 0, v.data() );
-  glColorPointer( 3, GL_FLOAT, 0, cA1.data() ) ;
+  glColorPointer( 3, GL_FLOAT, 0, cAjedrez1.data() ) ;
   glDrawElements( GL_TRIANGLES, f1.size()*3, GL_UNSIGNED_INT, f1.data() );
   glDisableClientState( GL_VERTEX_ARRAY );
 
   // Visualizar la malla usando glDrawElements,
   glEnableClientState( GL_VERTEX_ARRAY );
   glVertexPointer( 3, GL_FLOAT, 0, v.data() );
-  glColorPointer( 3, GL_FLOAT, 0, cA2.data() ) ;
+  glColorPointer( 3, GL_FLOAT, 0, cAjedrez2.data() ) ;
   glDrawElements( GL_TRIANGLES, f2.size()*3, GL_UNSIGNED_INT, f2.data() );
   glDisableClientState( GL_VERTEX_ARRAY );
 }
@@ -77,22 +88,72 @@ void Malla3D::draw_ModoAjedrez()
 // Función de visualización de la malla,
 // puede llamar a  draw_ModoInmediato o bien a draw_ModoDiferido
 
-void Malla3D::draw(int modo)
+void Malla3D::draw(int modo, GLenum visualizacion)
 {
-  switch (modo) {
-    case 0:
-      draw_ModoInmediato();
-      break;
-    case 1:
-      draw_ModoDiferido();
-      break;
-    case 2:
-      draw_ModoAjedrez();
-      break;
-    default:
-      draw_ModoInmediato();
-      break;
+
+  // INICIALIZACIÓN DE COLORES
+  // Inicializar colores solido en Modo inmediato y diferido
+   for (int i=0; i<v.size(); i=i+2) {
+     cCubo.push_back({1.0,0.0,0.64});
+     cCubo.push_back({0.97,0.78,0.05});
+   }
+
+   // Inicializar colores lineas y puntos en Modo inmediato y diferido
+    for (int i=0; i<v.size(); i++) {
+      cLineas.push_back({0.28,0.25,0.4});
+    }
+
+   // Inicializar colores cubo en Modo Ajedrez
+   for (int i=0; i<v.size(); i++) {
+     cAjedrez1.push_back({1.0,0.0,0.64});
+     cAjedrez2.push_back({0.97,0.78,0.05});
+   }
+
+  switch (visualizacion) {
+    case GL_POINT:
+      c = cLineas;
+      switch (modo) {
+        case 0:
+          draw_ModoInmediato();
+          break;
+        case 1:
+          draw_ModoDiferido();
+          break;
+        case 2:
+          draw_ModoAjedrez();
+          break;
+      }
+    break;
+    case GL_LINE:
+      c = cLineas;
+      switch (modo) {
+        case 0:
+          draw_ModoInmediato();
+          break;
+        case 1:
+          draw_ModoDiferido();
+          break;
+        case 2:
+          draw_ModoAjedrez();
+          break;
+      }
+    break;
+    case GL_FILL:
+      c = cCubo;
+      switch (modo) {
+        case 0:
+          draw_ModoInmediato();
+          break;
+        case 1:
+          draw_ModoDiferido();
+          break;
+        case 2:
+          draw_ModoAjedrez();
+          break;
+      }
+    break;
   }
+
 }
 
 GLuint Malla3D::CrearVBO (GLuint tipo_vbo, GLuint tamanio_bytes, GLvoid * puntero_ram) {

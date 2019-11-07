@@ -35,7 +35,7 @@ class Malla3D
    // Está función llama a 'draw_ModoInmediato' (modo inmediato)
    // o bien a 'draw_ModoDiferido' (modo diferido, VBOs)
    // o bien a 'draw_ModoAjedrez' (modo inmediato con dos listas de tríangulos)
-   void draw(int modo) ;
+   void draw(int modo, GLenum visualizacion) ;
 
    protected:
 
@@ -50,11 +50,15 @@ class Malla3D
    // IDs de los objetos VBO de los vértices y los triángulos respectivamente
    int id_vbo_ver = 0 ;
    int id_vbo_tri = 0 ;
+   int id_vbo_col = 0 ;
 
    // Vectores de colores del cubo (modo Inmediato y Diferido, y modo Ajedrez)
    std::vector<Tupla3f> c   ; // Tabla de colores (modo Inmediato y Diferido)
-   std::vector<Tupla3f> cA1 ; // 1a tabla de colores (modo Ajedrez)
-   std::vector<Tupla3f> cA2 ; // 2a tabla de colores (modo Ajedrez)
+
+   std::vector<Tupla3f> cCubo   ; // Tabla de colores (modo Inmediato y Diferido)
+   std::vector<Tupla3f> cLineas   ; // Tabla de colores (modo Inmediato y Diferido)
+   std::vector<Tupla3f> cAjedrez1 ; // 1a tabla de colores (modo Ajedrez)
+   std::vector<Tupla3f> cAjedrez2 ; // 2a tabla de colores (modo Ajedrez)
 
    // A completar: tabla de normales de vértices (practica 3)
 } ;
