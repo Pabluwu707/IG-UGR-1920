@@ -15,6 +15,7 @@ void Malla3D::draw_ModoInmediato()
   // Visualizar la malla usando glDrawElements,
   glEnableClientState( GL_VERTEX_ARRAY );
   glVertexPointer( 3, GL_FLOAT, 0, v.data() );
+  glColorPointer( 3, GL_FLOAT, 0, c.data() ) ;
   glDrawElements( GL_TRIANGLES, f.size()*3, GL_UNSIGNED_INT, f.data() );
   glDisableClientState( GL_VERTEX_ARRAY );
 }
@@ -37,9 +38,41 @@ void Malla3D::draw_ModoDiferido()
 
   // Visualizar triángulos con glDrawElements(puntero a tabla == 0)
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,id_vbo_tri); // Activar VBO de triángulos
-  glDrawElements(GL_TRIANGLES, 3*f.size(),GL_UNSIGNED_INT, 0 ) ;
+  glDrawElements(GL_TRIANGLES, 3*f.size(),GL_UNSIGNED_INT, 0 );
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0 ); // Desactivar VBO de triángulos
 }
+
+// -----------------------------------------------------------------------------
+// Visualización en modo diferido con 'glDrawElements' (usando VBOs)
+
+void Malla3D::draw_ModoAjedrez()
+{
+  std::vector<Tupla3i> f1 ;
+  std::vector<Tupla3i> f2 ;
+
+  for (int i=0; i<f.size(); i++) {
+    if (i%2 == 0) {
+      f1.push_back(f[i]);
+    } else {
+      f2.push_back(f[i]);
+    }
+  }
+
+  // Visualizar la malla usando glDrawElements,
+  glEnableClientState( GL_VERTEX_ARRAY );
+  glVertexPointer( 3, GL_FLOAT, 0, v.data() );
+  glColorPointer( 3, GL_FLOAT, 0, cA1.data() ) ;
+  glDrawElements( GL_TRIANGLES, f1.size()*3, GL_UNSIGNED_INT, f1.data() );
+  glDisableClientState( GL_VERTEX_ARRAY );
+
+  // Visualizar la malla usando glDrawElements,
+  glEnableClientState( GL_VERTEX_ARRAY );
+  glVertexPointer( 3, GL_FLOAT, 0, v.data() );
+  glColorPointer( 3, GL_FLOAT, 0, cA2.data() ) ;
+  glDrawElements( GL_TRIANGLES, f2.size()*3, GL_UNSIGNED_INT, f2.data() );
+  glDisableClientState( GL_VERTEX_ARRAY );
+}
+
 // -----------------------------------------------------------------------------
 // Función de visualización de la malla,
 // puede llamar a  draw_ModoInmediato o bien a draw_ModoDiferido
@@ -54,6 +87,9 @@ void Malla3D::draw(int modo)
       break;
     case 1:
       draw_ModoDiferido();
+      break;
+    case 2:
+      draw_ModoAjedrez();
       break;
     default:
       draw_ModoInmediato();
