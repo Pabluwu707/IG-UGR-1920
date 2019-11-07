@@ -75,11 +75,12 @@ void Escena::dibujar()
   // tetraedro.draw()
 
   // Ajustes
-  glShadeModel(GL_FLAT);
+  glShadeModel(GL_SMOOTH);
   glPointSize(10);
   glLineWidth(1.5);
 
   if (visPuntos) {
+    cout << "VisPuntos && !visAjedrez" << endl;
     glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
 
     switch (objetoVisualizado)
@@ -91,7 +92,7 @@ void Escena::dibujar()
         tetraedro->draw(modoDibujado);
         break;
       default :
-        cout << "Error, número incorrecto." << endl;
+        cout << "--- Error, el objeto introducido no existe. ---" << endl;
         break;
     }
   }
@@ -131,7 +132,7 @@ void Escena::dibujar()
   }
 
   if (visAjedrez) {
-    glPolygonMode(GL_FRONT_AND_BACK, modoVisualizacion);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
     switch (objetoVisualizado)
     {
@@ -146,6 +147,12 @@ void Escena::dibujar()
         break;
     }
   }
+
+
+  cout << "MODO AJEDREZ: " << visAjedrez << endl;
+  cout << "MODO PUNTOS: " << visPuntos << endl;
+  cout << "MODO LINEAS: " << visLineas << endl;
+  cout << "MODO SOLIDO: " << visSolido << endl << endl << endl;
 
   /*
   glPolygonMode(GL_FRONT_AND_BACK, modoVisualizacion);
@@ -179,7 +186,6 @@ void Escena::dibujar()
 bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 {
    using namespace std ;
-   cout << "Tecla pulsada: '" << tecla << "'" << endl;
    bool salir=false;
    switch( toupper(tecla) )
    {
@@ -226,11 +232,13 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
         if (modoMenu==SELVISUALIZACION) {
           cout << "Modo de visualización: Puntos." << endl;
           // Se activa/desactiva la visualización en modo puntos
+          modoDibujado = 0;
           modoVisualizacion = GL_POINT;
           if (visPuntos) {
             visPuntos = false;
           } else {
             visPuntos = true;
+            visAjedrez = false;
           }
         }
         break ;
@@ -238,11 +246,14 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
         if (modoMenu==SELVISUALIZACION) {
           cout << "Modo de visualización: Lineas." << endl;
           // Se activa/desactiva la visualización en modo líneas
+          modoDibujado = 0;
           modoVisualizacion = GL_LINE;
           if (visLineas) {
             visLineas = false;
           } else {
             visLineas = true;
+            visAjedrez = false;
+            visAjedrez = false;
           }
         }
         break ;
@@ -250,11 +261,13 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
         if (modoMenu==SELVISUALIZACION) {
           cout << "Modo de visualización: Sólido." << endl;
           // Se activa/desactiva la visualización en modo sólido (por defecto)
+          modoDibujado = 0;
           modoVisualizacion = GL_FILL;
           if (visSolido) {
             visSolido = false;
           } else {
             visSolido = true;
+            visAjedrez = false;
           }
         }
         break ;
@@ -262,7 +275,15 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
         if (modoMenu==SELVISUALIZACION) {
           cout << "Modo de visualización: Ajedrez." << endl;
           // Se activa/desactiva la visualización en modo ajedrez
-
+          modoDibujado = 2;
+          if (visAjedrez) {
+            visAjedrez = false;
+          } else {
+            visAjedrez = true;
+            visPuntos = false;
+            visLineas = false;
+            visSolido = false;
+          }
         }
         break ;
 
