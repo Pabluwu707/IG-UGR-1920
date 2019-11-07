@@ -22,36 +22,41 @@ class Malla3D
 {
    public:
 
-   // dibuja el objeto en modo inmediato
+   // Dibuja el objeto en modo inmediato
    void draw_ModoInmediato();
 
-   // dibuja el objeto en modo diferido (usando VBOs)
+   // Dibuja el objeto en modo diferido (usando VBOs)
    void draw_ModoDiferido();
 
-   // dibuja el objeto en modo ajedrez
+   // Dibuja el objeto en modo ajedrez
    void draw_ModoAjedrez();
 
-   // función que redibuja el objeto
-   // está función llama a 'draw_ModoInmediato' (modo inmediato)
+   // Función que redibuja el objeto
+   // Está función llama a 'draw_ModoInmediato' (modo inmediato)
    // o bien a 'draw_ModoDiferido' (modo diferido, VBOs)
+   // o bien a 'draw_ModoAjedrez' (modo inmediato con dos listas de tríangulos)
    void draw(int modo) ;
 
    protected:
 
-   void calcular_normales() ; // calcula tabla de normales de vértices (práctica 3)
+   void calcular_normales() ; // Calcula tabla de normales de vértices (práctica 3)
 
    std::vector<Tupla3f> v ;   // tabla de coordenadas de vértices (una tupla por vértice, con tres floats)
-   std::vector<Tupla3i> f ; // una terna de 3 enteros por cada cara o triángulo
+   std::vector<Tupla3i> f ;   // una terna de 3 enteros por cada cara o triángulo
 
+   // Función que crea los VBO en la primera llamada a draw_ModoDiferido()
    GLuint CrearVBO(GLuint tipo_vbo, GLuint tamanio_bytes, GLvoid * puntero_ram);
 
+   // IDs de los objetos VBO de los vértices y los triángulos respectivamente
    int id_vbo_ver = 0 ;
    int id_vbo_tri = 0 ;
 
-   // completar: tabla de colores, tabla de normales de vértices
-   std::vector<Tupla3f> c ; // Tabla de colores
-   std::vector<Tupla3f> cA1 ; // Tabla de colores
-   std::vector<Tupla3f> cA2 ; // Tabla de colores
+   // Vectores de colores del cubo (modo Inmediato y Diferido, y modo Ajedrez)
+   std::vector<Tupla3f> c   ; // Tabla de colores (modo Inmediato y Diferido)
+   std::vector<Tupla3f> cA1 ; // 1a tabla de colores (modo Ajedrez)
+   std::vector<Tupla3f> cA2 ; // 2a tabla de colores (modo Ajedrez)
+
+   // A completar: tabla de normales de vértices (practica 3)
 } ;
 
 

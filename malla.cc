@@ -79,10 +79,8 @@ void Malla3D::draw_ModoAjedrez()
 
 void Malla3D::draw(int modo)
 {
-// completar .....(práctica 1)
   switch (modo) {
     case 0:
-      //cout << "Draw modo inmediato" << endl;
       draw_ModoInmediato();
       break;
     case 1:
