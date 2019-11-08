@@ -35,7 +35,7 @@ class Malla3D
    // Está función llama a 'draw_ModoInmediato' (modo inmediato)
    // o bien a 'draw_ModoDiferido' (modo diferido, VBOs)
    // o bien a 'draw_ModoAjedrez' (modo inmediato con dos listas de tríangulos)
-   void draw(int modo, GLenum visualizacion) ;
+   void draw(int modo, GLenum visualizacion, bool ajedrezActivado) ;
 
    protected:
 
