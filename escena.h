@@ -39,6 +39,7 @@ class Escena
    GLenum modoVisualizacion = GL_FILL;
    int modoDibujado = 0;
    bool visPuntos = false, visLineas = false, visSolido = true, visAjedrez = false;
+   bool ajedrezActivado = false;
 
    // Objetos de la escena
    Ejes ejes;
