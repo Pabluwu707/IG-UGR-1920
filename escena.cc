@@ -217,13 +217,6 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
           objetoVisualizado = 1;
         }
         break ;
-      case 'M' :
-        if (modoMenu==SELOBJETO) {
-          cout << "Visualizando: PLY." << endl;
-          // Se visualiza/oculta el Tetraedro
-          objetoVisualizado = 2;
-        }
-        break ;
 
       // ----------------------------------------------
 
