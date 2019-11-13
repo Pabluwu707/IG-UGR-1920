@@ -40,13 +40,14 @@ class Escena
    GLenum modoVisualizacion = GL_FILL;
    int modoDibujado = 0;
    bool visPuntos = false, visLineas = false, visSolido = true, visAjedrez = false;
+   bool objCubo = true, objTetra = true, objModelo = true;
    bool ajedrezActivado = false;
 
    // Objetos de la escena
    Ejes ejes;
    Cubo * cubo = nullptr ; // es importante inicializarlo a 'nullptr'
    Tetraedro * tetraedro = nullptr ; // es importante inicializarlo a 'nullptr'
-   ObjPLY * mapache = nullptr ; // es importante inicializarlo a 'nullptr'
+   ObjPLY * objPLY = nullptr ; // es importante inicializarlo a 'nullptr'
 
    public:
 

@@ -25,7 +25,7 @@ Escena::Escena()
 
     cubo = new Cubo(50);
     tetraedro = new Tetraedro();
-    mapache = new ObjPLY("./plys/bust.ply");
+    objPLY = new ObjPLY("./plys/bust.ply");
 }
 
 //**************************************************************************
@@ -87,92 +87,88 @@ void Escena::dibujar()
   if (visPuntos) {
     glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
 
-    switch (objetoVisualizado)
-    {
-      case 0 :
-        cubo->draw(modoDibujado, GL_POINT, visAjedrez);
-        break;
-      case 1 :
-        tetraedro->draw(modoDibujado, GL_POINT, visAjedrez);
-        break;
-      case 2 :
-        glPushMatrix();
-        glScalef(60.0,60.0,60.0);
-        mapache->draw(modoDibujado, GL_POINT, visAjedrez);
-        glPopMatrix();
-        break;
-      default :
-        cout << "Error, número incorrecto." << endl;
-        break;
+    if (objCubo) {
+      cubo->draw(modoDibujado, GL_POINT, visAjedrez);
+    }
+    if (objTetra) {
+      glPushMatrix();
+      //glTranslatef(-100.0,0.0,0.0);
+      //glScalef(30.0,0.0,0.0);
+      tetraedro->draw(modoDibujado, GL_POINT, visAjedrez);
+      glPopMatrix();
+    }
+    if (objModelo) {
+      glPushMatrix();
+      glTranslatef(150.0,0.0,0.0);
+      glScalef(60.0,60.0,60.0);
+      objPLY->draw(modoDibujado, GL_POINT, visAjedrez);
+      glPopMatrix();
     }
   }
 
   if (visLineas) {
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-    switch (objetoVisualizado)
-    {
-      case 0 :
-        cubo->draw(modoDibujado, GL_LINE, visAjedrez);
-        break;
-      case 1 :
-        tetraedro->draw(modoDibujado, GL_LINE, visAjedrez);
-        break;
-      case 2 :
-        glPushMatrix();
-        glScalef(60.0,60.0,60.0);
-        mapache->draw(modoDibujado, GL_LINE, visAjedrez);
-        glPopMatrix();
-        break;
-      default :
-        cout << "Error, número incorrecto." << endl;
-        break;
+    if (objCubo) {
+      cubo->draw(modoDibujado, GL_LINE, visAjedrez);
+    }
+    if (objTetra) {
+      glPushMatrix();
+      //glTranslatef(-100.0,0.0,0.0);
+      //glScalef(30.0,0.0,0.0);
+      tetraedro->draw(modoDibujado, GL_LINE, visAjedrez);
+      glPopMatrix();
+    }
+    if (objModelo) {
+      glPushMatrix();
+      glTranslatef(150.0,0.0,0.0);
+      glScalef(60.0,60.0,60.0);
+      objPLY->draw(modoDibujado, GL_LINE, visAjedrez);
+      glPopMatrix();
     }
   }
 
   if (visSolido) {
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-    switch (objetoVisualizado)
-    {
-      case 0 :
-        cubo->draw(modoDibujado, GL_FILL, visAjedrez);
-        break;
-      case 1 :
-        tetraedro->draw(modoDibujado, GL_FILL, visAjedrez);
-        break;
-      case 2 :
-        glPushMatrix();
-        glScalef(60.0,60.0,60.0);
-        mapache->draw(modoDibujado, GL_FILL, visAjedrez);
-        glPopMatrix();
-        break;
-      default :
-        cout << "Error, número incorrecto." << endl;
-        break;
+    if (objCubo) {
+      cubo->draw(modoDibujado, GL_FILL, visAjedrez);
+    }
+    if (objTetra) {
+      glPushMatrix();
+      glScalef(1.5,1.5,1.5);
+      glTranslatef(-80.0,0.0,0.0);
+      tetraedro->draw(modoDibujado, GL_FILL, visAjedrez);
+      glPopMatrix();
+    }
+    if (objModelo) {
+      glPushMatrix();
+      glTranslatef(150.0,0.0,0.0);
+      glScalef(60.0,60.0,60.0);
+      objPLY->draw(modoDibujado, GL_FILL, visAjedrez);
+      glPopMatrix();
     }
   }
 
   if (visAjedrez) {
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-    switch (objetoVisualizado)
-    {
-      case 0 :
-        cubo->draw(modoDibujado, GL_FILL, visAjedrez);
-        break;
-      case 1 :
-        tetraedro->draw(modoDibujado, GL_FILL, visAjedrez);
-        break;
-      case 2 :
-        glPushMatrix();
-        glScalef(60.0,60.0,60.0);
-        mapache->draw(modoDibujado, GL_FILL, visAjedrez);
-        glPopMatrix();
-        break;
-      default :
-        cout << "Error, número incorrecto." << endl;
-        break;
+    if (objCubo) {
+      cubo->draw(modoDibujado, GL_FILL, visAjedrez);
+    }
+    if (objTetra) {
+      glPushMatrix();
+      glScalef(1.5,1.5,1.5);
+      glTranslatef(-80.0,0.0,0.0);
+      tetraedro->draw(modoDibujado, GL_FILL, visAjedrez);
+      glPopMatrix();
+    }
+    if (objModelo) {
+      glPushMatrix();
+      glTranslatef(150.0,0.0,0.0);
+      glScalef(60.0,60.0,60.0);
+      objPLY->draw(modoDibujado, GL_FILL, visAjedrez);
+      glPopMatrix();
     }
   }
 
@@ -230,23 +226,40 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 
       case 'C' :
         if (modoMenu==SELOBJETO) {
-          cout << "Visualizando: Cubo." << endl;
           // Se visualiza/oculta el Tetraedro
           objetoVisualizado = 0;
+          if (objCubo) {
+            cout << "Desactivando: Cubo." << endl;
+            objCubo = false;
+          } else {
+            cout << "Activando: Cubo." << endl;
+            objCubo = true;
+          }
         }
         break ;
       case 'T' :
         if (modoMenu==SELOBJETO) {
-          cout << "Visualizando: Tetraedro." << endl;
           // Se visualiza/oculta el Tetraedro
           objetoVisualizado = 1;
+          if (objTetra) {
+            cout << "Desactivando: Tetraedro." << endl;
+            objTetra = false;
+          } else {
+            cout << "Activando: Tetraedro." << endl;
+            objTetra = true;
+          }
         }
         break ;
       case 'M' :
         if (modoMenu==SELOBJETO) {
-          cout << "Visualizando: PLY." << endl;
           // Se visualiza/oculta el Tetraedro
-          objetoVisualizado = 2;
+          if (objModelo) {
+            cout << "Desactivando: Modelo PLY." << endl;
+            objModelo = false;
+          } else {
+            cout << "Activando: Modelo PLY." << endl;
+            objModelo = true;
+          }
         }
         break ;
 
