@@ -26,28 +26,31 @@ void Malla3D::draw_ModoDiferido()
 {
   // (la primera vez, se deben crear los VBOs y guardar sus identificadores en el objeto)
   if (id_vbo_ver == 0) {
-    id_vbo_ver = CrearVBO(GL_ARRAY_BUFFER, v.size()*3, v.data() );
+    id_vbo_ver = CrearVBO(GL_ARRAY_BUFFER, v.size()*3 * sizeof(float), v.data() );
   }
   if (id_vbo_tri == 0) {
-    id_vbo_tri = CrearVBO(GL_ELEMENT_ARRAY_BUFFER, f.size()*3, f.data() );
-  }
-  if (id_vbo_col == 0) {
-    id_vbo_col = CrearVBO(GL_ARRAY_BUFFER, c.size()*3, c.data() );
+    id_vbo_tri = CrearVBO(GL_ELEMENT_ARRAY_BUFFER, f.size()*3 * sizeof(int), f.data() );
   }
 
-  // Especificar localización y formato de la tabla de vértices, habilitar tabla
+  if (id_vbo_col == 0) {
+    id_vbo_col = CrearVBO(GL_ARRAY_BUFFER, c.size()*3 * sizeof(float), c.data() );
+  }
+
+  glEnableClientState(GL_VERTEX_ARRAY); // Habilitar tabla de vértices
+  glEnableClientState(GL_COLOR_ARRAY); // Habilitar tabla de colores
+
+
+  // Especificar localización y formato de la tabla de vértices
   glBindBuffer(GL_ARRAY_BUFFER,id_vbo_ver); // Activar VBO de vértices
   glVertexPointer( 3,GL_FLOAT, 0, 0 ); // Especifica formato y offset (=0)
   glBindBuffer(GL_ARRAY_BUFFER, 0 ); // Desactivar VBO de vértices.
 
-  // Especificar localización y formato de la tabla de vértices, habilitar tabla
-  glBindBuffer(GL_ARRAY_BUFFER,id_vbo_col); // Activar VBO de vértices
-  glVertexPointer( 3,GL_FLOAT, 0, 0 ); // Especifica formato y offset (=0)
-  glBindBuffer(GL_ARRAY_BUFFER, 0 ); // Desactivar VBO de vértices.
+  // Especificar localización y formato de la tabla de colores
+  glBindBuffer(GL_ARRAY_BUFFER,id_vbo_col); // Activar VBO de colores
+  glColorPointer( 3,GL_FLOAT, 0, 0 ); // Especifica formato y offset (=0)
+  glBindBuffer(GL_ARRAY_BUFFER, 0 ); // Desactivar VBO de colores.
 
-  glEnableClientState(GL_VERTEX_ARRAY); // Habilitar tabla de vértices
-
-  // Visualizar triángulos con glDrawElements(puntero a tabla == 0)
+  // Visualizar triángulos con glDrawElements (puntero a tabla == 0)
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,id_vbo_tri); // Activar VBO de triángulos
   glDrawElements(GL_TRIANGLES, 3*f.size(),GL_UNSIGNED_INT, 0 );
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0 ); // Desactivar VBO de triángulos
@@ -88,71 +91,77 @@ void Malla3D::draw_ModoAjedrez()
 // Función de visualización de la malla,
 // puede llamar a  draw_ModoInmediato o bien a draw_ModoDiferido
 
-void Malla3D::draw(int modo, GLenum visualizacion)
+void Malla3D::draw(int modo, GLenum visualizacion, bool ajedrezActivado)
 {
 
   // INICIALIZACIÓN DE COLORES
-  // Inicializar colores solido en Modo inmediato y diferido
+  // Inicializar colores solido para ObjPLY en Modo inmediato y diferido
+    cCubo.clear();
+   for (int i=0; i<v.size(); i++) {
+     cPLY.push_back({1.0,0.0,0.64});
+   }
+
+  // Inicializar colores solido para cubo en Modo inmediato y diferido
+    cCubo.clear();
    for (int i=0; i<v.size(); i=i+2) {
      cCubo.push_back({1.0,0.0,0.64});
      cCubo.push_back({0.97,0.78,0.05});
    }
 
    // Inicializar colores lineas y puntos en Modo inmediato y diferido
+   cLineas.clear();
     for (int i=0; i<v.size(); i++) {
       cLineas.push_back({0.28,0.25,0.4});
     }
 
    // Inicializar colores cubo en Modo Ajedrez
+   cAjedrez1.clear();
+   cAjedrez2.clear();
    for (int i=0; i<v.size(); i++) {
      cAjedrez1.push_back({1.0,0.0,0.64});
      cAjedrez2.push_back({0.97,0.78,0.05});
    }
 
-  switch (visualizacion) {
-    case GL_POINT:
-      c = cLineas;
-      switch (modo) {
-        case 0:
-          draw_ModoInmediato();
-          break;
-        case 1:
-          draw_ModoDiferido();
-          break;
-        case 2:
-          draw_ModoAjedrez();
-          break;
-      }
-    break;
-    case GL_LINE:
-      c = cLineas;
-      switch (modo) {
-        case 0:
-          draw_ModoInmediato();
-          break;
-        case 1:
-          draw_ModoDiferido();
-          break;
-        case 2:
-          draw_ModoAjedrez();
-          break;
-      }
-    break;
-    case GL_FILL:
-      c = cCubo;
-      switch (modo) {
-        case 0:
-          draw_ModoInmediato();
-          break;
-        case 1:
-          draw_ModoDiferido();
-          break;
-        case 2:
-          draw_ModoAjedrez();
-          break;
-      }
-    break;
-  }
+   if (ajedrezActivado) {
+     draw_ModoAjedrez();
+   } else {
+     switch (visualizacion) {
+       case GL_POINT:
+         c = cLineas;
+         switch (modo) {
+           case 0:
+             draw_ModoInmediato();
+             break;
+           case 1:
+             draw_ModoDiferido();
+             break;
+         }
+       break;
+       case GL_LINE:
+         c = cLineas;
+         switch (modo) {
+           case 0:
+             draw_ModoInmediato();
+             break;
+           case 1:
+             draw_ModoDiferido();
+             break;
+         }
+       break;
+       case GL_FILL:
+         c = cPLY;
+         switch (modo) {
+           case 0:
+             draw_ModoInmediato();
+             break;
+           case 1:
+             draw_ModoDiferido();
+             break;
+         }
+       break;
+     }
+   }
+
 
 }
 

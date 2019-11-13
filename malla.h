@@ -35,7 +35,7 @@ class Malla3D
    // Está función llama a 'draw_ModoInmediato' (modo inmediato)
    // o bien a 'draw_ModoDiferido' (modo diferido, VBOs)
    // o bien a 'draw_ModoAjedrez' (modo inmediato con dos listas de tríangulos)
-   void draw(int modo, GLenum visualizacion) ;
+   void draw(int modo, GLenum visualizacion, bool ajedrezActivado) ;
 
    protected:
 
@@ -55,6 +55,7 @@ class Malla3D
    // Vectores de colores del cubo (modo Inmediato y Diferido, y modo Ajedrez)
    std::vector<Tupla3f> c   ; // Vector de colores (modo Inmediato y Diferido)
 
+   std::vector<Tupla3f> cPLY     ; // Vector para visualización sólida (modo Inmediato y Diferido)
    std::vector<Tupla3f> cCubo     ; // Vector para visualización sólida (modo Inmediato y Diferido)
    std::vector<Tupla3f> cLineas   ; // Vector para lineas y puntos (modo Inmediato y Diferido)
    std::vector<Tupla3f> cAjedrez1 ; // 1a tabla de colores (modo Ajedrez)

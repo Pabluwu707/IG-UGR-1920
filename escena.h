@@ -5,6 +5,7 @@
 #include "malla.h"
 #include "cubo.h"
 #include "tetraedro.h"
+#include "objply.h"
 
 typedef enum {NADA, SELOBJETO,SELVISUALIZACION,SELDIBUJADO} menu;
 class Escena
@@ -39,12 +40,13 @@ class Escena
    GLenum modoVisualizacion = GL_FILL;
    int modoDibujado = 0;
    bool visPuntos = false, visLineas = false, visSolido = true, visAjedrez = false;
+   bool ajedrezActivado = false;
 
    // Objetos de la escena
    Ejes ejes;
    Cubo * cubo = nullptr ; // es importante inicializarlo a 'nullptr'
    Tetraedro * tetraedro = nullptr ; // es importante inicializarlo a 'nullptr'
-
+   ObjPLY * mapache = nullptr ; // es importante inicializarlo a 'nullptr'
 
    public:
 

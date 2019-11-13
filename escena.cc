@@ -25,13 +25,14 @@ Escena::Escena()
 
     cubo = new Cubo(50);
     tetraedro = new Tetraedro();
+    mapache = new ObjPLY("./plys/bust.ply");
 }
 
 //**************************************************************************
 // inicialización de la escena (se ejecuta cuando ya se ha creado la ventana, por
 // tanto sí puede ejecutar ordenes de OpenGL)
 // Principalmemnte, inicializa OpenGL y la transf. de vista y proyección
-//**************************************************************************
+//*****************************
 
 void Escena::inicializar( int UI_window_width, int UI_window_height )
 {
@@ -64,9 +65,11 @@ void Escena::dibujar()
   glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); // Limpiar la pantalla
 	change_observer();
 
-  //cout << "Función dibujar()" << endl;
+  // Ajuste e inicialización de los ejes
+
   glLineWidth(1);
   ejes.draw();
+
 
   // COMPLETAR
   // Dibujar los diferentes elementos de la escena
@@ -79,7 +82,7 @@ void Escena::dibujar()
   // Ajustes de los modelos
   glShadeModel(GL_SMOOTH);
   glPointSize(10);
-  glLineWidth(5);
+  glLineWidth(4);
 
   if (visPuntos) {
     glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
@@ -87,10 +90,16 @@ void Escena::dibujar()
     switch (objetoVisualizado)
     {
       case 0 :
-        cubo->draw(modoDibujado, GL_POINT);
+        cubo->draw(modoDibujado, GL_POINT, visAjedrez);
         break;
       case 1 :
-        tetraedro->draw(modoDibujado, GL_POINT);
+        tetraedro->draw(modoDibujado, GL_POINT, visAjedrez);
+        break;
+      case 2 :
+        glPushMatrix();
+        glScalef(60.0,60.0,60.0);
+        mapache->draw(modoDibujado, GL_POINT, visAjedrez);
+        glPopMatrix();
         break;
       default :
         cout << "Error, número incorrecto." << endl;
@@ -104,10 +113,16 @@ void Escena::dibujar()
     switch (objetoVisualizado)
     {
       case 0 :
-        cubo->draw(modoDibujado, GL_LINE);
+        cubo->draw(modoDibujado, GL_LINE, visAjedrez);
         break;
       case 1 :
-        tetraedro->draw(modoDibujado, GL_LINE);
+        tetraedro->draw(modoDibujado, GL_LINE, visAjedrez);
+        break;
+      case 2 :
+        glPushMatrix();
+        glScalef(60.0,60.0,60.0);
+        mapache->draw(modoDibujado, GL_LINE, visAjedrez);
+        glPopMatrix();
         break;
       default :
         cout << "Error, número incorrecto." << endl;
@@ -121,10 +136,16 @@ void Escena::dibujar()
     switch (objetoVisualizado)
     {
       case 0 :
-        cubo->draw(modoDibujado, GL_FILL);
+        cubo->draw(modoDibujado, GL_FILL, visAjedrez);
         break;
       case 1 :
-        tetraedro->draw(modoDibujado, GL_FILL);
+        tetraedro->draw(modoDibujado, GL_FILL, visAjedrez);
+        break;
+      case 2 :
+        glPushMatrix();
+        glScalef(60.0,60.0,60.0);
+        mapache->draw(modoDibujado, GL_FILL, visAjedrez);
+        glPopMatrix();
         break;
       default :
         cout << "Error, número incorrecto." << endl;
@@ -138,10 +159,16 @@ void Escena::dibujar()
     switch (objetoVisualizado)
     {
       case 0 :
-        cubo->draw(modoDibujado, GL_FILL);
+        cubo->draw(modoDibujado, GL_FILL, visAjedrez);
         break;
       case 1 :
-        tetraedro->draw(modoDibujado, GL_FILL);
+        tetraedro->draw(modoDibujado, GL_FILL, visAjedrez);
+        break;
+      case 2 :
+        glPushMatrix();
+        glScalef(60.0,60.0,60.0);
+        mapache->draw(modoDibujado, GL_FILL, visAjedrez);
+        glPopMatrix();
         break;
       default :
         cout << "Error, número incorrecto." << endl;
@@ -215,6 +242,13 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
           objetoVisualizado = 1;
         }
         break ;
+      case 'M' :
+        if (modoMenu==SELOBJETO) {
+          cout << "Visualizando: PLY." << endl;
+          // Se visualiza/oculta el Tetraedro
+          objetoVisualizado = 2;
+        }
+        break ;
 
       // ----------------------------------------------
 
@@ -228,7 +262,6 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
         if (modoMenu==SELVISUALIZACION) {
           cout << "Modo de visualización: Puntos." << endl;
           // Se activa/desactiva la visualización en modo puntos
-          modoDibujado = 0;
           modoVisualizacion = GL_POINT;
           if (visPuntos) {
             visPuntos = false;
@@ -242,13 +275,11 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
         if (modoMenu==SELVISUALIZACION) {
           cout << "Modo de visualización: Lineas." << endl;
           // Se activa/desactiva la visualización en modo líneas
-          modoDibujado = 0;
           modoVisualizacion = GL_LINE;
           if (visLineas) {
             visLineas = false;
           } else {
             visLineas = true;
-            visAjedrez = false;
             visAjedrez = false;
           }
         }
@@ -257,7 +288,6 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
         if (modoMenu==SELVISUALIZACION) {
           cout << "Modo de visualización: Sólido." << endl;
           // Se activa/desactiva la visualización en modo sólido (por defecto)
-          modoDibujado = 0;
           modoVisualizacion = GL_FILL;
           if (visSolido) {
             visSolido = false;
@@ -271,7 +301,6 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
         if (modoMenu==SELVISUALIZACION) {
           cout << "Modo de visualización: Ajedrez." << endl;
           // Se activa/desactiva la visualización en modo ajedrez
-          modoDibujado = 2;
           if (visAjedrez) {
             visAjedrez = false;
           } else {
