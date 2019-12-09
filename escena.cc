@@ -26,6 +26,7 @@ Escena::Escena()
     cubo = new Cubo(50);
     tetraedro = new Tetraedro();
     objPLY = new ObjPLY("./plys/bust.ply");
+    objRev = new ObjRevolucion("./plys/peon.ply", 20, true, true);
 }
 
 //**************************************************************************
@@ -87,83 +88,101 @@ void Escena::dibujar()
   if (visPuntos) {
     glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
 
-    if (objCubo) {
+    if (cuboActivado) {
       cubo->draw(modoDibujado, GL_POINT, visAjedrez);
     }
-    if (objTetra) {
+    if (tetraedroActivado) {
       glPushMatrix();
-      //glTranslatef(-100.0,0.0,0.0);
-      //glScalef(30.0,0.0,0.0);
+      glScalef(1.5,1.5,1.5);
+      glTranslatef(-80.0,0.0,0.0);
       tetraedro->draw(modoDibujado, GL_POINT, visAjedrez);
       glPopMatrix();
     }
-    if (objModelo) {
+    if (modeloActivado) {
       glPushMatrix();
       glTranslatef(150.0,0.0,0.0);
       glScalef(60.0,60.0,60.0);
       objPLY->draw(modoDibujado, GL_POINT, visAjedrez);
       glPopMatrix();
-    }
+   }
+    if (revolucionActivado) {
+      glPushMatrix();
+      glScalef(60.0,60.0,60.0);
+      objRev->draw(modoDibujado, GL_POINT, visAjedrez);
+      glPopMatrix();
+   }
   }
 
   if (visLineas) {
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-    if (objCubo) {
+    if (cuboActivado) {
       cubo->draw(modoDibujado, GL_LINE, visAjedrez);
     }
-    if (objTetra) {
+    if (tetraedroActivado) {
       glPushMatrix();
-      //glTranslatef(-100.0,0.0,0.0);
-      //glScalef(30.0,0.0,0.0);
+      glScalef(1.5,1.5,1.5);
+      glTranslatef(-80.0,0.0,0.0);
       tetraedro->draw(modoDibujado, GL_LINE, visAjedrez);
       glPopMatrix();
     }
-    if (objModelo) {
+    if (modeloActivado) {
       glPushMatrix();
       glTranslatef(150.0,0.0,0.0);
       glScalef(60.0,60.0,60.0);
       objPLY->draw(modoDibujado, GL_LINE, visAjedrez);
       glPopMatrix();
     }
+    if (revolucionActivado) {
+      glPushMatrix();
+      glScalef(60.0,60.0,60.0);
+      objRev->draw(modoDibujado, GL_LINE, visAjedrez);
+      glPopMatrix();
+   }
   }
 
   if (visSolido) {
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-    if (objCubo) {
+    if (cuboActivado) {
       cubo->draw(modoDibujado, GL_FILL, visAjedrez);
     }
-    if (objTetra) {
+    if (tetraedroActivado) {
       glPushMatrix();
       glScalef(1.5,1.5,1.5);
       glTranslatef(-80.0,0.0,0.0);
       tetraedro->draw(modoDibujado, GL_FILL, visAjedrez);
       glPopMatrix();
     }
-    if (objModelo) {
+    if (modeloActivado) {
       glPushMatrix();
       glTranslatef(150.0,0.0,0.0);
       glScalef(60.0,60.0,60.0);
       objPLY->draw(modoDibujado, GL_FILL, visAjedrez);
       glPopMatrix();
     }
+    if (revolucionActivado) {
+      glPushMatrix();
+      glScalef(60.0,60.0,60.0);
+      objRev->draw(modoDibujado, GL_FILL, visAjedrez);
+      glPopMatrix();
+   }
   }
 
   if (visAjedrez) {
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-    if (objCubo) {
+    if (cuboActivado) {
       cubo->draw(modoDibujado, GL_FILL, visAjedrez);
     }
-    if (objTetra) {
+    if (tetraedroActivado) {
       glPushMatrix();
       glScalef(1.5,1.5,1.5);
       glTranslatef(-80.0,0.0,0.0);
       tetraedro->draw(modoDibujado, GL_FILL, visAjedrez);
       glPopMatrix();
     }
-    if (objModelo) {
+    if (modeloActivado) {
       glPushMatrix();
       glTranslatef(150.0,0.0,0.0);
       glScalef(60.0,60.0,60.0);
@@ -228,12 +247,12 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
         if (modoMenu==SELOBJETO) {
           // Se visualiza/oculta el Tetraedro
           objetoVisualizado = 0;
-          if (objCubo) {
+          if (cuboActivado) {
             cout << "Desactivando: Cubo." << endl;
-            objCubo = false;
+            cuboActivado = false;
           } else {
             cout << "Activando: Cubo." << endl;
-            objCubo = true;
+            cuboActivado = true;
           }
         }
         break ;
@@ -241,24 +260,24 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
         if (modoMenu==SELOBJETO) {
           // Se visualiza/oculta el Tetraedro
           objetoVisualizado = 1;
-          if (objTetra) {
+          if (tetraedroActivado) {
             cout << "Desactivando: Tetraedro." << endl;
-            objTetra = false;
+            tetraedroActivado = false;
           } else {
             cout << "Activando: Tetraedro." << endl;
-            objTetra = true;
+            tetraedroActivado = true;
           }
         }
         break ;
       case 'M' :
         if (modoMenu==SELOBJETO) {
           // Se visualiza/oculta el Tetraedro
-          if (objModelo) {
+          if (modeloActivado) {
             cout << "Desactivando: Modelo PLY." << endl;
-            objModelo = false;
+            modeloActivado = false;
           } else {
             cout << "Activando: Modelo PLY." << endl;
-            objModelo = true;
+            modeloActivado = true;
           }
         }
         break ;
