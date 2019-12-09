@@ -149,7 +149,7 @@ void Malla3D::draw(int modo, GLenum visualizacion, bool ajedrezActivado)
         }
       break;
       case GL_FILL:
-        c = cPLY;
+        c = cCubo;
         switch (modo) {
           case 0:
             draw_ModoInmediato();
