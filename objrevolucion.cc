@@ -1,6 +1,5 @@
 #include "aux.h"
 #include "objrevolucion.h"
-#include "ply_reader.h"
 #include <math.h>
 using namespace std ;
 
@@ -21,6 +20,33 @@ ObjRevolucion::ObjRevolucion(const std::string & archivo, int num_instancias, bo
    ply::read_vertices(archivo, v_perfil);
 
    crearMalla(v_perfil, num_instancias);
+
+   // INICIALIZACIÓN DE COLORES
+   // Inicializar colores puntos en Modo inmediato y diferido
+   cPuntos.clear();
+   for (int i=0; i<v.size(); i++) {
+     cPuntos.push_back({0.28,0.25,0.4});
+   }
+
+   // Inicializar colores lineas en Modo inmediato y diferido
+   cLineas.clear();
+   for (int i=0; i<v.size(); i++) {
+     cLineas.push_back({0.28,0.25,0.4});
+   }
+
+   // Inicializar colores solido para cubo en Modo inmediato y diferido
+   cSolido.clear();
+   for (int i=0; i<v.size(); i++) {
+     cSolido.push_back({0.97,0.78,0.05});
+   }
+
+   // Inicializar colores cubo en Modo Ajedrez
+   cAjedrez1.clear();
+   cAjedrez2.clear();
+   for (int i=0; i<v.size(); i++) {
+     cAjedrez1.push_back({1.0,0.0,0.64});
+     cAjedrez2.push_back({0.97,0.78,0.05});
+   }
 }
 
 
@@ -30,9 +56,36 @@ ObjRevolucion::ObjRevolucion(const std::string & archivo, int num_instancias, bo
 ObjRevolucion::ObjRevolucion(std::vector<Tupla3f> archivo, int num_instancias, bool tapa_sup, bool tapa_inf) {
    // A completar
    crearMalla(archivo, num_instancias);
+
+   // INICIALIZACIÓN DE COLORES
+   // Inicializar colores puntos en Modo inmediato y diferido
+   cPuntos.clear();
+   for (int i=0; i<v.size(); i++) {
+     cPuntos.push_back({0.28,0.25,0.4});
+   }
+
+   // Inicializar colores lineas en Modo inmediato y diferido
+   cLineas.clear();
+   for (int i=0; i<v.size(); i++) {
+     cLineas.push_back({0.28,0.25,0.4});
+   }
+
+   // Inicializar colores solido para cubo en Modo inmediato y diferido
+   cSolido.clear();
+   for (int i=0; i<v.size(); i++) {
+     cSolido.push_back({0.97,0.78,0.05});
+   }
+
+   // Inicializar colores cubo en Modo Ajedrez
+   cAjedrez1.clear();
+   cAjedrez2.clear();
+   for (int i=0; i<v.size(); i++) {
+     cAjedrez1.push_back({1.0,0.0,0.64});
+     cAjedrez2.push_back({0.97,0.78,0.05});
+   }
 }
 
-void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil_original, int num_instancias) {
+void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil_original, int num_instancias, bool tapa_sup, bool tapa_inf) {
    float angulo, x, y, z;
    Tupla3f verticeRotado, poloSur, poloNorte;
    Tupla3i caraCreada;
@@ -44,10 +97,8 @@ void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil_original, int num_ins
 
    // Invertimos el vector si no es ascendente
    if (!ascendente) {
-      cout << "Valor del front: " << perfil_original.front()(1) << endl;
-      cout << "Valor del back: " << perfil_original.back()(1) << endl;
-      cout << "No es ascendente." << endl;
-      //std::reverse(perfil_original.begin(), perfil_original.end());
+      std::vector<Tupla3f> original (perfil_original.rbegin(), perfil_original.rend());
+      perfil_original = original;
    }
 
 
@@ -65,12 +116,13 @@ void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil_original, int num_ins
    // Comprobar si hay polo norte
    if (perfil_original.back()(0)==0 && perfil_original.back()(2)==0) {
       poloNorte = perfil_original.back();
-      perfil_original.erase(perfil_original.end());
+      perfil_original.pop_back();
    } else {
       poloNorte(0) = 0;
       poloNorte(1) = perfil_original.back()(1);
       poloNorte(2) = 0;
    }
+
 
    tamanio_perfil = perfil_original.size();
 
@@ -103,24 +155,25 @@ void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil_original, int num_ins
       }
    }
 
-   if (true) {
+   if (tapa_inf) {
       // Insertamos el polo sur
       v.push_back(poloSur);
 
       // Creamos las caras de la tapa sur
       for (int i=0; i<num_instancias; i++) {
-         caraCreada = {v.size()-1, (i+1)*tamanio_perfil, i*tamanio_perfil};
+         caraCreada = {v.size()-1, ((i+1)*tamanio_perfil) % (v.size() - 1), i*tamanio_perfil};
          f.push_back(caraCreada);
       }
    }
 
-   if (true) {
+   if (tapa_sup) {
       // Insertamos el polo norte
       v.push_back(poloNorte);
 
       // Creamos las caras de la tapa norte
       for (int i=0; i<num_instancias; i++) {
-         caraCreada = {v.size()-1, ((i+1)*tamanio_perfil)-1, ((i+2)*tamanio_perfil)-1};
+         caraCreada = {v.size()-1, (((i+1)*tamanio_perfil)-1) % (v.size() - 2) , (((i+2)*tamanio_perfil)-1) % (v.size() - 2)};
+
          f.push_back(caraCreada);
       }
    }

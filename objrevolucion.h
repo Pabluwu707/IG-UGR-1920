@@ -2,8 +2,7 @@
 //
 // Informática Gráfica (Grado Informática)
 //
-// Archivo: Cubo.h
-
+// Archivo: objrevolucion.h
 //
 // #############################################################################
 
@@ -12,6 +11,7 @@
 
 #include "aux.h"
 #include "malla.h"
+#include "ply_reader.h"
 
 // *****************************************************************************
 //
@@ -20,8 +20,8 @@
 // *****************************************************************************
 
 // *****************************************************************************
-// Cubo con centro en el origen y lado unidad por defecto
-// (tiene 9 vertices y 6 caras)
+// Objeto de revolución obtenido a partir de un perfil (en un PLY
+// o en un vector de puntos)
 
 class ObjRevolucion : public Malla3D
 {
@@ -29,10 +29,9 @@ class ObjRevolucion : public Malla3D
       ObjRevolucion();
       ObjRevolucion(const std::string & archivo, int num_instancias, bool tapa_sup=true, bool tapa_inf=true) ;
       ObjRevolucion(std::vector<Tupla3f> archivo, int num_instancias, bool tapa_sup=true, bool tapa_inf=true) ;
-   private:
-      void crearMalla(std::vector<Tupla3f> perfil_original, int num_instancias);
    protected:
       std::vector<Tupla3f> v_perfil ;   // tabla de coordenadas de vértices del perfil
+      void crearMalla(std::vector<Tupla3f> perfil_original, int num_instancias, bool tapa_sup=true, bool tapa_inf=true);
 } ;
 
 
