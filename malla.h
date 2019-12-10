@@ -55,9 +55,10 @@ class Malla3D
    // Vectores de colores del cubo (modo Inmediato y Diferido, y modo Ajedrez)
    std::vector<Tupla3f> c   ; // Vector de colores (modo Inmediato y Diferido)
 
-   std::vector<Tupla3f> cPLY     ; // Vector para visualización sólida (modo Inmediato y Diferido)
-   std::vector<Tupla3f> cCubo     ; // Vector para visualización sólida (modo Inmediato y Diferido)
-   std::vector<Tupla3f> cLineas   ; // Vector para lineas y puntos (modo Inmediato y Diferido)
+   std::vector<Tupla3f> cPLY      ; // Vector para visualización sólida (modo Inmediato y Diferido)
+   std::vector<Tupla3f> cSolido   ; // Vector para visualización sólida (modo Inmediato y Diferido)
+   std::vector<Tupla3f> cLineas   ; // Vector para lineas (modo Inmediato y Diferido)
+   std::vector<Tupla3f> cPuntos   ; // Vector para puntos (modo Inmediato y Diferido)
    std::vector<Tupla3f> cAjedrez1 ; // 1a tabla de colores (modo Ajedrez)
    std::vector<Tupla3f> cAjedrez2 ; // 2a tabla de colores (modo Ajedrez)
 

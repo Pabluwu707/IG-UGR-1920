@@ -94,40 +94,12 @@ void Malla3D::draw_ModoAjedrez()
 void Malla3D::draw(int modo, GLenum visualizacion, bool ajedrezActivado)
 {
 
-  // INICIALIZACIÓN DE COLORES
-  // Inicializar colores solido para ObjPLY en Modo inmediato y diferido
-  cPLY.clear();
-  for (int i=0; i<v.size(); i++) {
-    cPLY.push_back({1.0,0.0,0.64});
-  }
-
-  // Inicializar colores solido para cubo en Modo inmediato y diferido
-  cCubo.clear();
-  for (int i=0; i<v.size(); i=i+2) {
-    cCubo.push_back({1.0,0.0,0.64});
-    cCubo.push_back({0.97,0.78,0.05});
-  }
-
-  // Inicializar colores lineas y puntos en Modo inmediato y diferido
-  cLineas.clear();
-  for (int i=0; i<v.size(); i++) {
-    cLineas.push_back({0.28,0.25,0.4});
-  }
-
-  // Inicializar colores cubo en Modo Ajedrez
-  cAjedrez1.clear();
-  cAjedrez2.clear();
-  for (int i=0; i<v.size(); i++) {
-    cAjedrez1.push_back({1.0,0.0,0.64});
-    cAjedrez2.push_back({0.97,0.78,0.05});
-  }
-
-  if (ajedrezActivado) {
+   if (ajedrezActivado) {
     draw_ModoAjedrez();
   } else {
     switch (visualizacion) {
       case GL_POINT:
-        c = cLineas;
+        c = cPuntos;
         switch (modo) {
           case 0:
             draw_ModoInmediato();
@@ -149,7 +121,7 @@ void Malla3D::draw(int modo, GLenum visualizacion, bool ajedrezActivado)
         }
       break;
       case GL_FILL:
-        c = cCubo;
+        c = cSolido;
         switch (modo) {
           case 0:
             draw_ModoInmediato();
