@@ -17,7 +17,34 @@ Tetraedro::Tetraedro()
    //  de las agujas del reloj, cuando esa cara se observa desde el exterior del cubo)
    f.resize(100);
    f[0] = Tupla3i (1,2,0); // Triangulo 0
-   f[1] = Tupla3i (3,2,1); // Triangulo 0
-   f[2] = Tupla3i (0,2,3); // Triangulo 0
-   f[3] = Tupla3i (0,3,1); // Triangulo 0
+   f[1] = Tupla3i (3,2,1); // Triangulo 1
+   f[2] = Tupla3i (0,2,3); // Triangulo 2
+   f[3] = Tupla3i (0,3,1); // Triangulo 3
+
+
+   // Inicializar colores puntos en Modo inmediato y diferido
+   cPuntos.clear();
+   for (int i=0; i<v.size(); i++) {
+     cPuntos.push_back({0.28,0.25,0.4});
+   }
+
+   // Inicializar colores lineas en Modo inmediato y diferido
+   cLineas.clear();
+   for (int i=0; i<v.size(); i++) {
+     cLineas.push_back({0.28,0.25,0.4});
+   }
+
+   // Inicializar colores solido para cubo en Modo inmediato y diferido
+   cSolido.clear();
+   for (int i=0; i<v.size(); i++) {
+     cSolido.push_back({0.47,0.11,0.58});
+   }
+
+   // Inicializar colores cubo en Modo Ajedrez
+   cAjedrez1.clear();
+   cAjedrez2.clear();
+   for (int i=0; i<v.size(); i++) {
+     cAjedrez1.push_back({1.0,0.0,0.64});
+     cAjedrez2.push_back({0.97,0.78,0.05});
+   }
 }
