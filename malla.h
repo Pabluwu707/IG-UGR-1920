@@ -2,7 +2,7 @@
 //
 // Informática Gráfica (Grado Informática)
 //
-// Archivo: Malla3D.h
+// Archivo: malla.h
 // -- declaraciones de clase Malla3D (mallas indexadas) y derivados
 //
 // #############################################################################
@@ -61,7 +61,13 @@ class Malla3D
    std::vector<Tupla3f> cAjedrez1 ; // 1a tabla de colores (modo Ajedrez)
    std::vector<Tupla3f> cAjedrez2 ; // 2a tabla de colores (modo Ajedrez)
 
+   // Función que llama a glDrawElements (se sobreecribe en objRevolucion)
+   virtual void dibujarElementos();
+
    // A completar: tabla de normales de vértices (practica 3)
+   std::vector<Tupla3f> normalesf ;
+   std::vector<Tupla3f> normalesv ;
+
 } ;
 
 

@@ -16,9 +16,15 @@ void Malla3D::draw_ModoInmediato()
   glEnableClientState( GL_VERTEX_ARRAY );
   glVertexPointer( 3, GL_FLOAT, 0, v.data() );
   glColorPointer( 3, GL_FLOAT, 0, c.data() ) ;
-  glDrawElements( GL_TRIANGLES, f.size()*3, GL_UNSIGNED_INT, f.data() );
+  dibujarElementos();
+  //glDrawElements( GL_TRIANGLES, f.size()*3, GL_UNSIGNED_INT, f.data() );
   glDisableClientState( GL_VERTEX_ARRAY );
 }
+
+void Malla3D::dibujarElementos() {
+   glDrawElements( GL_TRIANGLES, f.size()*3, GL_UNSIGNED_INT, f.data() );
+}
+
 // -----------------------------------------------------------------------------
 // Visualización en modo diferido con 'glDrawElements' (usando VBOs)
 
@@ -144,4 +150,42 @@ GLuint Malla3D::CrearVBO (GLuint tipo_vbo, GLuint tamanio_bytes, GLvoid * punter
   glBufferData (tipo_vbo, tamanio_bytes, puntero_ram, GL_STATIC_DRAW);
   glBindBuffer (tipo_vbo, 0); // Desactivación del VBO (activar 0)
   return id_vbo; // Devolver el identificador resultado
+}
+
+void Malla3D::calcular_normales () {
+   Tupla3f A, B, Mc, Nc;
+
+   // Inicializar vector
+   for (int j=0; j < v.size(); j++) {
+      normalesv.push_back({0,0,0});
+   }
+
+   // Calcular tabla de normales de las caras
+   for (int i=0; i < f.size(); i++) {
+      // Calcular vectores A y B
+      A = v[f[i](0)] - v[f[i](1)];
+      B = v[f[i](0)] - v[f[i](2)];
+
+      // Calcular el vector mc perpendicular a la cara (producto vectorial de a y b)
+      Mc = A.cross(B);
+
+      // Calcular el vector normal Nc
+      Nc = Mc.normalized();
+
+      // Insertar en vector normalesf;
+      normalesf.push_back(Nc);
+   }
+
+   // Calcular normales de los vertices
+   // Calcular a partir de normalesf
+   for (int i=0; i < f.size(); i++) {
+      normalesv[f[i](0)] = normalesv[f[i](0)] + normalesf[i];
+      normalesv[f[i](1)] = normalesv[f[i](1)] + normalesf[i];
+      normalesv[f[i](2)] = normalesv[f[i](2)] + normalesf[i];
+   }
+
+   // Normalizar vertices
+   for (int j=0; j < normalesv.size(); j++) {
+      normalesv[j] = normalesv[j].normalized();
+   }
 }
