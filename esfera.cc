@@ -16,7 +16,7 @@ Esfera::Esfera(float radio, int num_instancias) {
    }
 
    // Invocar el método crearMalla con el vector de puntos
-   crearMalla(v_perfil, num_instancias);
+   crearMalla(v_perfil, num_instancias, true);
 
 
    // INICIALIZACIÓN DE COLORES

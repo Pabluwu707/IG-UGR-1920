@@ -14,7 +14,7 @@ Cilindro::Cilindro(float radio, float altura, int num_instancias)
    vector_puntos[1] = Tupla3f (radio,altura,0); // Vértice 1
 
    // Invocar el método crearMalla con el vector de puntos
-   crearMalla(vector_puntos, num_instancias);
+   crearMalla(vector_puntos, num_instancias, true);
 
    // INICIALIZACIÓN DE COLORES
    // Inicializar colores puntos en Modo inmediato y diferido
