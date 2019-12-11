@@ -15,11 +15,11 @@ using namespace std ;
 
 ObjRevolucion::ObjRevolucion() {}
 
-ObjRevolucion::ObjRevolucion(const std::string & archivo, int num_instancias, bool tapa_sup, bool tapa_inf) {
+ObjRevolucion::ObjRevolucion(const std::string & archivo, int num_instancias, bool conTapas) {
    // A completar ......(práctica 2)
    ply::read_vertices(archivo, v_perfil);
 
-   crearMalla(v_perfil, num_instancias);
+   crearMalla(v_perfil, num_instancias, conTapas);
 
    // INICIALIZACIÓN DE COLORES
    // Inicializar colores puntos en Modo inmediato y diferido
@@ -53,9 +53,9 @@ ObjRevolucion::ObjRevolucion(const std::string & archivo, int num_instancias, bo
 // *****************************************************************************
 // objeto de revolución obtenido a partir de un perfil (en un vector de puntos)
 
-ObjRevolucion::ObjRevolucion(std::vector<Tupla3f> archivo, int num_instancias, bool tapa_sup, bool tapa_inf) {
+ObjRevolucion::ObjRevolucion(std::vector<Tupla3f> archivo, int num_instancias, bool conTapas) {
    // A completar
-   crearMalla(archivo, num_instancias);
+   crearMalla(archivo, num_instancias, conTapas);
 
    // INICIALIZACIÓN DE COLORES
    // Inicializar colores puntos en Modo inmediato y diferido
@@ -85,12 +85,19 @@ ObjRevolucion::ObjRevolucion(std::vector<Tupla3f> archivo, int num_instancias, b
    }
 }
 
-void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil_original, int num_instancias, bool tapa_sup, bool tapa_inf) {
+void ObjRevolucion::dibujarElementos() {
+   if (tapasActivadas) {
+      glDrawElements( GL_TRIANGLES, f.size()*3, GL_UNSIGNED_INT, f.data() );
+   } else {
+      glDrawElements( GL_TRIANGLES, f.size()*3 - num_instancias_usadas*6, GL_UNSIGNED_INT, f.data() );
+   }
+}
+
+void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil_original, int num_instancias, bool conTapas) {
    float angulo, x, y, z;
    Tupla3f verticeRotado, poloSur, poloNorte;
    Tupla3i caraCreada;
    int tamanio_perfil = perfil_original.size();
-   bool tienePoloNorte = false, tienePoloSur = false;
 
    // Comprobar si los vertices estan en orden ascendente o descendente
    bool ascendente = perfil_original.front()(1) < perfil_original.back()(1);
@@ -155,26 +162,31 @@ void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil_original, int num_ins
       }
    }
 
-   if (tapa_inf) {
-      // Insertamos el polo sur
-      v.push_back(poloSur);
+   // Insertamos el polo sur
+   v.push_back(poloSur);
 
-      // Creamos las caras de la tapa sur
-      for (int i=0; i<num_instancias; i++) {
-         caraCreada = {v.size()-1, ((i+1)*tamanio_perfil) % (v.size() - 1), i*tamanio_perfil};
-         f.push_back(caraCreada);
-      }
+   // Creamos las caras de la tapa sur
+   for (int i=0; i<num_instancias; i++) {
+      caraCreada = {v.size()-1, ((i+1)*tamanio_perfil) % (v.size() - 1), i*tamanio_perfil};
+      f.push_back(caraCreada);
    }
 
-   if (tapa_sup) {
-      // Insertamos el polo norte
-      v.push_back(poloNorte);
+   // Insertamos el polo norte
+   v.push_back(poloNorte);
 
-      // Creamos las caras de la tapa norte
-      for (int i=0; i<num_instancias; i++) {
-         caraCreada = {v.size()-1, (((i+1)*tamanio_perfil)-1) % (v.size() - 2) , (((i+2)*tamanio_perfil)-1) % (v.size() - 2)};
+   // Creamos las caras de la tapa norte
+   for (int i=0; i<num_instancias; i++) {
+      caraCreada = {v.size()-1, (((i+1)*tamanio_perfil)-1) % (v.size() - 2) , (((i+2)*tamanio_perfil)-1) % (v.size() - 2)};
 
-         f.push_back(caraCreada);
-      }
+      f.push_back(caraCreada);
+   }
+
+   num_instancias_usadas = num_instancias;
+
+   // En caso de que queramos dibujar tapas, activamos el bool tapasActivadas
+   if (conTapas) {
+      tapasActivadas = true;
+   } else {
+      tapasActivadas = false;
    }
 }

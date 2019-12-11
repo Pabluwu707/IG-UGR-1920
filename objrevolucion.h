@@ -26,12 +26,15 @@
 class ObjRevolucion : public Malla3D
 {
    public:
+      int num_instancias_usadas;
+      bool tapasActivadas;
       ObjRevolucion();
-      ObjRevolucion(const std::string & archivo, int num_instancias, bool tapa_sup=true, bool tapa_inf=true) ;
-      ObjRevolucion(std::vector<Tupla3f> archivo, int num_instancias, bool tapa_sup=true, bool tapa_inf=true) ;
+      ObjRevolucion(const std::string & archivo, int num_instancias, bool conTapas=true) ;
+      ObjRevolucion(std::vector<Tupla3f> archivo, int num_instancias, bool conTapas=true) ;
    protected:
       std::vector<Tupla3f> v_perfil ;   // tabla de coordenadas de vértices del perfil
-      void crearMalla(std::vector<Tupla3f> perfil_original, int num_instancias, bool tapa_sup=true, bool tapa_inf=true);
+      void crearMalla(std::vector<Tupla3f> perfil_original, int num_instancias, bool conTapas);
+      void dibujarElementos() override;
 } ;
 
 
