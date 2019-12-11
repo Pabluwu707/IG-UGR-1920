@@ -46,6 +46,7 @@ class Escena
    bool visPuntos = false, visLineas = true, visSolido = true, visAjedrez = false;
    bool cuboActivado = true, tetraedroActivado = true, modeloActivado = true, revolucionActivado = true, cilindroActivado = true, conoActivado = true, esferaActivado = true;
    bool ajedrezActivado = false;
+   bool tapasEscenaActivadas = true;
 
    // Objetos de la escena
    Ejes ejes;

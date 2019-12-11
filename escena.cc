@@ -23,7 +23,7 @@ Escena::Escena()
     cubo = new Cubo(50);
     tetraedro = new Tetraedro();
     objPLY = new ObjPLY("./plys/palmera.ply");
-    objRev = new ObjRevolucion("./plys/peon.ply", 20, true, true);
+    objRev = new ObjRevolucion("./plys/peon.ply", 20, true);
     cilindro = new Cilindro(0.5, 1.5, 20);
     cono = new Cono(0.5, 1.5, 20);
     esfera = new Esfera(0.5, 12);
@@ -42,6 +42,9 @@ void Escena::inicializar( int UI_window_width, int UI_window_height )
 	glEnable( GL_DEPTH_TEST );	// se habilita el z-bufer
 
    glEnable(GL_CULL_FACE); // Se habilita el Cull Face
+
+   glEnable(GL_NORMALIZE);
+
 
 	Width  = UI_window_width/10;
 	Height = UI_window_height/10;
@@ -340,6 +343,32 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
           salir=true ;
         }
         break ;
+      case '9' :
+        if (tapasEscenaActivadas) {
+           cilindro->tapasActivadas = false;
+           cono->tapasActivadas = false;
+           esfera->tapasActivadas = false;
+           objRev->tapasActivadas = false;
+           tapasEscenaActivadas = false;
+        } else {
+           cilindro->tapasActivadas = true;
+           cono->tapasActivadas = true;
+           esfera->tapasActivadas = true;
+           objRev->tapasActivadas = true;
+           tapasEscenaActivadas = true;
+        }
+        break ;
+      /*
+      case '9' :
+         if (tapasEscenaActivadas) {
+            cilindro.tapasActivadas = false;
+
+        } else {
+        }
+      break;
+      */
+
+
 
       // ----------------------------------------------
 
