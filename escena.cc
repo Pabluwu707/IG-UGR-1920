@@ -19,16 +19,14 @@ Escena::Escena()
 
     ejes.changeAxisSize( 5000 );
 
-    // crear los objetos de la escena....
-    // .......completar: ...
-    // .....
-
+    // Crear los objetos de la escena....
     cubo = new Cubo(50);
     tetraedro = new Tetraedro();
-    objPLY = new ObjPLY("./plys/bust.ply");
+    objPLY = new ObjPLY("./plys/palmera.ply");
     objRev = new ObjRevolucion("./plys/peon.ply", 20, true, true);
-    cilindro = new Cilindro(0.5, 1.5, 30);
-    cono = new Cono(0.5, 1.5, 30);
+    cilindro = new Cilindro(0.5, 1.5, 20);
+    cono = new Cono(0.5, 1.5, 20);
+    esfera = new Esfera(0.5, 12);
 }
 
 //**************************************************************************
@@ -85,7 +83,7 @@ void Escena::dibujar()
   // Ajustes de los modelos
   glShadeModel(GL_SMOOTH);
   glPointSize(7);
-  glLineWidth(4);
+  glLineWidth(3);
 
   if (visPuntos) {
     glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
@@ -112,7 +110,7 @@ void Escena::dibujar()
    }
     if (revolucionActivado) {
       glPushMatrix();
-      glTranslatef(20.0,70.0,40.0);
+      glTranslatef(20.0,70.0,25.0);
       glScalef(50.0,50.0,50.0);
       objRev->draw(modoDibujado, GL_POINT, visAjedrez);
       glPopMatrix();
@@ -129,6 +127,13 @@ void Escena::dibujar()
       glTranslatef(-70.0,0.0,80.0);
       glScalef(60.0,60.0,60.0);
       cono->draw(modoDibujado, GL_POINT, visAjedrez);
+      glPopMatrix();
+   }
+    if(esferaActivado) {
+      glPushMatrix();
+      glTranslatef(80.0,30.0,-70.0);
+      glScalef(60.0,60.0,60.0);
+      esfera->draw(modoDibujado, GL_POINT, visAjedrez);
       glPopMatrix();
    }
   }
@@ -158,7 +163,7 @@ void Escena::dibujar()
     }
     if (revolucionActivado) {
       glPushMatrix();
-      glTranslatef(20.0,70.0,40.0);
+      glTranslatef(20.0,70.0,25.0);
       glScalef(50.0,50.0,50.0);
       objRev->draw(modoDibujado, GL_LINE, visAjedrez);
       glPopMatrix();
@@ -175,6 +180,13 @@ void Escena::dibujar()
       glTranslatef(-70.0,0.0,80.0);
       glScalef(60.0,60.0,60.0);
       cono->draw(modoDibujado, GL_LINE, visAjedrez);
+      glPopMatrix();
+   }
+    if(esferaActivado) {
+      glPushMatrix();
+      glTranslatef(80.0,30.0,-70.0);
+      glScalef(60.0,60.0,60.0);
+      esfera->draw(modoDibujado, GL_LINE, visAjedrez);
       glPopMatrix();
    }
   }
@@ -204,7 +216,7 @@ void Escena::dibujar()
     }
     if (revolucionActivado) {
       glPushMatrix();
-      glTranslatef(20.0,70.0,40.0);
+      glTranslatef(20.0,70.0,25.0);
       glScalef(50.0,50.0,50.0);
       objRev->draw(modoDibujado, GL_FILL, visAjedrez);
       glPopMatrix();
@@ -221,6 +233,13 @@ void Escena::dibujar()
       glTranslatef(-70.0,0.0,80.0);
       glScalef(60.0,60.0,60.0);
       cono->draw(modoDibujado, GL_FILL, visAjedrez);
+      glPopMatrix();
+   }
+    if(esferaActivado) {
+      glPushMatrix();
+      glTranslatef(80.0,30.0,-70.0);
+      glScalef(60.0,60.0,60.0);
+      esfera->draw(modoDibujado, GL_FILL, visAjedrez);
       glPopMatrix();
    }
   }
@@ -250,7 +269,7 @@ void Escena::dibujar()
     }
     if (revolucionActivado) {
       glPushMatrix();
-      glTranslatef(20.0,70.0,40.0);
+      glTranslatef(20.0,70.0,25.0);
       glScalef(50.0,50.0,50.0);
       objRev->draw(modoDibujado, GL_FILL, visAjedrez);
       glPopMatrix();
@@ -267,6 +286,13 @@ void Escena::dibujar()
       glTranslatef(-70.0,0.0,80.0);
       glScalef(60.0,60.0,60.0);
       cono->draw(modoDibujado, GL_FILL, visAjedrez);
+      glPopMatrix();
+   }
+    if(esferaActivado) {
+      glPushMatrix();
+      glTranslatef(80.0,30.0,-70.0);
+      glScalef(60.0,60.0,60.0);
+      esfera->draw(modoDibujado, GL_FILL, visAjedrez);
       glPopMatrix();
    }
   }

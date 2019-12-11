@@ -9,6 +9,7 @@
 #include "objrevolucion.h"
 #include "cilindro.h"
 #include "cono.h"
+#include "esfera.h"
 
 typedef enum {NADA, SELOBJETO,SELVISUALIZACION,SELDIBUJADO} menu;
 class Escena
@@ -42,8 +43,8 @@ class Escena
    int objetoVisualizado = 0;
    GLenum modoVisualizacion = GL_FILL;
    int modoDibujado = 0;
-   bool visPuntos = true, visLineas = false, visSolido = true, visAjedrez = false;
-   bool cuboActivado = true, tetraedroActivado = true, modeloActivado = true, revolucionActivado = true, cilindroActivado = true, conoActivado = true;
+   bool visPuntos = false, visLineas = true, visSolido = true, visAjedrez = false;
+   bool cuboActivado = true, tetraedroActivado = true, modeloActivado = true, revolucionActivado = true, cilindroActivado = true, conoActivado = true, esferaActivado = true;
    bool ajedrezActivado = false;
 
    // Objetos de la escena
@@ -54,6 +55,7 @@ class Escena
    ObjRevolucion * objRev = nullptr ; // es importante inicializarlo a 'nullptr'
    Cilindro * cilindro = nullptr;
    Cono * cono = nullptr;
+   Esfera * esfera = nullptr;
 
    public:
 
