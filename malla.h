@@ -51,6 +51,7 @@ class Malla3D
    int id_vbo_ver = 0 ;
    int id_vbo_tri = 0 ;
    int id_vbo_col = 0 ;
+   int id_vbo_nor = 0 ;
 
    // Vectores de colores del cubo (modo Inmediato y Diferido, y modo Ajedrez)
    std::vector<Tupla3f> c   ; // Vector de colores (modo Inmediato y Diferido)

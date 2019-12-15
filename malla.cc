@@ -16,9 +16,12 @@ void Malla3D::draw_ModoInmediato()
   glEnableClientState( GL_VERTEX_ARRAY );
   glVertexPointer( 3, GL_FLOAT, 0, v.data() );
   glColorPointer( 3, GL_FLOAT, 0, c.data() ) ;
+  glEnableClientState(GL_NORMAL_ARRAY);
+  glNormalPointer( GL_FLOAT, 0, normalesv.data() ) ;
   dibujarElementos();
   //glDrawElements( GL_TRIANGLES, f.size()*3, GL_UNSIGNED_INT, f.data() );
   glDisableClientState( GL_VERTEX_ARRAY );
+  glDisableClientState( GL_NORMAL_ARRAY );
 }
 
 void Malla3D::dibujarElementos() {
@@ -42,13 +45,22 @@ void Malla3D::draw_ModoDiferido()
     id_vbo_col = CrearVBO(GL_ARRAY_BUFFER, c.size()*3 * sizeof(float), c.data() );
   }
 
+  if (id_vbo_nor == 0) {
+    id_vbo_nor = CrearVBO(GL_ARRAY_BUFFER, normalesv.size()*3 * sizeof(float), normalesv.data() );
+  }
+
   glEnableClientState(GL_VERTEX_ARRAY); // Habilitar tabla de vértices
   glEnableClientState(GL_COLOR_ARRAY); // Habilitar tabla de colores
-
+  glEnableClientState(GL_NORMAL_ARRAY);
 
   // Especificar localización y formato de la tabla de vértices
   glBindBuffer(GL_ARRAY_BUFFER,id_vbo_ver); // Activar VBO de vértices
   glVertexPointer( 3,GL_FLOAT, 0, 0 ); // Especifica formato y offset (=0)
+  glBindBuffer(GL_ARRAY_BUFFER, 0 ); // Desactivar VBO de vértices.
+
+  // Especificar localización y formato de la tabla de normales
+  glBindBuffer(GL_ARRAY_BUFFER,id_vbo_nor); // Activar VBO de vértices
+  glNormalPointer( GL_FLOAT, 0, 0 ); // Especifica formato y offset (=0)
   glBindBuffer(GL_ARRAY_BUFFER, 0 ); // Desactivar VBO de vértices.
 
   // Especificar localización y formato de la tabla de colores
@@ -163,8 +175,8 @@ void Malla3D::calcular_normales () {
    // Calcular tabla de normales de las caras
    for (int i=0; i < f.size(); i++) {
       // Calcular vectores A y B
-      A = v[f[i](0)] - v[f[i](1)];
-      B = v[f[i](0)] - v[f[i](2)];
+      A = v[f[i](1)] - v[f[i](0)];
+      B = v[f[i](2)] - v[f[i](0)];
 
       // Calcular el vector mc perpendicular a la cara (producto vectorial de a y b)
       Mc = A.cross(B);
