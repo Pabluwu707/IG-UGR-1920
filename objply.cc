@@ -39,4 +39,7 @@ ObjPLY::ObjPLY( const std::string & nombre_archivo )
      cAjedrez1.push_back({1.0,0.0,0.64});
      cAjedrez2.push_back({0.97,0.78,0.05});
    }
+
+   // Calcular normales
+   calcular_normales();
 }

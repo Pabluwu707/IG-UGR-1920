@@ -7,7 +7,7 @@ Esfera::Esfera(float radio, int num_instancias) {
 
    // Inicializar vector de puntos
    float angulo, x, y, z;
-   for (int i=0; i <= num_instancias; i++) {
+   for (int i=0; i < num_instancias; i++) {
       angulo = (M_PI/num_instancias * i);
       x = (0 * cos (angulo)) + (radio * -sin (angulo));
       y = (0 * sin (angulo)) + (radio * cos (angulo));

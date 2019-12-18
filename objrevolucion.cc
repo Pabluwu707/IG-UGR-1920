@@ -47,9 +47,6 @@ ObjRevolucion::ObjRevolucion(const std::string & archivo, int num_instancias, bo
      cAjedrez1.push_back({1.0,0.0,0.64});
      cAjedrez2.push_back({0.97,0.78,0.05});
    }
-
-   // Calcular normales del objeto
-   calcular_normales();
 }
 
 
@@ -87,9 +84,6 @@ ObjRevolucion::ObjRevolucion(std::vector<Tupla3f> archivo, int num_instancias, b
      cAjedrez2.push_back({0.97,0.78,0.05});
    }
 
-   // Calcular normales del objeto
-   calcular_normales();
-   
 }
 
 void ObjRevolucion::dibujarElementos() {
@@ -137,6 +131,8 @@ void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil_original, int num_ins
       poloNorte(2) = 0;
    }
 
+   v.clear();
+   f.clear();
 
    tamanio_perfil = perfil_original.size();
 
@@ -169,8 +165,10 @@ void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil_original, int num_ins
       }
    }
 
+
    // Insertamos el polo sur
    v.push_back(poloSur);
+
 
    // Creamos las caras de la tapa sur
    for (int i=0; i<num_instancias; i++) {
@@ -178,15 +176,21 @@ void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil_original, int num_ins
       f.push_back(caraCreada);
    }
 
+
    // Insertamos el polo norte
    v.push_back(poloNorte);
 
+
    // Creamos las caras de la tapa norte
    for (int i=0; i<num_instancias; i++) {
-      caraCreada = {v.size()-1, (((i+1)*tamanio_perfil)-1) % (v.size() - 2) , (((i+2)*tamanio_perfil)-1) % (v.size() - 2)};
+      int v2 = ((i+1)*tamanio_perfil)-1;
+      int v3 = (v2 + tamanio_perfil) % (v.size() - 2);
+
+      caraCreada = {v.size()-1, v2 ,  v3};
 
       f.push_back(caraCreada);
    }
+
 
    num_instancias_usadas = num_instancias;
 
@@ -196,4 +200,7 @@ void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil_original, int num_ins
    } else {
       tapasActivadas = false;
    }
+
+   // Calcular normales
+   calcular_normales();
 }
