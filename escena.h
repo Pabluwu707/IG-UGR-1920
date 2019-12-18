@@ -10,8 +10,11 @@
 #include "cilindro.h"
 #include "cono.h"
 #include "esfera.h"
+#include "luz.h"
+#include "luzposicional.h"
+#include "luzdireccional.h"
 
-typedef enum {NADA, SELOBJETO,SELVISUALIZACION,SELDIBUJADO} menu;
+typedef enum {NADA, SELOBJETO,SELVISUALIZACION,SELDIBUJADO, VARALFA, VARBETA} menu;
 class Escena
 {
 
@@ -43,8 +46,11 @@ class Escena
    int objetoVisualizado = 0;
    GLenum modoVisualizacion = GL_FILL;
    int modoDibujado = 0;
-   bool visPuntos = false, visLineas = true, visSolido = true, visAjedrez = false;
-   bool cuboActivado = true, tetraedroActivado = true, modeloActivado = true, revolucionActivado = true, cilindroActivado = true, conoActivado = true, esferaActivado = true;
+   bool visPuntos = false, visLineas = false, visSolido = false, visAjedrez = false, visLuces = true;
+   bool cuboActivado = true, tetraedroActivado = true, modeloActivado = true,
+      revolucionActivado = true, cilindroActivado = true,
+      conoActivado = true, esferaActivado = true, bombillaActivado = true,
+      mesaActivado = true, peonNegroActivado = true, peonBlancoActivado = true;
    bool ajedrezActivado = false;
    bool tapasEscenaActivadas = true;
 
@@ -57,6 +63,13 @@ class Escena
    Cilindro * cilindro = nullptr;
    Cono * cono = nullptr;
    Esfera * esfera = nullptr;
+   Cubo * mesa = nullptr;
+   ObjRevolucion * peonBlanco = nullptr ; // es importante inicializarlo a 'nullptr'
+   ObjRevolucion * peonNegro = nullptr ; // es importante inicializarlo a 'nullptr'
+
+   LuzPosicional * luz0 = nullptr;
+   LuzDireccional * luz1 = nullptr;
+
 
    public:
 
@@ -66,6 +79,9 @@ class Escena
 
 	// Dibujar
 	void dibujar() ;
+
+   //
+   void dibujarUsandoVisualizacion(GLenum modoVisualizacionAUsar, bool visAjedrez);
 
 	// Interacción con la escena
 	bool teclaPulsada( unsigned char Tecla1, int x, int y ) ;

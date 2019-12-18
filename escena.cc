@@ -1,8 +1,7 @@
-
-
 #include "aux.h"     // includes de OpenGL/glut/glew, windows, y librería std de C++
 #include "escena.h"
 #include "malla.h" // objetos: Cubo y otros....
+#include <math.h>
 using namespace std ;
 
 //**************************************************************************
@@ -11,22 +10,50 @@ using namespace std ;
 
 Escena::Escena()
 {
-    Front_plane       = 50.0;
-    Back_plane        = 2000.0;
-    Observer_distance = 5*Front_plane;
-    Observer_angle_x  = 0.0 ;
-    Observer_angle_y  = 0.0 ;
+   Front_plane       = 50.0;
+   Back_plane        = 2000.0;
+   Observer_distance = 5*Front_plane;
+   Observer_angle_x  = 0.0 ;
+   Observer_angle_y  = 0.0 ;
 
-    ejes.changeAxisSize( 5000 );
+   ejes.changeAxisSize( 5000 );
 
-    // Crear los objetos de la escena....
-    cubo = new Cubo(50);
-    tetraedro = new Tetraedro();
-    objPLY = new ObjPLY("./plys/palmera.ply");
-    objRev = new ObjRevolucion("./plys/peon.ply", 20, true);
-    cilindro = new Cilindro(0.5, 1.5, 20);
-    cono = new Cono(0.5, 1.5, 20);
-    esfera = new Esfera(0.5, 12);
+   // Crear los objetos de la escena....
+   cubo = new Cubo(50);
+   tetraedro = new Tetraedro();
+   objPLY = new ObjPLY("./plys/palmera.ply");
+   objRev = new ObjRevolucion("./plys/peon.ply", 20, true);
+   cilindro = new Cilindro(0.5, 1.5, 20);
+   cono = new Cono(0.5, 1.5, 20);
+   esfera = new Esfera(0.5, 12);
+   mesa = new Cubo(50);
+   peonBlanco = new ObjRevolucion("./plys/peon.ply", 20, true);
+   peonNegro = new ObjRevolucion("./plys/peon.ply", 20, true);
+
+   // Crear materiales a usar
+   Material oro ({0.24725, 0.1995, 0.0745, 1}, {0.75164, 0.60648, 0.22648, 1}, {0.628281, 0.555802, 0.366065, 1}, 0.4*128.0f);
+   Material plata({0.19225, 0.19225, 0.19225, 1}, {0.50754, 0.50754, 0.50754, 1}, {0.508273, 0.508273, 0.508273, 1}, 0.4*128.0f);
+   Material bronce({0.2125, 0.1275, 0.054, 1}, {0.714, 0.04284, 0.18144, 1}, {0.393548, 0.271906, 0.166721, 1}, 0.2*128.0f);
+   Material rubi({0.61424, 0.04136, 0.04136, 1}, {0.61424, 0.04136, 0.04136, 1}, {0.727811, 0.626959, 0.626959, 1}, 0.7*128.0f);
+   Material turquesa({0.1, 0.18725, 0.1745, 1}, {0.396, 0.074151, 0.69102, 1}, {0.297254, 0.30829, 0.306678, 1}, 0.1*128.0f);
+   Material plasticoVerde({0.0, 0.0, 0.0, 1}, {0.1, 0.35, 0.1, 1}, {0.45, 0.55, 0.45, 1}, 0.25*128.0f);
+   Material plasticoCian({0.0, 0.1, 0.06, 1}, {0.0, 0.50980392, 0.50980392, 1}, {0.50196078, 0.50196078, 0.50196078, 1}, 0.25*128.0f);
+
+   // Aplicar materiales en objetos de la escena
+   cilindro->establecerMaterial(oro);
+   esfera->establecerMaterial(oro);
+   cubo->establecerMaterial(plata);
+   tetraedro->establecerMaterial(plata);
+   objPLY->establecerMaterial(plasticoVerde);
+   cono->establecerMaterial(plasticoCian);
+   mesa->establecerMaterial(bronce);
+   peonNegro->establecerMaterial(rubi);
+   peonBlanco->establecerMaterial(turquesa);
+
+
+   // Crear luces de la escena
+   luz0 = new LuzPosicional({0, 120, 0}, GL_LIGHT0, {0,0,0,1}, {1,1,1,1}, {1,1,1,1});
+   luz1 = new LuzDireccional({0,10,0}, GL_LIGHT1, {0,0,0,1}, {1,1,1,1}, {1,1,1,1});
 }
 
 //**************************************************************************
@@ -40,11 +67,8 @@ void Escena::inicializar( int UI_window_width, int UI_window_height )
 	glClearColor( 0.18, 0.15, 0.3, 0.0 );// se indica cual sera el color para limpiar la ventana	(r,v,a,al)
 
 	glEnable( GL_DEPTH_TEST );	// se habilita el z-bufer
-
    glEnable(GL_CULL_FACE); // Se habilita el Cull Face
-
    glEnable(GL_NORMALIZE);
-
 
 	Width  = UI_window_width/10;
 	Height = UI_window_height/10;
@@ -62,264 +86,139 @@ void Escena::inicializar( int UI_window_width, int UI_window_height )
 //
 // **************************************************************************
 
-void Escena::dibujar()
-{
-  using namespace std ;
+void Escena::dibujar() {
+   using namespace std ;
 
-  glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); // Limpiar la pantalla
-	change_observer();
+   glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); // Limpiar la pantalla
+   change_observer();
 
-  // Ajuste e inicialización de los ejes
+   // Ajuste e inicialización de los ejes
 
-  glLineWidth(1);
-  ejes.draw();
+   glDisable(GL_LIGHTING);
+   glLineWidth(1);
+   ejes.draw();
 
 
-  // COMPLETAR
-  // Dibujar los diferentes elementos de la escena
-  // Habrá que tener en esta primera práctica una variable que indique qué objeto se ha de visualizar
-  // y hacer
-  // cubo.draw()
-  // o
-  // tetraedro.draw()
+   // COMPLETAR
+   // Dibujar los diferentes elementos de la escena
+   // Habrá que tener en esta primera práctica una variable que indique qué objeto se ha de visualizar
+   // y hacer
+   // cubo.draw()
+   // o
+   // tetraedro.draw()
 
-  // Ajustes de los modelos
-  glShadeModel(GL_SMOOTH);
-  glPointSize(7);
-  glLineWidth(3);
+   // Ajustes de los modelos
+   glShadeModel(GL_SMOOTH);
+   glPointSize(7);
+   glLineWidth(3);
 
-  if (visPuntos) {
-    glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
 
-    if (cuboActivado) {
+
+   if (visPuntos) {
+      glDisable(GL_LIGHTING);
+      glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+      dibujarUsandoVisualizacion(GL_POINT, visAjedrez);
+   }
+
+   if (visLineas) {
+      glDisable(GL_LIGHTING);
+      glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+      dibujarUsandoVisualizacion(GL_LINE, visAjedrez);
+   }
+
+   if (visSolido) {
+      glDisable(GL_LIGHTING);
+      glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+      dibujarUsandoVisualizacion(GL_FILL, visAjedrez);
+   }
+
+   if (visAjedrez) {
+      glDisable(GL_LIGHTING);
+      glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+      dibujarUsandoVisualizacion(GL_FILL, visAjedrez);
+   }
+
+   if (visLuces) {
+      glEnable(GL_LIGHTING);
+      glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+      luz0->activar();
+      luz1->activar();
+      dibujarUsandoVisualizacion(GL_FILL, false);
+   }
+}
+
+
+
+void Escena::dibujarUsandoVisualizacion(GLenum modoVisualizacionAUsar, bool visAjedrez) {
+   if (cuboActivado) {
       glPushMatrix();
       glTranslatef(80.0,0.0,50.0);
-      cubo->draw(modoDibujado, GL_POINT, visAjedrez);
+      cubo->draw(modoDibujado, modoVisualizacionAUsar, visAjedrez);
       glPopMatrix();
-    }
+   }
     if (tetraedroActivado) {
       glPushMatrix();
-      glTranslatef(-110.0,0.0,-30.0);
-      glScalef(1.5,1.5,1.5);
-      tetraedro->draw(modoDibujado, GL_POINT, visAjedrez);
+      glTranslatef(-170.0,0.0,20.0);
+      glScalef(1.1,1.1,1.1);
+      tetraedro->draw(modoDibujado, modoVisualizacionAUsar, visAjedrez);
       glPopMatrix();
     }
     if (modeloActivado) {
       glPushMatrix();
       glTranslatef(150.0,0.0,0.0);
       glScalef(60.0,60.0,60.0);
-      objPLY->draw(modoDibujado, GL_POINT, visAjedrez);
+      objPLY->draw(modoDibujado, modoVisualizacionAUsar, visAjedrez);
       glPopMatrix();
    }
     if (revolucionActivado) {
       glPushMatrix();
-      glTranslatef(20.0,70.0,25.0);
+      glTranslatef(0.0,70.0,-90.0);
       glScalef(50.0,50.0,50.0);
-      objRev->draw(modoDibujado, GL_POINT, visAjedrez);
+      objRev->draw(modoDibujado, modoVisualizacionAUsar, visAjedrez);
       glPopMatrix();
    }
     if (cilindroActivado) {
       glPushMatrix();
-      glTranslatef(0.0,0.0,-90.0);
+      glTranslatef(-100.0,0.0,-80.0);
       glScalef(60.0,60.0,60.0);
-      cilindro->draw(modoDibujado, GL_POINT, visAjedrez);
+      cilindro->draw(modoDibujado, modoVisualizacionAUsar, visAjedrez);
       glPopMatrix();
    }
     if(conoActivado) {
       glPushMatrix();
-      glTranslatef(-70.0,0.0,80.0);
+      glTranslatef(-160.0,0.0,-30.0);
       glScalef(60.0,60.0,60.0);
-      cono->draw(modoDibujado, GL_POINT, visAjedrez);
+      cono->draw(modoDibujado, modoVisualizacionAUsar, visAjedrez);
       glPopMatrix();
    }
     if(esferaActivado) {
       glPushMatrix();
-      glTranslatef(80.0,30.0,-70.0);
+      glTranslatef(100.0,30.0,-60.0);
       glScalef(60.0,60.0,60.0);
-      esfera->draw(modoDibujado, GL_POINT, visAjedrez);
+      esfera->draw(modoDibujado, modoVisualizacionAUsar, visAjedrez);
       glPopMatrix();
    }
-  }
-
-  if (visLineas) {
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
-    if (cuboActivado) {
+    if(mesaActivado) {
       glPushMatrix();
-      glTranslatef(80.0,0.0,50.0);
-      cubo->draw(modoDibujado, GL_LINE, visAjedrez);
-      glPopMatrix();
-    }
-    if (tetraedroActivado) {
-      glPushMatrix();
-      glTranslatef(-110.0,0.0,-30.0);
-      glScalef(1.5,1.5,1.5);
-      tetraedro->draw(modoDibujado, GL_LINE, visAjedrez);
-      glPopMatrix();
-    }
-    if (modeloActivado) {
-      glPushMatrix();
-      glTranslatef(150.0,0.0,0.0);
-      glScalef(60.0,60.0,60.0);
-      objPLY->draw(modoDibujado, GL_LINE, visAjedrez);
-      glPopMatrix();
-    }
-    if (revolucionActivado) {
-      glPushMatrix();
-      glTranslatef(20.0,70.0,25.0);
-      glScalef(50.0,50.0,50.0);
-      objRev->draw(modoDibujado, GL_LINE, visAjedrez);
+      glScalef(2.0,0.05,2.0);
+      glTranslatef(-22.0,0.0,-5.0);
+      mesa->draw(modoDibujado, modoVisualizacionAUsar, visAjedrez);
       glPopMatrix();
    }
-    if (cilindroActivado) {
+    if(peonBlancoActivado) {
       glPushMatrix();
-      glTranslatef(0.0,0.0,-90.0);
-      glScalef(60.0,60.0,60.0);
-      cilindro->draw(modoDibujado, GL_LINE, visAjedrez);
+      glScalef(14.0,14.0,14.0);
+      glTranslatef(-0.8,1.7,2.0);
+      peonBlanco->draw(modoDibujado, modoVisualizacionAUsar, visAjedrez);
       glPopMatrix();
    }
-    if (conoActivado) {
+    if(peonNegroActivado) {
       glPushMatrix();
-      glTranslatef(-70.0,0.0,80.0);
-      glScalef(60.0,60.0,60.0);
-      cono->draw(modoDibujado, GL_LINE, visAjedrez);
+      glScalef(14.0,14.0,14.0);
+      glTranslatef(2.2,1.7,4.7);
+      peonNegro->draw(modoDibujado, modoVisualizacionAUsar, visAjedrez);
       glPopMatrix();
    }
-    if(esferaActivado) {
-      glPushMatrix();
-      glTranslatef(80.0,30.0,-70.0);
-      glScalef(60.0,60.0,60.0);
-      esfera->draw(modoDibujado, GL_LINE, visAjedrez);
-      glPopMatrix();
-   }
-  }
-
-  if (visSolido) {
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-
-    if (cuboActivado) {
-      glPushMatrix();
-      glTranslatef(80.0,0.0,50.0);
-      cubo->draw(modoDibujado, GL_FILL, visAjedrez);
-      glPopMatrix();
-    }
-    if (tetraedroActivado) {
-      glPushMatrix();
-      glTranslatef(-110.0,0.0,-30.0);
-      glScalef(1.5,1.5,1.5);
-      tetraedro->draw(modoDibujado, GL_FILL, visAjedrez);
-      glPopMatrix();
-    }
-    if (modeloActivado) {
-      glPushMatrix();
-      glTranslatef(150.0,0.0,0.0);
-      glScalef(60.0,60.0,60.0);
-      objPLY->draw(modoDibujado, GL_FILL, visAjedrez);
-      glPopMatrix();
-    }
-    if (revolucionActivado) {
-      glPushMatrix();
-      glTranslatef(20.0,70.0,25.0);
-      glScalef(50.0,50.0,50.0);
-      objRev->draw(modoDibujado, GL_FILL, visAjedrez);
-      glPopMatrix();
-   }
-    if (cilindroActivado) {
-      glPushMatrix();
-      glTranslatef(0.0,0.0,-90.0);
-      glScalef(60.0,60.0,60.0);
-      cilindro->draw(modoDibujado, GL_FILL, visAjedrez);
-      glPopMatrix();
-   }
-    if (conoActivado) {
-      glPushMatrix();
-      glTranslatef(-70.0,0.0,80.0);
-      glScalef(60.0,60.0,60.0);
-      cono->draw(modoDibujado, GL_FILL, visAjedrez);
-      glPopMatrix();
-   }
-    if(esferaActivado) {
-      glPushMatrix();
-      glTranslatef(80.0,30.0,-70.0);
-      glScalef(60.0,60.0,60.0);
-      esfera->draw(modoDibujado, GL_FILL, visAjedrez);
-      glPopMatrix();
-   }
-  }
-
-  if (visAjedrez) {
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-
-    if (cuboActivado) {
-      glPushMatrix();
-      glTranslatef(80.0,0.0,50.0);
-      cubo->draw(modoDibujado, GL_FILL, visAjedrez);
-      glPopMatrix();
-    }
-    if (tetraedroActivado) {
-      glPushMatrix();
-      glTranslatef(-110.0,0.0,-30.0);
-      glScalef(1.5,1.5,1.5);
-      tetraedro->draw(modoDibujado, GL_FILL, visAjedrez);
-      glPopMatrix();
-    }
-    if (modeloActivado) {
-      glPushMatrix();
-      glTranslatef(150.0,0.0,0.0);
-      glScalef(60.0,60.0,60.0);
-      objPLY->draw(modoDibujado, GL_FILL, visAjedrez);
-      glPopMatrix();
-    }
-    if (revolucionActivado) {
-      glPushMatrix();
-      glTranslatef(20.0,70.0,25.0);
-      glScalef(50.0,50.0,50.0);
-      objRev->draw(modoDibujado, GL_FILL, visAjedrez);
-      glPopMatrix();
-   }
-    if (cilindroActivado) {
-      glPushMatrix();
-      glTranslatef(0.0,0.0,-90.0);
-      glScalef(60.0,60.0,60.0);
-      cilindro->draw(modoDibujado, GL_FILL, visAjedrez);
-      glPopMatrix();
-   }
-    if (conoActivado) {
-      glPushMatrix();
-      glTranslatef(-70.0,0.0,80.0);
-      glScalef(60.0,60.0,60.0);
-      cono->draw(modoDibujado, GL_FILL, visAjedrez);
-      glPopMatrix();
-   }
-    if(esferaActivado) {
-      glPushMatrix();
-      glTranslatef(80.0,30.0,-70.0);
-      glScalef(60.0,60.0,60.0);
-      esfera->draw(modoDibujado, GL_FILL, visAjedrez);
-      glPopMatrix();
-   }
-  }
-
-
-  /*
-  glPolygonMode(GL_FRONT_AND_BACK, modoVisualizacion);
-  glShadeModel(GL_FLAT);
-  glPointSize(10);
-  glLineWidth(1.5);
-
-  switch (objetoVisualizado)
-  {
-    case 0 :
-      cubo->draw(modoDibujado);
-      break;
-    case 1 :
-      tetraedro->draw(modoDibujado);
-      break;
-    default :
-      cout << "Error, número incorrecto." << endl;
-      break;
-  }
-  */
 }
 
 //**************************************************************************
@@ -428,7 +327,7 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
           }
         }
         break ;
-      case 'I' :
+      case 'W' :
       if (modoMenu==SELOBJETO) {
         // Se visualiza/oculta el Tetraedro
         if (cilindroActivado) {
@@ -459,6 +358,7 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
           } else {
             visPuntos = true;
             visAjedrez = false;
+            visLuces = false;
           }
         }
         break ;
@@ -472,6 +372,7 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
           } else {
             visLineas = true;
             visAjedrez = false;
+            visLuces = false;
           }
         }
         break ;
@@ -485,23 +386,55 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
           } else {
             visSolido = true;
             visAjedrez = false;
+            visLuces = false;
           }
         }
         break ;
       case 'A' :
-        if (modoMenu==SELVISUALIZACION) {
-          cout << "Modo de visualización: Ajedrez." << endl;
-          // Se activa/desactiva la visualización en modo ajedrez
-          if (visAjedrez) {
-            visAjedrez = false;
+         if (visLuces == true) {
+             cout << "Modo Variación de Ángulo Alfa" << endl;
+             modoMenu=VARALFA;
           } else {
-            visAjedrez = true;
+             cout << "Modo de visualización: Ajedrez." << endl;
+             // Se activa/desactiva la visualización en modo ajedrez
+             if (visAjedrez) {
+               visAjedrez = false;
+             } else {
+                  visAjedrez = true;
+                  visPuntos = false;
+                  visLineas = false;
+                  visSolido = false;
+                  visLuces = false;
+             }
+          }
+        break ;
+      case 'I' :
+        if (modoMenu==SELVISUALIZACION) {
+       cout << "Modo de visualización: Luces." << endl;
+         // ESTAMOS EN MODO SELECCION DE LUCES
+          //modoMenu=SELILUMINACION;
+          // Se activa/desactiva la visualización en modo ajedrez
+          if (visLuces) {
+            visLuces = false;
+          } else {
+            visLuces = true;
+            visAjedrez = false;
             visPuntos = false;
             visLineas = false;
             visSolido = false;
           }
         }
-        break ;
+       break ;
+     case '0':
+      if (visLuces == true){
+         if (!luz0->getActivada()) {
+            luz0->encender();
+         } else{
+            luz0->apagar();
+         }
+      }
+
+      break;
 
       // ----------------------------------------------
 
@@ -516,8 +449,14 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
           cout << "Dibujado usando: glDrawElements." << endl;
           // Se activa la visualización usando glDrawElements
           modoDibujado = 0;
+       } else if (visLuces == true){
+           if (!luz1->getActivada()) {
+              luz1->encender();
+           } else {
+              luz1->apagar();
+           }
         }
-        break ;
+        break;
       case '2' :
         if (modoMenu==SELDIBUJADO) {
           cout << "Dibujado usando: VBO." << endl;
@@ -526,7 +465,32 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
         }
         break ;
       // ----------------------------------------------
+      case 'B' :
+         cout << "Modo Variación de Ángulo Alfa" << endl;
+        modoMenu=VARBETA;
+        break ;
+      case '<':
+         if (modoMenu == VARALFA){
+            luz1->variarAnguloAlpha(-2);
+         } else if (modoMenu == VARBETA){
+            luz1->variarAnguloBeta(-2);
 
+         } else {
+            cout << "ERROR: Opcion no valida" << endl;
+         }
+         break;
+
+      case '>':
+         if (modoMenu == VARALFA){
+            luz1->variarAnguloAlpha(2);
+         } else if (modoMenu == VARBETA){
+            luz1->variarAnguloBeta(2);
+
+         } else {
+            cout << "ERROR: Opcion no valida" << endl;
+         }
+         break;
+       // ----------------------------------------------
    }
    return salir;
 }
