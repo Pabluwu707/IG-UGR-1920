@@ -31,3 +31,27 @@
 |Visualización opcional de tapas en tiempo de ejecución|0.08|✓|
 |Varios objetos simultáneos en la escena|0.08|✓|
 |Extra: rotación de perfil en cualquier eje|0.075||
+
+# PRACTICA 3
+|Elementos de la Práctica 3|Puntos máximos|✓|
+|-|-|-|
+|Cálculo correcto de las normales en los vértices|0.15|✓|
+|Los ejes se siguen viendo en color plano|0.10|✓|
+|Uso de array de normales|0.05|✓|
+|Implementación correcta clase Luz (y subclases)|0.10|✓|
+|Hay al menos una luz direccional|0.15|✓|
+|Hay al menos una luz puntual|0.15|✓|
+|Modo de visualización sombreado suave|0.15|✓|
+|Hay al menos tres materiales distintos en la escena simultáneamente|0.10|✓|
+
+
+# PRACTICA 4
+|Elementos de la Práctica 4|Puntos máximos|✓|
+|-|-|-|
+|Diseño manual del grafo del modelo jerárquico|0.25||
+|Estructura de clases del modelo jerárquico|0.20||
+|Se conservan los modos de visualización|0.10||
+|Movimiento paso a paso con teclado 3 grados de libertad (al menos unarotación y una traslación)|0.20||
+|Animación automática de los 3 grados de libertad|0.25||
+|Extra: Aumento/Disminución de velocidad general|0.05||
+|Extra: Aumento/Disminución de velocidad para cada grado por separado|0.05||
