@@ -15,7 +15,28 @@ LuzDireccional::LuzDireccional(const Tupla3f & direccion, const GLenum idLuzOpen
       colorEspecular = especular;
       colorDifuso = difuso;
       posicion = {direccion(0), direccion(1), direccion(2), 0.0};
+      r = sqrt(direccion.lengthSq());
 
-      alpha = atan ( posicion(1) / posicion(0) );
-      beta = acos ( posicion(2) / ( sqrt((int)posicion(0)^2 + (int)posicion(1)^2 + (int)posicion(2)^2) ) ) ;
+      alpha = atan(( sqrt(pow(direccion(0),2) + pow(direccion(1),2) ) / direccion(2) ));
+      beta = atan(direccion(1)/direccion(0));
    } ;
+
+void LuzDireccional::variarAnguloAlpha(float incremento) {
+
+      double r2 = M_PI * incremento / 180.0;
+      alpha = alpha + r2;
+
+      posicion(0) = sin(alpha) * cos(beta) * r;
+      posicion(1) = sin(alpha) * sin(beta) * r;
+      posicion(2) = cos(alpha) * 1 * r;
+}
+
+void LuzDireccional::variarAnguloBeta(float incremento) {
+
+      double r2 = M_PI * incremento / 180.0;
+      beta = beta + r2;
+
+      posicion(0) = sin(alpha) * cos(beta) * r;
+      posicion(1) = sin(alpha) * sin(beta) * r;
+      posicion(2) = cos(alpha) * 1 * r;
+}

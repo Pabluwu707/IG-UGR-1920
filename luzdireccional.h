@@ -17,6 +17,7 @@ class LuzDireccional : public Luz {
    protected:
       float alpha;
       float beta;
+      float r;
    public:
       // inicializar la fuente de luz
       LuzDireccional(const Tupla3f & direccion, const GLenum idLuzOpenGL,

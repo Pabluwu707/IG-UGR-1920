@@ -6,7 +6,7 @@
 //
 // *****************************************************************************
 
-LuzPosicional::LuzPosicional(const Tupla3f & pos, const GLenum idLuzOpenGL, const Tupla4f ambiente, const Tupla4f especular, const Tupla4f difuso) {
+LuzPosicional::LuzPosicional(const Tupla3f pos, const GLenum idLuzOpenGL, const Tupla4f ambiente, const Tupla4f especular, const Tupla4f difuso) {
       id = idLuzOpenGL;
       colorAmbiente = ambiente;
       colorEspecular = especular;

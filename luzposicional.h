@@ -16,7 +16,7 @@
 class LuzPosicional : public Luz {
    public:
       // inicializar la fuente de luz
-      LuzPosicional(const Tupla3f & posicion, const GLenum idLuzOpenGL,
+      LuzPosicional(const Tupla3f posicion, const GLenum idLuzOpenGL,
          const Tupla4f colorAmbiente, const Tupla4f colorEspecular, const Tupla4f colorDifuso);
 
 } ;

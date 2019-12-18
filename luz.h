@@ -15,7 +15,9 @@
 class Luz {
    public:
       void activar();
-      void desactivar();
+      void encender();
+      void apagar();
+      bool getActivada();
    protected:
       Tupla4f posicion;
       GLenum id;
