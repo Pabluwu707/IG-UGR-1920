@@ -16,12 +16,20 @@ void Malla3D::draw_ModoInmediato()
   glEnableClientState( GL_VERTEX_ARRAY );
   glVertexPointer( 3, GL_FLOAT, 0, v.data() );
   glColorPointer( 3, GL_FLOAT, 0, c.data() ) ;
-  glEnableClientState(GL_NORMAL_ARRAY);
-  glNormalPointer( GL_FLOAT, 0, normalesv.data() ) ;
+
+  if (glIsEnabled(GL_LIGHTING)) {
+      glEnableClientState(GL_NORMAL_ARRAY);
+      glNormalPointer( GL_FLOAT, 0, nv.data() ) ;
+      m.aplicar();
+  }
+
   dibujarElementos();
   //glDrawElements( GL_TRIANGLES, f.size()*3, GL_UNSIGNED_INT, f.data() );
   glDisableClientState( GL_VERTEX_ARRAY );
-  glDisableClientState( GL_NORMAL_ARRAY );
+
+  if (glIsEnabled(GL_LIGHTING)) {
+     glDisableClientState( GL_NORMAL_ARRAY );
+  }
 }
 
 void Malla3D::dibujarElementos() {
@@ -46,7 +54,7 @@ void Malla3D::draw_ModoDiferido()
   }
 
   if (id_vbo_nor == 0) {
-    id_vbo_nor = CrearVBO(GL_ARRAY_BUFFER, normalesv.size()*3 * sizeof(float), normalesv.data() );
+    id_vbo_nor = CrearVBO(GL_ARRAY_BUFFER, nv.size()*3 * sizeof(float), nv.data() );
   }
 
   glEnableClientState(GL_VERTEX_ARRAY); // Habilitar tabla de vértices
@@ -59,9 +67,12 @@ void Malla3D::draw_ModoDiferido()
   glBindBuffer(GL_ARRAY_BUFFER, 0 ); // Desactivar VBO de vértices.
 
   // Especificar localización y formato de la tabla de normales
-  glBindBuffer(GL_ARRAY_BUFFER,id_vbo_nor); // Activar VBO de vértices
-  glNormalPointer( GL_FLOAT, 0, 0 ); // Especifica formato y offset (=0)
-  glBindBuffer(GL_ARRAY_BUFFER, 0 ); // Desactivar VBO de vértices.
+  if (glIsEnabled(GL_LIGHTING)) {
+     glBindBuffer(GL_ARRAY_BUFFER,id_vbo_nor); // Activar VBO de vértices
+     glNormalPointer( GL_FLOAT, 0, 0 ); // Especifica formato y offset (=0)
+     glBindBuffer(GL_ARRAY_BUFFER, 0 ); // Desactivar VBO de vértices.
+     m.aplicar();
+  }
 
   // Especificar localización y formato de la tabla de colores
   glBindBuffer(GL_ARRAY_BUFFER,id_vbo_col); // Activar VBO de colores
@@ -164,12 +175,13 @@ GLuint Malla3D::CrearVBO (GLuint tipo_vbo, GLuint tamanio_bytes, GLvoid * punter
   return id_vbo; // Devolver el identificador resultado
 }
 
+
 void Malla3D::calcular_normales () {
    Tupla3f A, B, Mc, Nc;
 
    // Inicializar vector
    for (int j=0; j < v.size(); j++) {
-      normalesv.push_back({0,0,0});
+      nv.push_back({0,0,0});
    }
 
    // Calcular tabla de normales de las caras
@@ -182,22 +194,30 @@ void Malla3D::calcular_normales () {
       Mc = A.cross(B);
 
       // Calcular el vector normal Nc
-      Nc = Mc.normalized();
+      if (Mc.lengthSq() != 0)
+         Nc = Mc.normalized();
 
-      // Insertar en vector normalesf;
-      normalesf.push_back(Nc);
+      // Insertar en vector nf;
+      nf.push_back(Nc);
    }
 
    // Calcular normales de los vertices
-   // Calcular a partir de normalesf
+   // Calcular a partir de nf
    for (int i=0; i < f.size(); i++) {
-      normalesv[f[i](0)] = normalesv[f[i](0)] + normalesf[i];
-      normalesv[f[i](1)] = normalesv[f[i](1)] + normalesf[i];
-      normalesv[f[i](2)] = normalesv[f[i](2)] + normalesf[i];
+      nv[f[i](0)] = nv[f[i](0)] + nf[i];
+      nv[f[i](1)] = nv[f[i](1)] + nf[i];
+      nv[f[i](2)] = nv[f[i](2)] + nf[i];
    }
 
    // Normalizar vertices
-   for (int j=0; j < normalesv.size(); j++) {
-      normalesv[j] = normalesv[j].normalized();
+   for (int j=0; j < nv.size(); j++) {
+      if (nv[j].lengthSq() != 0)
+         nv[j] = nv[j].normalized();
    }
+}
+
+
+
+void Malla3D::establecerMaterial(const Material & material){
+   m.setMaterial(material);
 }

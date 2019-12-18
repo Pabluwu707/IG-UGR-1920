@@ -11,6 +11,7 @@
 #define MALLA3D_H_INCLUDED
 
 #include "aux.h"
+#include "material.h"
 
 // *****************************************************************************
 //
@@ -36,6 +37,9 @@ class Malla3D
    // o bien a 'draw_ModoDiferido' (modo diferido, VBOs)
    // o bien a 'draw_ModoAjedrez' (modo inmediato con dos listas de tríangulos)
    void draw(int modo, GLenum visualizacion, bool ajedrezActivado) ;
+
+   // Setter del material m del objeto
+   void establecerMaterial (const Material & material);
 
    protected:
 
@@ -66,8 +70,11 @@ class Malla3D
    virtual void dibujarElementos();
 
    // A completar: tabla de normales de vértices (practica 3)
-   std::vector<Tupla3f> normalesf ;
-   std::vector<Tupla3f> normalesv ;
+   std::vector<Tupla3f> nf ;
+   std::vector<Tupla3f> nv ;
+
+   // Material del objeto
+   Material m;
 
 } ;
 
