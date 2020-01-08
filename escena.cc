@@ -30,6 +30,8 @@ Escena::Escena()
    peonBlanco = new ObjRevolucion("./plys/peon.ply", 20, true);
    peonNegro = new ObjRevolucion("./plys/peon.ply", 20, true);
 
+   objmettaton = new Mettaton();
+
    // Crear materiales a usar
    Material oro ({0.24725, 0.1995, 0.0745, 1}, {0.75164, 0.60648, 0.22648, 1}, {0.628281, 0.555802, 0.366065, 1}, 0.4*128.0f);
    Material plata({0.19225, 0.19225, 0.19225, 1}, {0.50754, 0.50754, 0.50754, 1}, {0.508273, 0.508273, 0.508273, 1}, 0.4*128.0f);
@@ -219,6 +221,14 @@ void Escena::dibujarUsandoVisualizacion(GLenum modoVisualizacionAUsar, bool visA
       peonNegro->draw(modoDibujado, modoVisualizacionAUsar, visAjedrez);
       glPopMatrix();
    }
+   if (objmettatonActivado) {
+      glPushMatrix();
+      glScalef(12.0,12.0,12.0);
+      glRotatef(180.0,0,1,0);
+      glTranslatef(-3,5.8,5.0);
+      objmettaton->draw(modoDibujado, modoVisualizacionAUsar, visAjedrez);
+      glPopMatrix();
+   }
 }
 
 //**************************************************************************
@@ -232,6 +242,7 @@ void Escena::dibujarUsandoVisualizacion(GLenum modoVisualizacionAUsar, bool visA
 bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 {
    using namespace std ;
+   cout << "Tecla pulsada: '" << tecla << "'" << endl;
    bool salir=false;
    switch( toupper(tecla) )
    {
@@ -243,30 +254,20 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
         }
         break ;
       case '9' :
-        if (tapasEscenaActivadas) {
-           cilindro->tapasActivadas = false;
-           cono->tapasActivadas = false;
-           esfera->tapasActivadas = false;
-           objRev->tapasActivadas = false;
-           tapasEscenaActivadas = false;
-        } else {
-           cilindro->tapasActivadas = true;
-           cono->tapasActivadas = true;
-           esfera->tapasActivadas = true;
-           objRev->tapasActivadas = true;
-           tapasEscenaActivadas = true;
-        }
-        break ;
-      /*
-      case '9' :
          if (tapasEscenaActivadas) {
-            cilindro.tapasActivadas = false;
-
-        } else {
-        }
-      break;
-      */
-
+            cilindro->tapasActivadas = false;
+            cono->tapasActivadas = false;
+            esfera->tapasActivadas = false;
+            objRev->tapasActivadas = false;
+            tapasEscenaActivadas = false;
+         } else {
+            cilindro->tapasActivadas = true;
+            cono->tapasActivadas = true;
+            esfera->tapasActivadas = true;
+            objRev->tapasActivadas = true;
+            tapasEscenaActivadas = true;
+            }
+         break ;
 
 
       // ----------------------------------------------
@@ -343,11 +344,18 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
       // ----------------------------------------------
 
       case 'V' :
-        cout << "-- Modo: Selección de modo de visualización --" << endl;
-        // ESTAMOS EN MODO SELECCION DE MODO DE VISUALIZACION
-        modoMenu=SELVISUALIZACION;
-        break ;
-
+         if (modoMenu != SELVISUALIZACION) {
+            cout << "-- Modo: Selección de modo de visualización --" << endl;
+            // ESTAMOS EN MODO SELECCION DE MODO DE VISUALIZACION
+            modoMenu=SELVISUALIZACION;
+         } else if (modoMenu == SELVISUALIZACION) {
+            cout << "-- Animaciones automáticas desactivadas --" << endl;
+            cout << "-- Modo: Movimiento manual de grados de libertad --" << endl;
+            modoMenu = GRADOSLIBERTAD;
+            animacionGradoLibertad = true;
+            animacionesAutomaticas = false;
+         }
+         break ;
       case 'P' :
         if (modoMenu==SELVISUALIZACION) {
           cout << "Modo de visualización: Puntos." << endl;
@@ -409,24 +417,27 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
           }
         break ;
       case 'I' :
-        if (modoMenu==SELVISUALIZACION) {
-       cout << "Modo de visualización: Luces." << endl;
-         // ESTAMOS EN MODO SELECCION DE LUCES
-          //modoMenu=SELILUMINACION;
-          // Se activa/desactiva la visualización en modo ajedrez
-          if (visLuces) {
-            visLuces = false;
-          } else {
-            visLuces = true;
-            visAjedrez = false;
-            visPuntos = false;
-            visLineas = false;
-            visSolido = false;
-          }
-        }
-       break ;
-     case '0':
-      if (visLuces == true){
+         if (modoMenu==SELVISUALIZACION) {
+            cout << "Modo de visualización: Luces." << endl;
+            // ESTAMOS EN MODO SELECCION DE LUCES
+            //modoMenu=SELILUMINACION;
+            // Se activa/desactiva la visualización en modo ajedrez
+            if (visLuces) {
+               visLuces = false;
+            } else {
+               visLuces = true;
+               visAjedrez = false;
+               visPuntos = false;
+               visLineas = false;
+               visSolido = false;
+            }
+         }
+         break ;
+      case '0':
+      if (modoMenu == GRADOSLIBERTAD) {
+         cout << "Grado de libertad elegido: Rotación de rueda." << endl;
+         gradoLibertadElegido = 0;
+      } else if (visLuces == true){
          if (!luz0->getActivada()) {
             luz0->encender();
          } else{
@@ -449,6 +460,9 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
           cout << "Dibujado usando: glDrawElements." << endl;
           // Se activa la visualización usando glDrawElements
           modoDibujado = 0;
+       } else if (modoMenu == GRADOSLIBERTAD) {
+          cout << "Grado de libertad elegido: Rotación de mano." << endl;
+          gradoLibertadElegido = 1;
        } else if (visLuces == true){
            if (!luz1->getActivada()) {
               luz1->encender();
@@ -462,13 +476,17 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
           cout << "Dibujado usando: VBO." << endl;
           // Se activa la visualización usando Vertex Buffer Objects (VBOs)
           modoDibujado = 1;
-        }
+       } else if (modoMenu == GRADOSLIBERTAD) {
+          cout << "Grado de libertad elegido: Traslación de brazos + manos." << endl;
+          gradoLibertadElegido = 2;
+       }
         break ;
       // ----------------------------------------------
       case 'B' :
-         cout << "Modo Variación de Ángulo Alfa" << endl;
+         cout << "Modo Variación de Ángulo Beta" << endl;
         modoMenu=VARBETA;
         break ;
+
       case '<':
          if (modoMenu == VARALFA){
             luz1->variarAnguloAlpha(-2);
@@ -491,6 +509,50 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
          }
          break;
        // ----------------------------------------------
+
+       case 'J' :
+          if (animacionesAutomaticas == true){
+             cout << "-- Animaciones automáticas desactivadas --" << endl;
+             animacionesAutomaticas = false;
+          } else {
+             cout << "-- Animaciones automáticas activadas --" << endl;
+             animacionesAutomaticas = true;
+          }
+         break ;
+
+      // ----------------------------------------------
+
+      case '3':
+         if (modoMenu == GRADOSLIBERTAD) {
+            cout << "Grado de libertad elegido: Traslación de cuerpos más brazos." << endl;
+            gradoLibertadElegido = 3;
+         }
+         break;
+
+      case '4':
+         if (modoMenu == GRADOSLIBERTAD) {
+            cout << "Grado de libertad elegido: Rotación de personaje completo." << endl;
+            gradoLibertadElegido = 4;
+         }
+         break;
+
+      case '+' :
+         if (animacionesAutomaticas == true) {
+            velAnimacionAutomatica += 0.2;
+         }
+         if (modoMenu == GRADOSLIBERTAD){
+            velGradoLibertad += 0.2;
+         }
+         break ;
+
+      case '-' :
+         if (animacionesAutomaticas == true) {
+            velAnimacionAutomatica -= 0.2;
+         }
+         if (modoMenu == GRADOSLIBERTAD){
+            velGradoLibertad -= 0.2;
+         }
+         break ;
    }
    return salir;
 }
@@ -561,4 +623,26 @@ void Escena::change_observer()
    glTranslatef( 0.0, 0.0, -Observer_distance );
    glRotatef( Observer_angle_y, 0.0 ,1.0, 0.0 );
    glRotatef( Observer_angle_x, 1.0, 0.0, 0.0 );
+}
+
+void Escena::animarModeloJerarquico() {
+   if (animacionesAutomaticas) {
+      objmettaton->rotarRueda(2 + velAnimacionAutomatica);
+      objmettaton->rotarMano(4 + velAnimacionAutomatica);
+      objmettaton->elevarBrazos(3 + velAnimacionAutomatica);
+      objmettaton->elevarCuerpoBrazos(1 + velAnimacionAutomatica);
+      objmettaton->rotarPersonaje(1 + velAnimacionAutomatica);
+   } else if (animacionGradoLibertad) {
+      if (gradoLibertadElegido == 0) {
+         objmettaton->rotarRueda(velGradoLibertad);
+      } else if (gradoLibertadElegido == 1) {
+         objmettaton->rotarMano(velGradoLibertad);
+      } else if (gradoLibertadElegido == 2)  {
+         objmettaton->elevarBrazos(velGradoLibertad);
+      } else if (gradoLibertadElegido == 3)  {
+         objmettaton->elevarCuerpoBrazos(velGradoLibertad);
+      } else if (gradoLibertadElegido == 4)  {
+         objmettaton->rotarPersonaje(velGradoLibertad * 0.3);
+      }
+   }
 }

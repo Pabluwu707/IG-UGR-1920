@@ -11,10 +11,11 @@
 #include "cono.h"
 #include "esfera.h"
 #include "luz.h"
+#include "mettaton.h"
 #include "luzposicional.h"
 #include "luzdireccional.h"
 
-typedef enum {NADA, SELOBJETO,SELVISUALIZACION,SELDIBUJADO, VARALFA, VARBETA} menu;
+typedef enum {NADA, SELOBJETO,SELVISUALIZACION,SELDIBUJADO, VARALFA, VARBETA, GRADOSLIBERTAD} menu;
 class Escena
 {
 
@@ -24,7 +25,7 @@ class Escena
 
  // ** PARÁMETROS DE LA CÁMARA (PROVISIONAL)
 
-       // variables que definen la posicion de la camara en coordenadas polares
+   // variables que definen la posicion de la camara en coordenadas polares
    GLfloat Observer_distance;
    GLfloat Observer_angle_x;
    GLfloat Observer_angle_y;
@@ -36,8 +37,6 @@ class Escena
 	void change_projection( const float ratio_xy );
 	void change_observer();
 
-
-
    void clear_window();
 
    menu modoMenu=NADA;
@@ -46,13 +45,19 @@ class Escena
    int objetoVisualizado = 0;
    GLenum modoVisualizacion = GL_FILL;
    int modoDibujado = 0;
-   bool visPuntos = false, visLineas = false, visSolido = false, visAjedrez = false, visLuces = true;
-   bool cuboActivado = true, tetraedroActivado = true, modeloActivado = true,
-      revolucionActivado = true, cilindroActivado = true,
-      conoActivado = true, esferaActivado = true, bombillaActivado = true,
-      mesaActivado = true, peonNegroActivado = true, peonBlancoActivado = true;
+   bool visPuntos = false, visLineas = false, visSolido = true, visAjedrez = false, visLuces = false;
+   bool cuboActivado = false, tetraedroActivado = false, modeloActivado = false,
+      revolucionActivado = false, cilindroActivado = false,
+      conoActivado = false, esferaActivado = false, bombillaActivado = false,
+      mesaActivado = false, peonNegroActivado = false, peonBlancoActivado = false,
+      objmettatonActivado = true;
    bool ajedrezActivado = false;
    bool tapasEscenaActivadas = true;
+   bool animacionesAutomaticas = false;
+   float velAnimacionAutomatica = 0;
+   bool animacionGradoLibertad = false;
+   int gradoLibertadElegido = 0;
+   float velGradoLibertad = 0;
 
    // Objetos de la escena
    Ejes ejes;
@@ -66,14 +71,16 @@ class Escena
    Cubo * mesa = nullptr;
    ObjRevolucion * peonBlanco = nullptr ; // es importante inicializarlo a 'nullptr'
    ObjRevolucion * peonNegro = nullptr ; // es importante inicializarlo a 'nullptr'
+   Mettaton * objmettaton = nullptr;
 
+   // Luces de la escena
    LuzPosicional * luz0 = nullptr;
    LuzDireccional * luz1 = nullptr;
 
 
    public:
 
-    Escena();
+   Escena();
 	void inicializar( int UI_window_width, int UI_window_height );
 	void redimensionar( int newWidth, int newHeight ) ;
 
@@ -86,6 +93,8 @@ class Escena
 	// Interacción con la escena
 	bool teclaPulsada( unsigned char Tecla1, int x, int y ) ;
 	void teclaEspecial( int Tecla1, int x, int y );
+
+   void animarModeloJerarquico();
 
 };
 #endif
