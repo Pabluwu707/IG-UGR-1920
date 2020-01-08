@@ -23,8 +23,9 @@ void Malla3D::draw_ModoInmediato()
       m.aplicar();
   }
 
-  dibujarElementos();
   //glDrawElements( GL_TRIANGLES, f.size()*3, GL_UNSIGNED_INT, f.data() );
+  dibujarElementos();
+
   glDisableClientState( GL_VERTEX_ARRAY );
 
   if (glIsEnabled(GL_LIGHTING)) {
@@ -68,9 +69,9 @@ void Malla3D::draw_ModoDiferido()
 
   // Especificar localización y formato de la tabla de normales
   if (glIsEnabled(GL_LIGHTING)) {
-     glBindBuffer(GL_ARRAY_BUFFER,id_vbo_nor); // Activar VBO de vértices
+     glBindBuffer(GL_ARRAY_BUFFER,id_vbo_nor); // Activar VBO de normales
      glNormalPointer( GL_FLOAT, 0, 0 ); // Especifica formato y offset (=0)
-     glBindBuffer(GL_ARRAY_BUFFER, 0 ); // Desactivar VBO de vértices.
+     glBindBuffer(GL_ARRAY_BUFFER, 0 ); // Desactivar VBO de normales
      m.aplicar();
   }
 
