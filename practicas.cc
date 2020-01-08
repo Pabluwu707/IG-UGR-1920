@@ -88,6 +88,23 @@ void special_keys( int tecla, int x, int y )
 }
 
 //***************************************************************************
+// Funcion_idle
+//
+// Hace cosas.
+//
+// Creo.
+//
+
+//***************************************************************************
+
+void funcion_idle()
+{
+	if (escena!=0)
+		escena->animarModeloJerarquico();
+	glutPostRedisplay();
+}
+
+//***************************************************************************
 // Programa principal
 //
 // Se encarga de iniciar la ventana, asignar las funciones e comenzar el
@@ -137,6 +154,9 @@ int main( int argc, char **argv )
    // asignación de la funcion llamada "tecla_Especial" al evento correspondiente
    glutSpecialFunc( special_keys );
 
+	// Gestionar evento idle en escena
+	glutIdleFunc(funcion_idle);
+
    // inicialización de librería GLEW (solo en Linux)
    #ifdef LINUX
    const GLenum codigoError = glewInit();
@@ -156,6 +176,7 @@ int main( int argc, char **argv )
 
    // ejecutar del bucle de eventos
    glutMainLoop();
+
 
    return 0;
 }
