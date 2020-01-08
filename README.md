@@ -48,10 +48,10 @@
 # PRACTICA 4
 |Elementos de la Práctica 4|Puntos máximos|✓|
 |-|-|-|
-|Diseño manual del grafo del modelo jerárquico|0.25||
-|Estructura de clases del modelo jerárquico|0.20||
-|Se conservan los modos de visualización|0.10||
-|Movimiento paso a paso con teclado 3 grados de libertad (al menos unarotación y una traslación)|0.20||
-|Animación automática de los 3 grados de libertad|0.25||
-|Extra: Aumento/Disminución de velocidad general|0.05||
-|Extra: Aumento/Disminución de velocidad para cada grado por separado|0.05||
+|Diseño manual del grafo del modelo jerárquico|0.25|✓|
+|Estructura de clases del modelo jerárquico|0.20|✓|
+|Se conservan los modos de visualización|0.10|✓|
+|Movimiento paso a paso con teclado 3 grados de libertad (al menos una rotación y una traslación)|0.20|✓|
+|Animación automática de los 3 grados de libertad|0.25|✓|
+|Extra: Aumento/Disminución de velocidad general|0.05|✓|
+|Extra: Aumento/Disminución de velocidad para cada grado por separado|0.05|✓|
