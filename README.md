@@ -55,3 +55,13 @@
 |Animación automática de los 3 grados de libertad|0.25|✓|
 |Extra: Aumento/Disminución de velocidad general|0.05|✓|
 |Extra: Aumento/Disminución de velocidad para cada grado por separado|0.05|✓|
+
+# PRACTICA 5
+
+| Elementos de la Práctica 5                                   | Puntos máximos | ✓    |
+| ------------------------------------------------------------ | -------------- | ---- |
+| Asignación correcta de coordenadas de texturas en cuadro     | 0.20           |      |
+| Visualización correcta al menos un objeto con la textura     | 0.15           |      |
+| Animación de luz puntual                                     | 0.20           |      |
+| Extra: Hay en la escena un cilindro texturizado (p.ej. lata de refresco) o una esfera texturizada (p.ej. tierra). | 0.15           |      |
+
