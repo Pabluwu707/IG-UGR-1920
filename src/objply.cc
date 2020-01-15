@@ -42,4 +42,5 @@ ObjPLY::ObjPLY( const std::string & nombre_archivo )
 
    // Calcular normales
    calcular_normales();
+
 }
