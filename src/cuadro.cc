@@ -57,10 +57,10 @@ Cuadro::Cuadro(float lado, const std::string & nombre_archivo )
 
    // Coordenadas de textura
    ct.resize(4);
-   ct[0] = (Tupla2f(0,1));
-   ct[1] = (Tupla2f(1,1));
-   ct[2] = (Tupla2f(0,0));
-   ct[3] = (Tupla2f(1,0));
+   ct[0] = (Tupla2f(0,0));
+   ct[1] = (Tupla2f(1,0));
+   ct[2] = (Tupla2f(0,1));
+   ct[3] = (Tupla2f(1,1));
 
 
 }
