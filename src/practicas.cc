@@ -101,6 +101,7 @@ void funcion_idle()
 {
 	if (escena!=0)
 		escena->animarModeloJerarquico();
+		escena->animarLuces();
 	glutPostRedisplay();
 }
 
