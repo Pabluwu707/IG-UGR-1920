@@ -15,8 +15,8 @@ Material::Material() {
    //cout << "Inicializando material." << endl;
 }
 
-Material::Material(Tupla4f mdifuso, Tupla4f mespecular,
-   Tupla4f mambiente, float mbrillo) {
+Material::Material(Tupla4f mambiente, Tupla4f mdifuso,
+   Tupla4f mespecular, float mbrillo) {
    ambiente = mambiente;
    difuso = mdifuso;
    especular = mespecular;
