@@ -6,6 +6,14 @@ using namespace std ;
 Mettaton::Mettaton()
 {
 
+    cuerpo = new MettatonCuerpo();
+    paloI = new MettatonPalo();
+    paloE = new MettatonPalo();
+    brazoIzq = new MettatonBrazoIzquierdo();
+    brazoDer = new MettatonBrazoDerecho();
+    manoIzq = new MettatonManoIzquierda();
+    manoDer = new MettatonManoDerecha();
+    rueda = new MettatonRueda();
 }
 
 void Mettaton::draw(int modo, GLenum visualizacion, bool ajedrezActivado) {

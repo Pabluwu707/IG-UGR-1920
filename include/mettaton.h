@@ -26,14 +26,14 @@ class Mettaton
    protected:
    private:
       // Partes del modelo jerárquico
-      MettatonCuerpo * cuerpo = new MettatonCuerpo();
-      MettatonPalo * paloI = new MettatonPalo();
-      MettatonPalo * paloE = new MettatonPalo();
-      MettatonBrazoIzquierdo * brazoIzq = new MettatonBrazoIzquierdo();
-      MettatonBrazoDerecho * brazoDer = new MettatonBrazoDerecho();
-      MettatonManoIzquierda * manoIzq = new MettatonManoIzquierda();
-      MettatonManoDerecha * manoDer = new MettatonManoDerecha();
-      MettatonRueda * rueda = new MettatonRueda();
+      MettatonCuerpo * cuerpo = nullptr;
+      MettatonPalo * paloI = nullptr;
+      MettatonPalo * paloE = nullptr;
+      MettatonBrazoIzquierdo * brazoIzq = nullptr;
+      MettatonBrazoDerecho * brazoDer = nullptr;
+      MettatonManoIzquierda * manoIzq = nullptr;
+      MettatonManoDerecha * manoDer = nullptr;
+      MettatonRueda * rueda = nullptr;
 
       // Valores de los grados de libertad
       float giroManoIzq = 0;
