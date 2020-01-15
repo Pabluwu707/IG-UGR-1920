@@ -12,25 +12,41 @@ using namespace std ;
 
 void Malla3D::draw_ModoInmediato()
 {
-  // Visualizar la malla usando glDrawElements,
-  glEnableClientState( GL_VERTEX_ARRAY );
-  glVertexPointer( 3, GL_FLOAT, 0, v.data() );
-  glColorPointer( 3, GL_FLOAT, 0, c.data() ) ;
+   // Visualizar la malla usando glDrawElements,
+   glEnableClientState( GL_VERTEX_ARRAY );
+   glVertexPointer( 3, GL_FLOAT, 0, v.data() );
+   glColorPointer( 3, GL_FLOAT, 0, c.data() ) ;
+   if (ct.size() != 0) {
+      glTexCoordPointer( 2, GL_FLOAT, 0, ct.data() ) ;
+   }
 
-  if (glIsEnabled(GL_LIGHTING)) {
+   if (glIsEnabled(GL_LIGHTING)) {
       glEnableClientState(GL_NORMAL_ARRAY);
       glNormalPointer( GL_FLOAT, 0, nv.data() ) ;
       m.aplicar();
-  }
+   }
 
-  //glDrawElements( GL_TRIANGLES, f.size()*3, GL_UNSIGNED_INT, f.data() );
-  dibujarElementos();
+   if (ct.size() != 0) {
+      glEnable(GL_TEXTURE_2D);
+      textura->activar();
+      glEnableClientState( GL_TEXTURE_COORD_ARRAY );
+   }
 
-  glDisableClientState( GL_VERTEX_ARRAY );
 
-  if (glIsEnabled(GL_LIGHTING)) {
-     glDisableClientState( GL_NORMAL_ARRAY );
-  }
+   //glDrawElements( GL_TRIANGLES, f.size()*3, GL_UNSIGNED_INT, f.data() );
+   dibujarElementos();
+
+
+   glDisableClientState( GL_VERTEX_ARRAY );
+
+   if (glIsEnabled(GL_LIGHTING)) {
+      glDisableClientState( GL_NORMAL_ARRAY );
+   }
+
+   if (ct.size() != 0) {
+      glDisableClientState( GL_TEXTURE_COORD_ARRAY );
+      glDisable(GL_TEXTURE_2D);
+   }
 }
 
 void Malla3D::dibujarElementos() {
@@ -42,48 +58,56 @@ void Malla3D::dibujarElementos() {
 
 void Malla3D::draw_ModoDiferido()
 {
-  // (la primera vez, se deben crear los VBOs y guardar sus identificadores en el objeto)
-  if (id_vbo_ver == 0) {
-    id_vbo_ver = CrearVBO(GL_ARRAY_BUFFER, v.size()*3 * sizeof(float), v.data() );
-  }
-  if (id_vbo_tri == 0) {
-    id_vbo_tri = CrearVBO(GL_ELEMENT_ARRAY_BUFFER, f.size()*3 * sizeof(int), f.data() );
-  }
+   // (la primera vez, se deben crear los VBOs y guardar sus identificadores en el objeto)
+   if (id_vbo_ver == 0) {
+      id_vbo_ver = CrearVBO(GL_ARRAY_BUFFER, v.size()*3 * sizeof(float), v.data() );
+   }
+   if (id_vbo_tri == 0) {
+      id_vbo_tri = CrearVBO(GL_ELEMENT_ARRAY_BUFFER, f.size()*3 * sizeof(int), f.data() );
+   }
 
-  if (id_vbo_col == 0) {
-    id_vbo_col = CrearVBO(GL_ARRAY_BUFFER, c.size()*3 * sizeof(float), c.data() );
-  }
+   if (id_vbo_col == 0) {
+      id_vbo_col = CrearVBO(GL_ARRAY_BUFFER, c.size()*3 * sizeof(float), c.data() );
+   }
 
-  if (id_vbo_nor == 0) {
-    id_vbo_nor = CrearVBO(GL_ARRAY_BUFFER, nv.size()*3 * sizeof(float), nv.data() );
-  }
+   if (id_vbo_nor == 0) {
+      id_vbo_nor = CrearVBO(GL_ARRAY_BUFFER, nv.size()*3 * sizeof(float), nv.data() );
+   }
 
-  glEnableClientState(GL_VERTEX_ARRAY); // Habilitar tabla de vértices
-  glEnableClientState(GL_COLOR_ARRAY); // Habilitar tabla de colores
-  glEnableClientState(GL_NORMAL_ARRAY);
+   glEnableClientState(GL_VERTEX_ARRAY); // Habilitar tabla de vértices
+   glEnableClientState(GL_COLOR_ARRAY); // Habilitar tabla de colores
+   glEnableClientState(GL_NORMAL_ARRAY);
 
-  // Especificar localización y formato de la tabla de vértices
-  glBindBuffer(GL_ARRAY_BUFFER,id_vbo_ver); // Activar VBO de vértices
-  glVertexPointer( 3,GL_FLOAT, 0, 0 ); // Especifica formato y offset (=0)
-  glBindBuffer(GL_ARRAY_BUFFER, 0 ); // Desactivar VBO de vértices.
+   // Especificar localización y formato de la tabla de vértices
+   glBindBuffer(GL_ARRAY_BUFFER,id_vbo_ver); // Activar VBO de vértices
+   glVertexPointer( 3,GL_FLOAT, 0, 0 ); // Especifica formato y offset (=0)
+   glBindBuffer(GL_ARRAY_BUFFER, 0 ); // Desactivar VBO de vértices.
 
-  // Especificar localización y formato de la tabla de normales
-  if (glIsEnabled(GL_LIGHTING)) {
-     glBindBuffer(GL_ARRAY_BUFFER,id_vbo_nor); // Activar VBO de normales
-     glNormalPointer( GL_FLOAT, 0, 0 ); // Especifica formato y offset (=0)
-     glBindBuffer(GL_ARRAY_BUFFER, 0 ); // Desactivar VBO de normales
-     m.aplicar();
-  }
+   // Especificar localización y formato de la tabla de normales
+   if (glIsEnabled(GL_LIGHTING)) {
+      glBindBuffer(GL_ARRAY_BUFFER,id_vbo_nor); // Activar VBO de normales
+      glNormalPointer( GL_FLOAT, 0, 0 ); // Especifica formato y offset (=0)
+      glBindBuffer(GL_ARRAY_BUFFER, 0 ); // Desactivar VBO de normales
+      m.aplicar();
+   }
 
-  // Especificar localización y formato de la tabla de colores
-  glBindBuffer(GL_ARRAY_BUFFER,id_vbo_col); // Activar VBO de colores
-  glColorPointer( 3,GL_FLOAT, 0, 0 ); // Especifica formato y offset (=0)
-  glBindBuffer(GL_ARRAY_BUFFER, 0 ); // Desactivar VBO de colores.
+   // Cosas de texturas
+   if (ct.size() != 0) {
+      glEnable(GL_TEXTURE_2D);
+      glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+      glTexCoordPointer(2, GL_FLOAT, 0, ct.data());
+      textura->activar();
+   }
 
-  // Visualizar triángulos con glDrawElements (puntero a tabla == 0)
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,id_vbo_tri); // Activar VBO de triángulos
-  glDrawElements(GL_TRIANGLES, 3*f.size(),GL_UNSIGNED_INT, 0 );
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0 ); // Desactivar VBO de triángulos
+   // Especificar localización y formato de la tabla de colores
+   glBindBuffer(GL_ARRAY_BUFFER,id_vbo_col); // Activar VBO de colores
+   glColorPointer( 3,GL_FLOAT, 0, 0 ); // Especifica formato y offset (=0)
+   glBindBuffer(GL_ARRAY_BUFFER, 0 ); // Desactivar VBO de colores.
+
+   // Visualizar triángulos con glDrawElements (puntero a tabla == 0)
+   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,id_vbo_tri); // Activar VBO de triángulos
+   glDrawElements(GL_TRIANGLES, 3*f.size(),GL_UNSIGNED_INT, 0 );
+   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0 ); // Desactivar VBO de triángulos
 }
 
 // -----------------------------------------------------------------------------
@@ -91,30 +115,30 @@ void Malla3D::draw_ModoDiferido()
 
 void Malla3D::draw_ModoAjedrez()
 {
-  std::vector<Tupla3i> f1 ;
-  std::vector<Tupla3i> f2 ;
+   std::vector<Tupla3i> f1 ;
+   std::vector<Tupla3i> f2 ;
 
-  for (int i=0; i<f.size(); i++) {
-    if (i%2 == 0) {
-      f1.push_back(f[i]);
-    } else {
-      f2.push_back(f[i]);
-    }
-  }
+   for (int i=0; i<f.size(); i++) {
+      if (i%2 == 0) {
+         f1.push_back(f[i]);
+      } else {
+         f2.push_back(f[i]);
+      }
+   }
 
-  // Visualizar la malla usando glDrawElements,
-  glEnableClientState( GL_VERTEX_ARRAY );
-  glVertexPointer( 3, GL_FLOAT, 0, v.data() );
-  glColorPointer( 3, GL_FLOAT, 0, cAjedrez1.data() ) ;
-  glDrawElements( GL_TRIANGLES, f1.size()*3, GL_UNSIGNED_INT, f1.data() );
-  glDisableClientState( GL_VERTEX_ARRAY );
+   // Visualizar la malla usando glDrawElements,
+   glEnableClientState( GL_VERTEX_ARRAY );
+   glVertexPointer( 3, GL_FLOAT, 0, v.data() );
+   glColorPointer( 3, GL_FLOAT, 0, cAjedrez1.data() ) ;
+   glDrawElements( GL_TRIANGLES, f1.size()*3, GL_UNSIGNED_INT, f1.data() );
+   glDisableClientState( GL_VERTEX_ARRAY );
 
-  // Visualizar la malla usando glDrawElements,
-  glEnableClientState( GL_VERTEX_ARRAY );
-  glVertexPointer( 3, GL_FLOAT, 0, v.data() );
-  glColorPointer( 3, GL_FLOAT, 0, cAjedrez2.data() ) ;
-  glDrawElements( GL_TRIANGLES, f2.size()*3, GL_UNSIGNED_INT, f2.data() );
-  glDisableClientState( GL_VERTEX_ARRAY );
+   // Visualizar la malla usando glDrawElements,
+   glEnableClientState( GL_VERTEX_ARRAY );
+   glVertexPointer( 3, GL_FLOAT, 0, v.data() );
+   glColorPointer( 3, GL_FLOAT, 0, cAjedrez2.data() ) ;
+   glDrawElements( GL_TRIANGLES, f2.size()*3, GL_UNSIGNED_INT, f2.data() );
+   glDisableClientState( GL_VERTEX_ARRAY );
 }
 
 // -----------------------------------------------------------------------------
@@ -125,44 +149,44 @@ void Malla3D::draw(int modo, GLenum visualizacion, bool ajedrezActivado)
 {
 
    if (ajedrezActivado) {
-    draw_ModoAjedrez();
-  } else {
-    switch (visualizacion) {
+      draw_ModoAjedrez();
+   } else {
+      switch (visualizacion) {
       case GL_POINT:
-        c = cPuntos;
-        switch (modo) {
-          case 0:
-            draw_ModoInmediato();
-            break;
-          case 1:
-            draw_ModoDiferido();
-            break;
-        }
-        break;
+         c = cPuntos;
+         switch (modo) {
+            case 0:
+               draw_ModoInmediato();
+               break;
+            case 1:
+               draw_ModoDiferido();
+               break;
+         }
+         break;
       case GL_LINE:
-        c = cLineas;
-        switch (modo) {
-          case 0:
+         c = cLineas;
+         switch (modo) {
+         case 0:
             draw_ModoInmediato();
             break;
-          case 1:
+         case 1:
             draw_ModoDiferido();
             break;
-        }
-      break;
+         }
+         break;
       case GL_FILL:
-        c = cSolido;
-        switch (modo) {
-          case 0:
+         c = cSolido;
+         switch (modo) {
+         case 0:
             draw_ModoInmediato();
             break;
-          case 1:
+         case 1:
             draw_ModoDiferido();
             break;
-        }
-      break;
-    }
-  }
+         }
+         break;
+      }
+   }
 }
 
 GLuint Malla3D::CrearVBO (GLuint tipo_vbo, GLuint tamanio_bytes, GLvoid * puntero_ram) {

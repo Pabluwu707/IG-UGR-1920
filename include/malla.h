@@ -12,6 +12,7 @@
 
 #include "aux.h"
 #include "material.h"
+#include "textura.h"
 
 // *****************************************************************************
 //
@@ -75,6 +76,12 @@ class Malla3D
 
    // Material del objeto
    Material m;
+
+   // Textura del objeto
+   Textura * textura = nullptr;
+
+   // Vector de coordenadas de textura
+   std::vector<Tupla2f> ct;
 
 } ;
 
