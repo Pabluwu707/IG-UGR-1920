@@ -1,5 +1,6 @@
 #include "luzdireccional.h"
 #include <math.h>
+using namespace std;
 
 // *****************************************************************************
 //
@@ -18,13 +19,16 @@ LuzDireccional::LuzDireccional(const Tupla3f & direccion, const GLenum idLuzOpen
       r = sqrt(direccion.lengthSq());
 
       alpha = atan(( sqrt(pow(direccion(0),2) + pow(direccion(1),2) ) / direccion(2) ));
-      beta = atan(direccion(1)/direccion(0));
+      beta = atan(direccion(1)/r);
    } ;
 
 void LuzDireccional::variarAnguloAlpha(float incremento) {
 
+      cout << "Alpha:" << alpha << "   " << posicion;
+
       double r2 = M_PI * incremento / 180.0;
       alpha = alpha + r2;
+
 
       posicion(0) = sin(alpha) * cos(beta) * r;
       posicion(1) = sin(alpha) * sin(beta) * r;
@@ -37,6 +41,6 @@ void LuzDireccional::variarAnguloBeta(float incremento) {
       beta = beta + r2;
 
       posicion(0) = sin(alpha) * cos(beta) * r;
-      posicion(1) = sin(alpha) * sin(beta) * r;
-      posicion(2) = cos(alpha) * 1 * r;
+      posicion(1) = sin(beta) * r;
+      posicion(2) = cos(alpha) * cos(beta) * r;
 }
