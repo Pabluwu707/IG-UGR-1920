@@ -14,8 +14,9 @@
 #include "mettaton.h"
 #include "luzposicional.h"
 #include "luzdireccional.h"
+#include "cuadro.h"
 
-typedef enum {NADA, SELOBJETO,SELVISUALIZACION,SELDIBUJADO, VARALFA, VARBETA, GRADOSLIBERTAD} menu;
+typedef enum {NADA, SELOBJETO,SELVISUALIZACION,SELDIBUJADO, SELILUMINACION, VARALFA, VARBETA, SELANIMACION, GRADOSLIBERTAD} menu;
 class Escena
 {
 
@@ -46,11 +47,11 @@ class Escena
    GLenum modoVisualizacion = GL_FILL;
    int modoDibujado = 0;
    bool visPuntos = false, visLineas = false, visSolido = true, visAjedrez = false, visLuces = false;
-   bool cuboActivado = false, tetraedroActivado = false, modeloActivado = false,
-      revolucionActivado = false, cilindroActivado = false,
-      conoActivado = false, esferaActivado = false, bombillaActivado = false,
-      mesaActivado = false, peonNegroActivado = false, peonBlancoActivado = false,
-      objmettatonActivado = true;
+   bool cuboActivado = true, tetraedroActivado = true, modeloActivado = true,
+      revolucionActivado = true, cilindroActivado = true,
+      conoActivado = true, esferaActivado = true, bombillaActivado = true,
+      mesaActivado = true, peonNegroActivado = true, peonBlancoActivado = true,
+      objmettatonActivado = true, cuadroActivado = true;
    bool ajedrezActivado = false;
    bool tapasEscenaActivadas = true;
    bool animacionesAutomaticas = false;
@@ -72,10 +73,17 @@ class Escena
    ObjRevolucion * peonBlanco = nullptr ; // es importante inicializarlo a 'nullptr'
    ObjRevolucion * peonNegro = nullptr ; // es importante inicializarlo a 'nullptr'
    Mettaton * objmettaton = nullptr;
+   Cuadro * cuadro = nullptr;
 
    // Luces de la escena
    LuzPosicional * luz0 = nullptr;
    LuzDireccional * luz1 = nullptr;
+
+   LuzPosicional * luzPuntual = nullptr;
+   float giroLuz = 0;
+   float incrementoLuz = 1;
+
+   bool luzPuntualEnMovimiento = false;
 
 
    public:
@@ -95,6 +103,7 @@ class Escena
 	void teclaEspecial( int Tecla1, int x, int y );
 
    void animarModeloJerarquico();
+   void animarLuces();
 
 };
 #endif
