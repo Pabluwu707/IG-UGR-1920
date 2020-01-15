@@ -98,7 +98,7 @@ void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil_original, int num_ins
    float angulo, x, y, z;
    Tupla3f verticeRotado, poloSur, poloNorte;
    Tupla3i caraCreada;
-   int tamanio_perfil = perfil_original.size();
+   int tamanio_perfil_original = perfil_original.size();
 
    // Comprobar si los vertices estan en orden ascendente o descendente
    bool ascendente = perfil_original.front()(1) < perfil_original.back()(1);
@@ -134,12 +134,12 @@ void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil_original, int num_ins
    v.clear();
    f.clear();
 
-   tamanio_perfil = perfil_original.size();
+   tamanio_perfil_original = perfil_original.size();
 
    // Creacion de la tabla de vertices a partir de perfil
-   for (int i=0; i<num_instancias; i++) {
+   for (int i=0; i<=num_instancias; i++) {
       angulo = (2*M_PI/num_instancias) * i;
-      for (int j=0; j<tamanio_perfil;j++) {
+      for (int j=0; j<tamanio_perfil_original;j++) {
          x = (perfil_original[j](0) * cos (angulo)) + (perfil_original[j](2) * sin (angulo));
          y = perfil_original[j](1);
          z = (perfil_original[j](0) * -sin (angulo)) + (perfil_original[j](2) * cos (angulo));
@@ -150,12 +150,18 @@ void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil_original, int num_ins
       }
    }
 
+   // Duplicar perfil original para luego asignar texturas (practica 5)
+   /*for (int i=0; i<tamanio_perfil_original; i++) {
+      verticeRotado = v[i];
+      v.push_back(verticeRotado);
+   }*/
+
 
    // Creacion de la tabla de triangulos (a completar)
    for (int i=0; i<num_instancias; i++) {
-      for (int j=0; j<tamanio_perfil-1; j++) {
-         int a = tamanio_perfil * i + j;
-         int b = tamanio_perfil * ((i+1) % num_instancias) + j;
+      for (int j=0; j<tamanio_perfil_original-1; j++) {
+         int a = tamanio_perfil_original * i + j;
+         int b = tamanio_perfil_original * (i+1)  + j;
 
          caraCreada = {a, b, b+1};
          f.push_back(caraCreada);
@@ -169,27 +175,25 @@ void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil_original, int num_ins
    // Insertamos el polo sur
    v.push_back(poloSur);
 
-
    // Creamos las caras de la tapa sur
    for (int i=0; i<num_instancias; i++) {
-      caraCreada = {v.size()-1, ((i+1)*tamanio_perfil) % (v.size() - 1), i*tamanio_perfil};
+      caraCreada = {v.size()-1, ((i+1)*tamanio_perfil_original), i*tamanio_perfil_original};
       f.push_back(caraCreada);
    }
-
 
    // Insertamos el polo norte
    v.push_back(poloNorte);
 
-
    // Creamos las caras de la tapa norte
    for (int i=0; i<num_instancias; i++) {
-      int v2 = ((i+1)*tamanio_perfil)-1;
-      int v3 = (v2 + tamanio_perfil) % (v.size() - 2);
+      int v2 = ((i+1)*tamanio_perfil_original)-1;
+      int v3 = (v2 + tamanio_perfil_original);
 
       caraCreada = {v.size()-1, v2 ,  v3};
 
       f.push_back(caraCreada);
    }
+
 
 
    num_instancias_usadas = num_instancias;
@@ -203,4 +207,18 @@ void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil_original, int num_ins
 
    // Calcular normales
    calcular_normales();
+
+   // Duplicar normales del primer perfil al último (practica 5)
+   for (int i=0; i<tamanio_perfil_original; i++) {
+      nv[(tamanio_perfil_original)*(num_instancias)+i] = nv[i];
+   }
+
+   /*
+   for (int i=0; i<v.size(); i++) {
+      cout << "V[" << i << "]: " << v[i] << endl;
+   }
+
+   for (int i=0; i<nv.size(); i++) {
+      cout << "Normal[" << i << "]: " << nv[i] << endl;
+   }*/
 }
