@@ -5,7 +5,7 @@
 Cubo::Cubo(float lado)
 {
 
-   // inicializar la tabla de vértices
+   // Inicializar la tabla de vértices
    v.resize(8);
    v[0] = Tupla3f (0,lado,lado); // Vértice 0
    v[1] = Tupla3f (lado,lado,lado); // Vértice 1
@@ -17,8 +17,8 @@ Cubo::Cubo(float lado)
    v[7] = Tupla3f (lado,0,0); // Vértice 7
 
 
-   // inicializar la tabla de caras o triángulos:
-   // (es importante en cada caerticesra ordenar los vértices en sentido contrario
+   // Inicializar la tabla de caras o triángulos:
+   // (es importante en cada cara ordenar los vértices en sentido contrario
    //  de las agujas del reloj, cuando esa cara se observa desde el exterior del cubo)
    f.resize(12);
    f[0] = Tupla3i (2,1,0); // Triangulo 0
@@ -64,5 +64,7 @@ Cubo::Cubo(float lado)
 
    // Calcular normales del cubo
    calcular_normales();
+
+
 
 }
