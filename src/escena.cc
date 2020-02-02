@@ -12,11 +12,22 @@ Escena::Escena()
 {
    Front_plane       = 50.0;
    Back_plane        = 2000.0;
-   Observer_distance = 5*Front_plane;
+   Observer_distance = 2*Front_plane;
    Observer_angle_x  = 0.0 ;
    Observer_angle_y  = 0.0 ;
 
    ejes.changeAxisSize( 5000 );
+
+
+   // Cámaras
+   Camara camara0(Tupla3f(0.0,250.0,600.0),Tupla3f(0.0,50.0,0.0), Tupla3f(0.0,1.0,0.0),
+                  ORTOGONAL, Front_plane, Back_plane, -300.0, 300.0, 300.0, -300.0);
+
+   camarasEscena.push_back(camara0);
+
+   cout << "Datos de la camara:" << endl;
+   cout << "Eye:" << camarasEscena[0].eye << endl;
+
 
    // Crear los objetos de la escena....
    cubo = new Cubo(50);
@@ -42,6 +53,7 @@ Escena::Escena()
    monedaMario3 = new ObjPLY("./plys/moneda.ply");
    nubeMario = new ObjPLY("./plys/nube.ply");
 
+
    // Crear materiales a usar
    Material oro ({0.24725, 0.1995, 0.0745, 1}, {0.75164, 0.60648, 0.22648, 1}, {0.628281, 0.555802, 0.366065, 1}, 0.4*128.0f);
    Material plata({0.19225, 0.19225, 0.19225, 1}, {0.50754, 0.50754, 0.50754, 1}, {0.508273, 0.508273, 0.508273, 1}, 0.4*128.0f);
@@ -51,6 +63,7 @@ Escena::Escena()
    Material plasticoVerde({0.0, 0.0, 0.0, 1}, {0.1, 0.35, 0.1, 1}, {0.45, 0.55, 0.45, 1}, 0.25*128.0f);
    Material plasticoCian({0.0, 0.1, 0.06, 1}, {0.0, 0.50980392, 0.50980392, 1}, {0.50196078, 0.50196078, 0.50196078, 1}, 0.25*128.0f);
    Material plasticoRojo({0.0,0.0,0.0,1.0},{0.5,0.0,0.0,1.0},{0.7,0.6,0.6,1.0},128.0*0.25);
+
 
    // Aplicar materiales en objetos de la escena
    cilindro->establecerMaterial(plasticoCian);
@@ -106,6 +119,18 @@ void Escena::inicializar( int UI_window_width, int UI_window_height )
 
 	Width  = UI_window_width/10;
 	Height = UI_window_height/10;
+
+   /*
+   for (int i = 0; i < camarasEscena.size(); i++){
+
+		camarasEscena[i].setLeft(-UI_window_width/10);
+		camarasEscena[i].setRight(UI_window_width/10);
+		camarasEscena[i].setBottom(-UI_window_height/10);
+		camarasEscena[i].setTop(UI_window_height/10);
+
+		//camarasEscena[i].zoom((float)newWidth/(float)newHeight);
+	}
+   */
 
    change_projection( float(UI_window_width)/float(UI_window_height) );
 	glViewport( 0, 0, UI_window_width, UI_window_height );
@@ -833,8 +858,7 @@ void Escena::change_projection( const float ratio_xy )
 {
    glMatrixMode( GL_PROJECTION );
    glLoadIdentity();
-   const float wx = float(Height)*ratio_xy ;
-   glFrustum( -wx, wx, -Height, Height, Front_plane, Back_plane );
+   camarasEscena[camaraActiva].setProyeccion();
 }
 //**************************************************************************
 // Funcion que se invoca cuando cambia el tamaño de la ventana
@@ -844,6 +868,10 @@ void Escena::redimensionar( int newWidth, int newHeight )
 {
    Width  = newWidth/10;
    Height = newHeight/10;
+   for(int i = 0; i < camarasEscena.size(); i++){
+      camarasEscena[i].setLeft(camarasEscena[i].getBottom()*Width/Height);
+      camarasEscena[i].setRight(camarasEscena[i].getTop()*Width/Height);
+   }
    change_projection( float(newHeight)/float(newWidth) );
    glViewport( 0, 0, newWidth, newHeight );
 }
@@ -857,9 +885,7 @@ void Escena::change_observer()
    // posicion del observador
    glMatrixMode(GL_MODELVIEW);
    glLoadIdentity();
-   glTranslatef( 0.0, 0.0, -Observer_distance );
-   glRotatef( Observer_angle_y, 0.0 ,1.0, 0.0 );
-   glRotatef( Observer_angle_x, 1.0, 0.0, 0.0 );
+   camarasEscena[camaraActiva].setObserver();
 }
 
 void Escena::animarModeloJerarquico() {

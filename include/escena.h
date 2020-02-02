@@ -15,6 +15,7 @@
 #include "luzposicional.h"
 #include "luzdireccional.h"
 #include "cuadro.h"
+#include "camara.h"
 
 typedef enum {NADA, SELOBJETO,SELVISUALIZACION,SELDIBUJADO, SELILUMINACION, VARALFA, VARBETA, SELANIMACION, GRADOSLIBERTAD} menu;
 class Escena
@@ -93,6 +94,11 @@ class Escena
    float incrementoLuz = 1;
 
    bool luzPuntualEnMovimiento = false;
+
+
+   // Cámaras de la Escena
+   std::vector<Camara> camarasEscena;
+   int camaraActiva = 0;
 
 
    public:
