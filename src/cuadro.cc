@@ -35,9 +35,8 @@ Cuadro::Cuadro(float lado, const std::string & nombre_archivo )
 
    // Inicializar colores solido para cubo en Modo inmediato y diferido
    cSolido.clear();
-   for (int i=0; i<v.size(); i=i+2) {
-     cSolido.push_back({1.0,0.0,0.64});
-     cSolido.push_back({0.97,0.78,0.05});
+   for (int i=0; i<v.size(); i++) {
+     cSolido.push_back({0.18,0.88,0.90});
    }
 
    // Inicializar colores cubo en Modo Ajedrez
