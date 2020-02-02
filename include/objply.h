@@ -2,7 +2,7 @@
 //
 // Informática Gráfica (Grado Informática)
 //
-// Archivo: cilindro.h
+// Archivo: objply.h
 
 //
 // #############################################################################
@@ -14,7 +14,7 @@
 #include "ply_reader.h"
 #include "malla.h"
 
- 
+
 
 // *****************************************************************************
 //
@@ -24,10 +24,8 @@
 class ObjPLY: public Malla3D {
 public:
  ObjPLY( const std::string & nombre_archivo ) ;
-    
- 
+
+
 };
 
 #endif
-
-
