@@ -50,8 +50,8 @@ class Escena
    bool cuboActivado = true, tetraedroActivado = true, modeloActivado = true,
       revolucionActivado = true, cilindroActivado = true,
       conoActivado = true, esferaActivado = true, bombillaActivado = true,
-      mesaActivado = true, peonNegroActivado = true, peonBlancoActivado = true,
-      objmettatonActivado = true, cuadroActivado = true;
+      mesaActivado = false, peonNegroActivado = false, peonBlancoActivado = false,
+      objmettatonActivado = true, cuadroActivado = true, objetosMarioActivado = true;
    bool ajedrezActivado = false;
    bool tapasEscenaActivadas = true;
    bool animacionesAutomaticas = false;
@@ -74,6 +74,15 @@ class Escena
    ObjRevolucion * peonNegro = nullptr ; // es importante inicializarlo a 'nullptr'
    Mettaton * objmettaton = nullptr;
    Cuadro * cuadro = nullptr;
+
+   // Objetos de la escena chula
+   ObjPLY * florMario = nullptr;
+   ObjPLY * monedaMario1 = nullptr;
+   ObjPLY * monedaMario2 = nullptr;
+   ObjPLY * monedaMario3 = nullptr;
+   float giroMoneda = 0;
+   float incrementoMoneda = 2;
+   ObjPLY * nubeMario = nullptr;
 
    // Luces de la escena
    LuzPosicional * luz0 = nullptr;

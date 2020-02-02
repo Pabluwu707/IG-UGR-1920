@@ -33,7 +33,14 @@ Escena::Escena()
 
    objmettaton = new Mettaton();
 
-   cuadro = new Cuadro(50, "./texturas/gato.jpg");
+   cuadro = new Cuadro(50, "./texturas/fondo.jpg");
+
+
+   florMario = new ObjPLY("./plys/flor.ply");
+   monedaMario1 = new ObjPLY("./plys/moneda.ply");
+   monedaMario2 = new ObjPLY("./plys/moneda.ply");
+   monedaMario3 = new ObjPLY("./plys/moneda.ply");
+   nubeMario = new ObjPLY("./plys/nube.ply");
 
    // Crear materiales a usar
    Material oro ({0.24725, 0.1995, 0.0745, 1}, {0.75164, 0.60648, 0.22648, 1}, {0.628281, 0.555802, 0.366065, 1}, 0.4*128.0f);
@@ -48,19 +55,39 @@ Escena::Escena()
    // Aplicar materiales en objetos de la escena
    cilindro->establecerMaterial(plasticoCian);
    esfera->establecerMaterial(plasticoRojo);
-   cubo->establecerMaterial(plata);
+   cubo->establecerMaterial(rubi);
    tetraedro->establecerMaterial(plata);
+   objRev->establecerMaterial(oro);
    objPLY->establecerMaterial(plasticoVerde);
-   cono->establecerMaterial(plasticoCian);
+   cono->establecerMaterial(plasticoVerde);
    mesa->establecerMaterial(bronce);
    peonNegro->establecerMaterial(rubi);
    peonBlanco->establecerMaterial(turquesa);
+   florMario->establecerMaterial(rubi);
+   monedaMario1->establecerMaterial(oro);
+   monedaMario2->establecerMaterial(oro);
+   monedaMario3->establecerMaterial(oro);
 
 
    // Crear luces de la escena
    luz0 = new LuzPosicional({0, 500, 0}, GL_LIGHT0, {0,0,0,1}, {1,1,1,1}, {1,1,1,1});
    luz1 = new LuzDireccional({0,0,1}, GL_LIGHT1, {0,0,0,1}, {1,1,1,1}, {1,1,1,1});
    luzPuntual = new LuzPosicional({250, 100, 0}, GL_LIGHT2, {0,0,0,1}, {1,1,1,1}, {1,1,1,1});
+
+   cout << endl << "--- MENÚ PRINCIPAL ---" << endl
+        << "Opciones disponibles: " << endl
+        << "\t [O] Menú: Selección de objetos" << endl
+        << "\t [V] Menú: Modos de visualización de objetos" << endl
+        << "\t [D] Menú: Modo dibujado" << endl << endl
+
+        << "\t [A] Activar/Desactivar animaciones automáticas" << endl
+        << "\t [+] Aumentar velocidad de animación automática" << endl
+        << "\t [-] Disminuir velocidad de animación automática" << endl
+        << "\t [M] Menú: Grados de libertad del modelo jerárquico" << endl << endl
+
+        << "\t [9] Activar/desactivar tapas de objetos por revolución" << endl << endl
+
+        << "\t [Q] Salir y cerrar el programa" << endl;
 }
 
 //**************************************************************************
@@ -163,13 +190,13 @@ void Escena::dibujar() {
 void Escena::dibujarUsandoVisualizacion(GLenum modoVisualizacionAUsar, bool visAjedrez) {
    if (cuboActivado) {
       glPushMatrix();
-      glTranslatef(80.0,0.0,50.0);
+      glTranslatef(70.0,0.0,-90.0);
       cubo->draw(modoDibujado, modoVisualizacionAUsar, visAjedrez);
       glPopMatrix();
    }
    if (tetraedroActivado) {
       glPushMatrix();
-      glTranslatef(-170.0,0.0,20.0);
+      glTranslatef(-220.0,0.0,-40.0);
       glScalef(1.1,1.1,1.1);
       tetraedro->draw(modoDibujado, modoVisualizacionAUsar, visAjedrez);
       glPopMatrix();
@@ -183,7 +210,7 @@ void Escena::dibujarUsandoVisualizacion(GLenum modoVisualizacionAUsar, bool visA
    }
    if (revolucionActivado) {
       glPushMatrix();
-      glTranslatef(0.0,70.0,-120.0);
+      glTranslatef(0.0,70.0,-150.0);
       glScalef(50.0,50.0,50.0);
       objRev->draw(modoDibujado, modoVisualizacionAUsar, visAjedrez);
       glPopMatrix();
@@ -197,14 +224,14 @@ void Escena::dibujarUsandoVisualizacion(GLenum modoVisualizacionAUsar, bool visA
    }
    if(conoActivado) {
       glPushMatrix();
-      glTranslatef(-160.0,0.0,-30.0);
+      glTranslatef(-220.0,0.0,-150.0);
       glScalef(60.0,60.0,60.0);
       cono->draw(modoDibujado, modoVisualizacionAUsar, visAjedrez);
       glPopMatrix();
    }
    if(esferaActivado) {
       glPushMatrix();
-      glTranslatef(100.0,30.0,-60.0);
+      glTranslatef(150.0,30.0,-120.0);
       glScalef(60.0,60.0,60.0);
       esfera->draw(modoDibujado, modoVisualizacionAUsar, visAjedrez);
       glPopMatrix();
@@ -240,8 +267,52 @@ void Escena::dibujarUsandoVisualizacion(GLenum modoVisualizacionAUsar, bool visA
    }
    if (cuadroActivado) {
       glPushMatrix();
-      glTranslatef(50.0,100.0,-50.0);
+      glScalef(50.0,50.0,50.0);
+      glTranslatef(-25.0,-20.0,-20.0);
       cuadro->draw(modoDibujado, modoVisualizacionAUsar, visAjedrez);
+      glPopMatrix();
+   }
+   if (objetosMarioActivado) {
+      glPushMatrix();
+      glScalef(4.0,4.0,4.0);
+      glTranslatef(10.0,7.0,20.0);
+      glRotatef(90.0,1,0,0);
+      glRotatef(90.0,0,0,1);
+      glRotatef(giroMoneda,0,0,1);
+      monedaMario1->draw(modoDibujado, modoVisualizacionAUsar, visAjedrez);
+      glPopMatrix();
+
+      glPushMatrix();
+      glScalef(4.0,4.0,4.0);
+      glTranslatef(23.0,7.0,20.0);
+      glRotatef(90.0,1,0,0);
+      glRotatef(90.0,0,0,1);
+      glRotatef(giroMoneda,0,0,1);
+      monedaMario2->draw(modoDibujado, modoVisualizacionAUsar, visAjedrez);
+      glPopMatrix();
+
+      glPushMatrix();
+      glScalef(4.0,4.0,4.0);
+      glTranslatef(36.0,7.0,20.0);
+      glRotatef(90.0,1,0,0);
+      glRotatef(90.0,0,0,1);
+      glRotatef(giroMoneda,0,0,1);
+      monedaMario3->draw(modoDibujado, modoVisualizacionAUsar, visAjedrez);
+      glPopMatrix();
+
+
+      glPushMatrix();
+      glScalef(5.0,5.0,5.0);
+      glTranslatef(-15.0,0.0,3.0);
+      glRotatef(30.0,0,1,0);
+      glRotatef(270.0,1,0,0);
+      florMario->draw(modoDibujado, modoVisualizacionAUsar, visAjedrez);
+      glPopMatrix();
+
+      glPushMatrix();
+      glScalef(30.0,30.0,30.0);
+      glTranslatef(-5.0,8.0,-5.0);
+      nubeMario->draw(modoDibujado, modoVisualizacionAUsar, visAjedrez);
       glPopMatrix();
    }
 }
@@ -274,19 +345,21 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
         break ;
 
       case '9' :
-         if (tapasEscenaActivadas) {
-            cilindro->tapasActivadas = false;
-            cono->tapasActivadas = false;
-            esfera->tapasActivadas = false;
-            objRev->tapasActivadas = false;
-            tapasEscenaActivadas = false;
-         } else {
-            cilindro->tapasActivadas = true;
-            cono->tapasActivadas = true;
-            esfera->tapasActivadas = true;
-            objRev->tapasActivadas = true;
-            tapasEscenaActivadas = true;
+         if (modoMenu == NADA) {
+            if (tapasEscenaActivadas) {
+               cilindro->tapasActivadas = false;
+               cono->tapasActivadas = false;
+               esfera->tapasActivadas = false;
+               objRev->tapasActivadas = false;
+               tapasEscenaActivadas = false;
+            } else {
+               cilindro->tapasActivadas = true;
+               cono->tapasActivadas = true;
+               esfera->tapasActivadas = true;
+               objRev->tapasActivadas = true;
+               tapasEscenaActivadas = true;
             }
+         }
          break ;
 
 
@@ -427,6 +500,7 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
             if (animacionesAutomaticas == true){
                cout << "-- Animaciones automáticas desactivadas --" << endl;
                animacionesAutomaticas = false;
+               velAnimacionAutomatica = 0;
             } else {
                cout << "-- Animaciones automáticas activadas --" << endl;
                animacionesAutomaticas = true;
@@ -618,7 +692,7 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 
    switch(modoMenu){
       case NADA:
-         cout << "MENÚ PRINCIPAL" << endl
+         cout << "--- MENÚ PRINCIPAL ---" << endl
               << "Opciones disponibles: " << endl
               << "\t [O] Menú: Selección de objetos" << endl
               << "\t [V] Menú: Modos de visualización de objetos" << endl
@@ -627,14 +701,16 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
               << "\t [A] Activar/Desactivar animaciones automáticas" << endl
               << "\t [+] Aumentar velocidad de animación automática" << endl
               << "\t [-] Disminuir velocidad de animación automática" << endl
-              << "\t [M] Menú: Grados de libertad del modelo jerárquico" << endl
+              << "\t [M] Menú: Grados de libertad del modelo jerárquico" << endl << endl
+
+              << "\t [9] Activar/desactivar tapas de objetos por revolución" << endl << endl
 
               << "\t [Q] Salir y cerrar el programa" << endl;
 
          break;
 
       case SELOBJETO:
-         cout << "MENU: Selección de objeto" << endl
+         cout << "--- MENU: Selección de objetos ---" << endl
               << "Opciones: " << endl
               << "\t [C] Mostrar/ocultar cubo" << endl
               << "\t [T] Mostrar/ocultar tetraedro" << endl
@@ -647,7 +723,7 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
          break;
 
       case SELVISUALIZACION:
-         cout << "MENU: Selección de modo de visualización" << endl
+         cout << "--- MENU: Selección de modo de visualización ---" << endl
               << "Modos de visualización disponibles:" << endl
               << "\t [P] Activar/desactivar: Visualización Puntos" << endl
               << "\t [L] Activar/desactivar: Visualización Líneas" << endl
@@ -658,7 +734,7 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
          break;
 
       case SELILUMINACION:
-         cout << "MENU: Modo Iluminación" << endl
+         cout << "--- MENU: Modo Iluminación ---" << endl
               << "Luces disponibles:" << endl
               << "\t [0] Activar/desactivar Luz 0: Posicional" << endl
               << "\t [1] Activar/desactivar Luz 1: Direccional" << endl
@@ -671,7 +747,7 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
           break;
 
       case SELDIBUJADO:
-         cout << "MENU: Selección de modo de dibujado" << endl
+         cout << "--- MENU: Selección de modo de dibujado ---" << endl
               << "Opciones disponibles: " << endl
               << "\t [1] Dibujado inmediato" << endl
               << "\t [2] Dibujado diferido (VBO)" << endl
@@ -681,7 +757,7 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 
 
      case VARALFA:
-       cout << "MENU: Modo Iluminación - Variar ángulo Alfa (luz direccional)" << endl
+       cout << "--- MENU: Modo Iluminación - Variar ángulo Alfa (luz direccional) ---" << endl
             << "Opciones disponibles: " << endl
             << "\t [<] Disminuir ángulo alfa" << endl
             << "\t [>] Aumentar ángulo alfa" << endl
@@ -690,7 +766,7 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
        break;
 
       case VARBETA:
-       cout << "MENU: Modo Iluminación - Variar ángulo Beta (luz direccional)" << endl
+       cout << "--- MENU: Modo Iluminación - Variar ángulo Beta (luz direccional) ---" << endl
             << "Opciones disponibles: " << endl
             << "\t [<] Disminuir ángulo beta" << endl
             << "\t [>] Aumentar ángulo beta" << endl
@@ -699,7 +775,7 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
        break;
 
       case GRADOSLIBERTAD:
-         cout << "MENU: Selección de grados de libertad" << endl
+         cout << "--- MENU: Selección de grados de libertad ---" << endl
               << "Elige un grado de libertad a modificar:" << endl
               << "\t [0] Grado de libertad 0: Giro de rueda" << endl
               << "\t [1] Grado de libertad 1: Giro de mano derecha (2 frames)" << endl
@@ -712,15 +788,6 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
               << "\t [-] Disminuir velocidad de animación" << endl << endl
 
               << "\t [Q] Volver al menú principal" << endl;
-         break;
-
-      case SELANIMACION:
-
-         cout << "ANIMACIONES PERO ETO AUN NO ETA" << endl
-         << "Animaciones:" << endl
-         << "\t [J] Activar/desactivar animaciones automáticas" << endl
-         << "\t [+] Aumentar velocidad de animaciones automáticas" << endl
-         << "\t [-] Disminuir velocidad de animaciones automáticas" << endl;
          break;
    }
 
@@ -796,6 +863,7 @@ void Escena::change_observer()
 }
 
 void Escena::animarModeloJerarquico() {
+   giroMoneda += (incrementoMoneda);
    if (animacionesAutomaticas) {
       objmettaton->rotarRueda(2 + velAnimacionAutomatica);
       objmettaton->rotarMano(4 + velAnimacionAutomatica);
