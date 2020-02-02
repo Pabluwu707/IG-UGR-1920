@@ -1,6 +1,6 @@
-## Practicas IG 2019/2020
+## Prácticas IG 2019/2020
 
-# PRACTICA 1
+# PRÁCTICA 1
 |Elementos de la Práctica 1|Puntos máximos|✓|
 |-|-|-|
 |Clase Malla3D (implementación correcta)|0.03|✓|
@@ -16,7 +16,7 @@
 |CULL_FACE habilitado|0.05|✓|
 |Extra: Visualización simultánea puntos + lineas + sólido (cualquier combinación de ellos)|0.05|✓|
 
-# PRACTICA 2
+# PRÁCTICA 2
 |Elementos de la Práctica 2|Puntos máximos|✓|
 |-|-|-|
 |Carga y visualiza PLY (con clase propia)|0.08|✓|
@@ -32,7 +32,7 @@
 |Varios objetos simultáneos en la escena|0.08|✓|
 |Extra: rotación de perfil en cualquier eje|0.075||
 
-# PRACTICA 3
+# PRÁCTICA 3
 |Elementos de la Práctica 3|Puntos máximos|✓|
 |-|-|-|
 |Cálculo correcto de las normales en los vértices|0.15|✓|
@@ -45,7 +45,7 @@
 |Hay al menos tres materiales distintos en la escena simultáneamente|0.10|✓|
 
 
-# PRACTICA 4
+# PRÁCTICA 4
 |Elementos de la Práctica 4|Puntos máximos|✓|
 |-|-|-|
 |Diseño manual del grafo del modelo jerárquico|0.25|✓|
@@ -56,12 +56,24 @@
 |Extra: Aumento/Disminución de velocidad general|0.05|✓|
 |Extra: Aumento/Disminución de velocidad para cada grado por separado|0.05|✓|
 
-# PRACTICA 5
+# PRÁCTICA 5
 
 | Elementos de la Práctica 5                                   | Puntos máximos | ✓    |
 | ------------------------------------------------------------ | -------------- | ---- |
-| Asignación correcta de coordenadas de texturas en cuadro     | 0.20           |      |
-| Visualización correcta al menos un objeto con la textura     | 0.15           |      |
-| Animación de luz puntual                                     | 0.20           |      |
+| Asignación correcta de coordenadas de texturas en cuadro     | 0.20           | ✓    |
+| Visualización correcta al menos un objeto con la textura     | 0.15           | ✓    |
+| Animación de luz puntual                                     | 0.20           | ✓    |
 | Extra: Hay en la escena un cilindro texturizado (p.ej. lata de refresco) o una esfera texturizada (p.ej. tierra). | 0.15           |      |
 
+
+# PRÁCTICA 6
+| Elementos de la Práctica 6                                   | Puntos máximos | ✓    |
+| ------------------------------------------------------------ | -------------- | ---- |
+| Hay una clase cámara que almacena sus parámetros intrínsecos y extrínsecos | 0.20           |      |
+| Hay al menos tres cámaras en la escena (obligatorio: una ortográfica y una perspectiva) | 0.15           |      |
+| La cámara activa se mueve en torno al objeto seleccionado con el ratón | 0.25           |      |
+| Se puede hacer zoom con cada cámara                          | 0.15           |      |
+| Se seleccionan objetos en la escena iluminada con materiales | 0.25           |      |
+| La camara activa, sin objeto seleccionado, se mueve en primera persona | 0.15           |      |
+| Las cámaras conservan su estado al pasar de una a otra       | 0.10           |      |
+| Extra: Los objetos seleccionables se visualizan de forma especial | 0.125          |      |
