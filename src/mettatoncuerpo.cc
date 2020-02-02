@@ -6,7 +6,7 @@
 MettatonCuerpo::MettatonCuerpo()
 {
    // Leer la lista de caras y vértices
-   ply::read( "./plys/mettaton_cuerpo.ply", this->v, this->f );
+   ply::read( "./plys/mettaton_cuerpo3.ply", this->v, this->f );
 
 
    // Inicializar colores puntos en Modo inmediato y diferido

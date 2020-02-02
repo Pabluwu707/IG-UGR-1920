@@ -117,6 +117,7 @@ void Mettaton::elevarCuerpoBrazos(float incremento) {
       ascendiendoCuerpoBrazos = true;
    }
 
+
    if (ascendiendoCuerpoBrazos) {
       alturaCuerpoBrazos += incrementoConvertidoCB;
    } else {
