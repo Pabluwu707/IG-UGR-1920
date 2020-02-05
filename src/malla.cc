@@ -241,7 +241,11 @@ void Malla3D::calcular_normales () {
    }
 }
 
-
+void Malla3D::setColorSolido(const Tupla3f & nuevoColor) {
+   for (int i=0; i < cSolido.size(); i++) {
+     cSolido[i] = nuevoColor;
+   }
+}
 
 void Malla3D::establecerMaterial(const Material & material){
    m.setMaterial(material);

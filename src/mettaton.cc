@@ -148,3 +148,14 @@ void Mettaton::rotarPersonaje(float incremento) {
 
    //cout << giroPersonaje << endl;
 }
+
+void Mettaton::setColorSolido(const Tupla3f & nuevoColor) {
+   cuerpo->setColorSolido(nuevoColor);
+   paloI->setColorSolido(nuevoColor);
+   paloE->setColorSolido(nuevoColor);
+   brazoIzq->setColorSolido(nuevoColor);
+   brazoDer->setColorSolido(nuevoColor);
+   manoIzq->setColorSolido(nuevoColor);
+   manoDer->setColorSolido(nuevoColor);
+   rueda->setColorSolido(nuevoColor);
+}

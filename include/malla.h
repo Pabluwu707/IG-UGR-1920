@@ -42,6 +42,8 @@ class Malla3D
    // Setter del material m del objeto
    void establecerMaterial (const Material & material);
 
+   void setColorSolido(const Tupla3f & nuevoColor);
+
    protected:
 
    void calcular_normales() ; // Calcula tabla de normales de vértices (práctica 3)

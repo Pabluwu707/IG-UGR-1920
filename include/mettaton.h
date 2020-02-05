@@ -23,6 +23,8 @@ class Mettaton
       void elevarBrazos(float incremento);
       void elevarCuerpoBrazos(float incremento);
       void rotarPersonaje(float incremento);
+
+      void setColorSolido(const Tupla3f & colorNuevo);
    protected:
    private:
       // Partes del modelo jerárquico
