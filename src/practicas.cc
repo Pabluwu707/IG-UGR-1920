@@ -105,6 +105,22 @@ void funcion_idle()
 	glutPostRedisplay();
 }
 
+//
+//
+//
+
+void moverRaton(int x, int y){
+	if(escena != nullptr)
+		escena->moverRaton(x,y);
+	glutPostRedisplay();
+}
+
+void pulsarRaton(int boton, int status, int x, int y){
+	if(escena != nullptr)
+		escena->pulsarRaton(boton,status,x,y);
+	glutPostRedisplay();
+}
+
 //***************************************************************************
 // Programa principal
 //
@@ -157,6 +173,12 @@ int main( int argc, char **argv )
 
 	// Gestionar evento idle en escena
 	glutIdleFunc(funcion_idle);
+
+	// asignacion de la funcion moverRaton
+	glutMotionFunc(moverRaton);
+
+	// asignacion de la funcion pulsarRaton
+	glutMouseFunc(pulsarRaton);
 
    // inicialización de librería GLEW (solo en Linux)
    #ifdef LINUX
