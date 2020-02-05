@@ -10,6 +10,7 @@ Camara::Camara(const Tupla3f eye, const Tupla3f at, const Tupla3f up,
    this->up = up;
 
    this->tipo = tipo;
+      cout << "Tipo: " << tipo << endl;
 
    this->near = near;
    this->far = far;
@@ -71,12 +72,12 @@ void Camara::rotarZFirstPerson(const float angle){
 
 // Mover el at y el eye de la cámara
 void Camara::mover(const float x, const float y, const float z){
-   at(0) += x;
-   at(1) += y;
-   at(2) += z;
-   eye(0) += x;
-   eye(1) += y;
-   eye(2) += z;
+   at(0) = x;
+   at(1) = y;
+   at(2) = z;
+   eye(0) = x;
+   eye(1) = y + 400.0;
+   eye(2) = z + 300.0;
 }
 
 // Aplicar zoom aumentando o disminuyendo los marcos del frustum
@@ -92,6 +93,10 @@ void Camara::girar(const float x, const float y){
    rotarYFirstPerson(-x*0.25*M_PI/180.0);
 }
 
+
+
+// -- SETTERS --
+
 void Camara::setObserver(){
    gluLookAt(eye(0),eye(1),eye(2),
             at(0),at(1),at(2),
@@ -100,39 +105,41 @@ void Camara::setObserver(){
 
 void Camara::setProyeccion(){
    if (tipo == ORTOGONAL) {
-      cout << "Ortogonal" << endl;
       glOrtho(left,right,bottom,top,near,far);
    } else {
       glFrustum(left,right,bottom,top,near,far);
    }
 }
 
-void Camara::setLeft(const float l){
-   left = l;
+void Camara::setLeft(const float valor){
+   left = valor;
 }
+
+void Camara::setRight(const float valor){
+   right = valor;
+}
+
+void Camara::setTop(const float valor){
+   top = valor;
+}
+
+void Camara::setBottom(const float valor){
+   bottom = valor;
+}
+
+
+// -- GETTERS --
 
 float Camara::getLeft() const{
    return left;
-}
-
-void Camara::setRight(const float l){
-   right = l;
 }
 
 float Camara::getRight() const{
    return right;
 }
 
-void Camara::setTop(const float l){
-   top = l;
-}
-
 float Camara::getTop() const{
    return top;
-}
-
-void Camara::setBottom(const float l){
-   bottom = l;
 }
 
 float Camara::getBottom() const{

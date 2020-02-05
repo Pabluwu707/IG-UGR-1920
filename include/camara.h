@@ -5,7 +5,7 @@
 
 typedef enum {ORTOGONAL, PERSPECTIVA} TipoCamara;
 
-typedef enum {NINGUNO} objetoSeleccionado;
+typedef enum {NINGUNO, METTATON, CUBO, TETRAEDRO, MODELOPLY, OBJREV, CILINDRO, CONO, ESFERA, PEON, CUADRO, MONEDA1, MONEDA2, MONEDA3, FLOR, NUBE} objetoSeleccionado;
 
 class Camara{
 	private:
@@ -43,10 +43,10 @@ class Camara{
 		void setObjetoSeleccionado(const objetoSeleccionado obj);
 		objetoSeleccionado getObjetoSeleccionado() const;
 
-	   void setLeft(const float l);
-	   void setRight(const float l);
-	   void setTop(const float l);
-	   void setBottom(const float l);
+	   void setLeft(const float valor);
+	   void setRight(const float valor);
+	   void setTop(const float valor);
+	   void setBottom(const float valor);
 	   float getLeft() const;
 	   float getRight() const;
 	   float getTop() const;
