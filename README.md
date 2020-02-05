@@ -30,7 +30,7 @@
 |Constructores con argumento para crear o no tapas|0.08|✓|
 |Visualización opcional de tapas en tiempo de ejecución|0.08|✓|
 |Varios objetos simultáneos en la escena|0.08|✓|
-|Extra: rotación de perfil en cualquier eje|0.075||
+|Extra: rotación de perfil en cualquier eje|0.075|✓|
 
 # PRÁCTICA 3
 |Elementos de la Práctica 3|Puntos máximos|✓|
@@ -69,11 +69,11 @@
 # PRÁCTICA 6
 | Elementos de la Práctica 6                                   | Puntos máximos | ✓    |
 | ------------------------------------------------------------ | -------------- | ---- |
-| Hay una clase cámara que almacena sus parámetros intrínsecos y extrínsecos | 0.20           |      |
-| Hay al menos tres cámaras en la escena (obligatorio: una ortográfica y una perspectiva) | 0.15           |      |
-| La cámara activa se mueve en torno al objeto seleccionado con el ratón | 0.25           |      |
-| Se puede hacer zoom con cada cámara                          | 0.15           |      |
-| Se seleccionan objetos en la escena iluminada con materiales | 0.25           |      |
-| La camara activa, sin objeto seleccionado, se mueve en primera persona | 0.15           |      |
-| Las cámaras conservan su estado al pasar de una a otra       | 0.10           |      |
+| Hay una clase cámara que almacena sus parámetros intrínsecos y extrínsecos | 0.20           | ✓    |
+| Hay al menos tres cámaras en la escena (obligatorio: una ortográfica y una perspectiva) | 0.15           | ✓    |
+| La cámara activa se mueve en torno al objeto seleccionado con el ratón | 0.25           | ✓    |
+| Se puede hacer zoom con cada cámara                          | 0.15           | ✓    |
+| Se seleccionan objetos en la escena iluminada con materiales | 0.25           | ✓    |
+| La camara activa, sin objeto seleccionado, se mueve en primera persona | 0.15           | ✓    |
+| Las cámaras conservan su estado al pasar de una a otra       | 0.10           | ✓    |
 | Extra: Los objetos seleccionables se visualizan de forma especial | 0.125          |      |
