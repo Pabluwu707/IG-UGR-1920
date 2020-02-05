@@ -94,7 +94,7 @@ void ObjRevolucion::dibujarElementos() {
    }
 }
 
-void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil_original, int num_instancias, bool conTapas) {
+void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil_original, int num_instancias, bool conTapas, int eje_revolucion) {
    float angulo, x, y, z;
    Tupla3f verticeRotado, poloSur, poloNorte;
    Tupla3i caraCreada;
@@ -140,9 +140,31 @@ void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil_original, int num_ins
    for (int i=0; i<=num_instancias; i++) {
       angulo = (2*M_PI/num_instancias) * i;
       for (int j=0; j<tamanio_perfil_original;j++) {
-         x = (perfil_original[j](0) * cos (angulo)) + (perfil_original[j](2) * sin (angulo));
-         y = perfil_original[j](1);
-         z = (perfil_original[j](0) * -sin (angulo)) + (perfil_original[j](2) * cos (angulo));
+         switch (eje_revolucion) {
+            case 0:
+               // Rotación en X
+               x = perfil_original[j](0);
+               y = (perfil_original[j](1) * cos (angulo)) - (perfil_original[j](2) * sin (angulo));
+               z = (perfil_original[j](1) * sin (angulo)) + (perfil_original[j](2) * cos (angulo));
+               break;
+            case 1:
+               // Rotación en Y
+               x = (perfil_original[j](0) * cos (angulo)) + (perfil_original[j](2) * sin (angulo));
+               y = perfil_original[j](1);
+               z = (perfil_original[j](0) * -sin (angulo)) + (perfil_original[j](2) * cos (angulo));
+               break;
+            case 2:
+               // Rotación en Z
+               x = (perfil_original[j](0) * cos (angulo)) - (perfil_original[j](1) * sin (angulo));
+               y = (perfil_original[j](0) * sin (angulo)) + (perfil_original[j](1) * cos (angulo));
+               z = perfil_original[j](2);
+               break;
+
+         }
+
+         //x = (perfil_original[j](0) * cos (angulo)) + (perfil_original[j](2) * sin (angulo));
+         //y = perfil_original[j](1);
+         //z = (perfil_original[j](0) * -sin (angulo)) + (perfil_original[j](2) * cos (angulo));
          //cout << "Se crea el vertice (" << x << ", " << y << ", " << z << ")" << endl;
 
          verticeRotado = {x,y,z};

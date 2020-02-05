@@ -33,7 +33,7 @@ class ObjRevolucion : public Malla3D
       ObjRevolucion(std::vector<Tupla3f> archivo, int num_instancias, bool conTapas=true) ;
    protected:
       std::vector<Tupla3f> v_perfil ;   // tabla de coordenadas de vértices del perfil
-      void crearMalla(std::vector<Tupla3f> perfil_original, int num_instancias, bool conTapas);
+      void crearMalla(std::vector<Tupla3f> perfil_original, int num_instancias, bool conTapas, int eje_revolucion=1);
       void dibujarElementos() override;
 } ;
 
