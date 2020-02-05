@@ -11,7 +11,7 @@ using namespace std ;
 Escena::Escena()
 {
    Front_plane       = 50.0;
-   Back_plane        = 2000.0;
+   Back_plane        = 3000.0;
    Observer_distance = 2*Front_plane;
    Observer_angle_x  = 0.0 ;
    Observer_angle_y  = 0.0 ;
@@ -22,11 +22,15 @@ Escena::Escena()
    // Cámaras
    Camara camara0(Tupla3f(0.0,250.0,600.0),Tupla3f(0.0,50.0,0.0), Tupla3f(0.0,1.0,0.0),
                   ORTOGONAL, Front_plane, Back_plane, -300.0, 300.0, 300.0, -300.0);
-   //camarasEscena.push_back(camara0);
+   camarasEscena.push_back(camara0);
 
-   Camara camara1(Tupla3f(0.0,250.0,600.0),Tupla3f(0.0,50.0,0.0), Tupla3f(0.0,1.0,0.0),
+   Camara camara1(Tupla3f(-300.0,50.0,300.0),Tupla3f(0.0,50.0,0.0), Tupla3f(0.0,1.0,0.0),
                   PERSPECTIVA, Front_plane, Back_plane, -50.0, 50.0, 50.0, -50.0);
    camarasEscena.push_back(camara1);
+
+   Camara camara2(Tupla3f(500.0,500.0,600.0),Tupla3f(0.0,50.0,0.0), Tupla3f(0.0,1.0,0.0),
+                  ORTOGONAL, Front_plane, Back_plane, -300.0, 300.0, 300.0, -300.0);
+   camarasEscena.push_back(camara2);
 
    // Crear los objetos de la escena....
    cubo = new Cubo(50);
@@ -90,7 +94,8 @@ Escena::Escena()
         << "Opciones disponibles: " << endl
         << "\t [O] Menú: Selección de objetos" << endl
         << "\t [V] Menú: Modos de visualización de objetos" << endl
-        << "\t [D] Menú: Modo dibujado" << endl << endl
+        << "\t [D] Menú: Modo dibujado" << endl
+        << "\t [C] Menú: Selección de cámaras" << endl << endl
 
         << "\t [A] Activar/Desactivar animaciones automáticas" << endl
         << "\t [+] Aumentar velocidad de animación automática" << endl
@@ -215,6 +220,7 @@ void Escena::dibujarUsandoVisualizacion(GLenum modoVisualizacionAUsar, bool visA
    if (cuboActivado) {
       glPushMatrix();
       glTranslatef(70.0,0.0,-90.0);
+      cubo->setColorSolido({0.97,0.78,0.05});
       cubo->draw(modoDibujado, modoVisualizacionAUsar, visAjedrez);
       glPopMatrix();
    }
@@ -222,6 +228,7 @@ void Escena::dibujarUsandoVisualizacion(GLenum modoVisualizacionAUsar, bool visA
       glPushMatrix();
       glTranslatef(-220.0,0.0,-40.0);
       glScalef(1.1,1.1,1.1);
+      tetraedro->setColorSolido({0.47,0.11,0.58});
       tetraedro->draw(modoDibujado, modoVisualizacionAUsar, visAjedrez);
       glPopMatrix();
    }
@@ -229,6 +236,7 @@ void Escena::dibujarUsandoVisualizacion(GLenum modoVisualizacionAUsar, bool visA
       glPushMatrix();
       glTranslatef(150.0,0.0,0.0);
       glScalef(60.0,60.0,60.0);
+      objPLY->setColorSolido({1.0,0.0,0.64});
       objPLY->draw(modoDibujado, modoVisualizacionAUsar, visAjedrez);
       glPopMatrix();
    }
@@ -236,6 +244,7 @@ void Escena::dibujarUsandoVisualizacion(GLenum modoVisualizacionAUsar, bool visA
       glPushMatrix();
       glTranslatef(0.0,70.0,-150.0);
       glScalef(50.0,50.0,50.0);
+      objRev->setColorSolido({0.97,0.78,0.05});
       objRev->draw(modoDibujado, modoVisualizacionAUsar, visAjedrez);
       glPopMatrix();
    }
@@ -243,6 +252,7 @@ void Escena::dibujarUsandoVisualizacion(GLenum modoVisualizacionAUsar, bool visA
       glPushMatrix();
       glTranslatef(-100.0,0.0,-80.0);
       glScalef(60.0,60.0,60.0);
+      cilindro->setColorSolido({1.0,0.42,0.06});
       cilindro->draw(modoDibujado, modoVisualizacionAUsar, visAjedrez);
       glPopMatrix();
    }
@@ -250,6 +260,7 @@ void Escena::dibujarUsandoVisualizacion(GLenum modoVisualizacionAUsar, bool visA
       glPushMatrix();
       glTranslatef(-220.0,0.0,-150.0);
       glScalef(60.0,60.0,60.0);
+      cono->setColorSolido({0.18,0.88,0.90});
       cono->draw(modoDibujado, modoVisualizacionAUsar, visAjedrez);
       glPopMatrix();
    }
@@ -257,6 +268,7 @@ void Escena::dibujarUsandoVisualizacion(GLenum modoVisualizacionAUsar, bool visA
       glPushMatrix();
       glTranslatef(150.0,30.0,-120.0);
       glScalef(60.0,60.0,60.0);
+      esfera->setColorSolido({1.0,0.00,0.32});
       esfera->draw(modoDibujado, modoVisualizacionAUsar, visAjedrez);
       glPopMatrix();
    }
@@ -286,6 +298,7 @@ void Escena::dibujarUsandoVisualizacion(GLenum modoVisualizacionAUsar, bool visA
       glScalef(12.0,12.0,12.0);
       glRotatef(180.0,0,1,0);
       glTranslatef(-3,5.8,5.0);
+      objmettaton->setColorSolido({1.0,0.0,0.32});
       objmettaton->draw(modoDibujado, modoVisualizacionAUsar, visAjedrez);
       glPopMatrix();
    }
@@ -293,6 +306,7 @@ void Escena::dibujarUsandoVisualizacion(GLenum modoVisualizacionAUsar, bool visA
       glPushMatrix();
       glScalef(50.0,50.0,50.0);
       glTranslatef(-25.0,-20.0,-20.0);
+      cuadro->setColorSolido({0.18,0.88,0.90});
       cuadro->draw(modoDibujado, modoVisualizacionAUsar, visAjedrez);
       glPopMatrix();
    }
@@ -303,6 +317,7 @@ void Escena::dibujarUsandoVisualizacion(GLenum modoVisualizacionAUsar, bool visA
       glRotatef(90.0,1,0,0);
       glRotatef(90.0,0,0,1);
       glRotatef(giroMoneda,0,0,1);
+      monedaMario1->setColorSolido({1.0,0.0,0.32});
       monedaMario1->draw(modoDibujado, modoVisualizacionAUsar, visAjedrez);
       glPopMatrix();
 
@@ -312,6 +327,7 @@ void Escena::dibujarUsandoVisualizacion(GLenum modoVisualizacionAUsar, bool visA
       glRotatef(90.0,1,0,0);
       glRotatef(90.0,0,0,1);
       glRotatef(giroMoneda,0,0,1);
+      monedaMario2->setColorSolido({1.0,0.0,0.32});
       monedaMario2->draw(modoDibujado, modoVisualizacionAUsar, visAjedrez);
       glPopMatrix();
 
@@ -321,6 +337,7 @@ void Escena::dibujarUsandoVisualizacion(GLenum modoVisualizacionAUsar, bool visA
       glRotatef(90.0,1,0,0);
       glRotatef(90.0,0,0,1);
       glRotatef(giroMoneda,0,0,1);
+      monedaMario3->setColorSolido({1.0,0.0,0.32});
       monedaMario3->draw(modoDibujado, modoVisualizacionAUsar, visAjedrez);
       glPopMatrix();
 
@@ -330,12 +347,14 @@ void Escena::dibujarUsandoVisualizacion(GLenum modoVisualizacionAUsar, bool visA
       glTranslatef(-15.0,0.0,3.0);
       glRotatef(30.0,0,1,0);
       glRotatef(270.0,1,0,0);
+      florMario->setColorSolido({1.0,0.0,0.32});
       florMario->draw(modoDibujado, modoVisualizacionAUsar, visAjedrez);
       glPopMatrix();
 
       glPushMatrix();
       glScalef(30.0,30.0,30.0);
       glTranslatef(-5.0,8.0,-5.0);
+      nubeMario->setColorSolido({1.0,0.0,0.32});
       nubeMario->draw(modoDibujado, modoVisualizacionAUsar, visAjedrez);
       glPopMatrix();
    }
@@ -396,20 +415,6 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
             modoMenu=SELOBJETO;
             break ;
          }
-
-      case 'C' :
-         if (modoMenu==SELOBJETO) {
-            // Se visualiza/oculta el Tetraedro
-            objetoVisualizado = 0;
-            if (cuboActivado) {
-               cout << "Desactivando: Cubo." << endl;
-               cuboActivado = false;
-            } else {
-               cout << "Activando: Cubo." << endl;
-               cuboActivado = true;
-            }
-         }
-         break ;
 
       case 'T' :
          if (modoMenu==SELOBJETO) {
@@ -594,6 +599,10 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
             } else{
                luz0->apagar();
             }
+         } else if (modoMenu == SELCAMARA) {
+            camaraActiva = 0;
+            change_projection(1.0);
+            change_observer();
          }
          break;
 
@@ -629,6 +638,10 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
            } else {
               luz1->apagar();
            }
+        } else if (modoMenu == SELCAMARA) {
+           camaraActiva = 1;
+           change_projection(1.0);
+           change_observer();
         }
         break;
       case '2' :
@@ -645,9 +658,15 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
            } else {
               luzPuntual->apagar();
            }
+        } else if (modoMenu == SELCAMARA) {
+           camaraActiva = 2;
+           change_projection(1.0);
+           change_observer();
         }
         break ;
+
       // ----------------------------------------------
+
       case 'B' :
          if (modoMenu == SELILUMINACION) {
             cout << "Modo Variación de Ángulo Beta" << endl;
@@ -676,8 +695,27 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
             cout << "ERROR: Opcion no valida" << endl;
          }
          break;
-       // ----------------------------------------------
+      // ----------------------------------------------
 
+      case 'C' :
+         if (modoMenu==NADA) {
+           cout << "-- Modo: Selección de Cámaras --" << endl;
+           // ESTAMOS EN MODO SELECCION DE DIBUJADO
+           modoMenu=SELCAMARA;
+           break ;
+
+         } else if (modoMenu==SELOBJETO) {
+            // Se visualiza/oculta el Tetraedro
+            objetoVisualizado = 0;
+            if (cuboActivado) {
+               cout << "Desactivando: Cubo." << endl;
+               cuboActivado = false;
+            } else {
+               cout << "Activando: Cubo." << endl;
+               cuboActivado = true;
+            }
+         }
+         break ;
 
       // ----------------------------------------------
 
@@ -720,7 +758,8 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
               << "Opciones disponibles: " << endl
               << "\t [O] Menú: Selección de objetos" << endl
               << "\t [V] Menú: Modos de visualización de objetos" << endl
-              << "\t [D] Menú: Modo dibujado" << endl << endl
+              << "\t [D] Menú: Modo dibujado" << endl
+              << "\t [C] Menú: Selección de cámaras" << endl << endl
 
               << "\t [A] Activar/Desactivar animaciones automáticas" << endl
               << "\t [+] Aumentar velocidad de animación automática" << endl
@@ -776,9 +815,19 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
               << "\t [1] Dibujado inmediato" << endl
               << "\t [2] Dibujado diferido (VBO)" << endl
               << "\t [Q] Salir y volver al menú principal" << endl;
-
          break;
 
+      case SELCAMARA:
+         cout << "--- MENU: Selección de cámaras ---" << endl
+              << "Opciones disponibles: " << endl
+              << "\t [0] Cámara 1: Ortogonal frontal" << endl
+              << "\t [1] Cámara 2: Perspectiva frontal" << endl
+              << "\t [2] Cámara 3: Ortogonal inclinada " << endl
+              << "\t [Q] Salir y volver al menú principal" << endl << endl
+
+              << "Pro tip: Puedes mover la cámara en primera persona con Click Derecho." << endl;
+
+         break;
 
      case VARALFA:
        cout << "--- MENU: Modo Iluminación - Variar ángulo Alfa (luz direccional) ---" << endl
@@ -845,7 +894,7 @@ void Escena::teclaEspecial( int Tecla1, int x, int y )
          break;
 	}
 
-	//std::cout << Observer_distance << std::endl;
+	//cout << Observer_distance << endl;
 }
 
 //**************************************************************************
@@ -920,12 +969,12 @@ void Escena::animarLuces() {
 
 void Escena::moverRaton(int x, int y){
    if(ratonPulsado){
-      //if(camaras[camaraActiva].getSeleccionado() == NOSEL){
+      if(camarasEscena[camaraActiva].getObjetoSeleccionado() == NINGUNO){
          camarasEscena[camaraActiva].girar(x-x_ant, y-y_ant);
-      //} else {
-      //   camarasEscena[camaraActiva].rotarXExaminar(-0.25*(y-y_ant)*M_PI/180.0);
-      //   camarasEscena[camaraActiva].rotarYExaminar(-0.25*(x-x_ant)*M_PI/180.0);
-      //}
+      } else {
+         camarasEscena[camaraActiva].rotarXExaminar(-0.25*(y-y_ant)*M_PI/180.0);
+         camarasEscena[camaraActiva].rotarYExaminar(-0.25*(x-x_ant)*M_PI/180.0);
+      }
       x_ant = x;
       y_ant = y;
    }
@@ -943,15 +992,240 @@ void Escena::pulsarRaton(int boton, int status, int x, int y){
       }
    } else if (boton == GLUT_LEFT_BUTTON){
       //Seleccionar objeto
-      /*if(status == GLUT_DOWN){
+      if(status == GLUT_DOWN){
          dibujar_seleccion();
-         procesar_click(x,y);
-      }*/
+         analizarClick(x,y);
+      }
    } else if (boton == 3){
       camarasEscena[camaraActiva].zoom(1/1.2);
       change_projection(1.0);
    } else if (boton == 4){
       camarasEscena[camaraActiva].zoom(1.2);
       change_projection(1.0);
+   }
+}
+
+
+void Escena::dibujar_seleccion() {
+   GLenum modoVisualizacionAUsar = GL_FILL;
+   bool visAjedrez = false;
+
+   change_observer();
+   glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+   glDisable(GL_LIGHTING);
+
+   if(glIsEnabled(GL_DITHER)){
+      glDisable(GL_DITHER);
+   }
+
+   if (cuboActivado) {
+      glPushMatrix();
+      glTranslatef(70.0,0.0,-90.0);
+      cubo->setColorSolido({0.1,0.0,0.0});
+      cubo->draw(modoDibujado, modoVisualizacionAUsar, visAjedrez);
+      glPopMatrix();
+   }
+   if (tetraedroActivado) {
+      glPushMatrix();
+      glTranslatef(-220.0,0.0,-40.0);
+      glScalef(1.1,1.1,1.1);
+      tetraedro->setColorSolido({0.15,0.0,0.0});
+      tetraedro->draw(modoDibujado, modoVisualizacionAUsar, visAjedrez);
+      glPopMatrix();
+   }
+   if (modeloActivado) {
+      glPushMatrix();
+      glTranslatef(150.0,0.0,0.0);
+      glScalef(60.0,60.0,60.0);
+      objPLY->setColorSolido({0.2,0.0,0.0});
+      objPLY->draw(modoDibujado, modoVisualizacionAUsar, visAjedrez);
+      glPopMatrix();
+   }
+   if (revolucionActivado) {
+      glPushMatrix();
+      glTranslatef(0.0,70.0,-150.0);
+      glScalef(50.0,50.0,50.0);
+      objRev->setColorSolido({0.25,0.0,0.0});
+      objRev->draw(modoDibujado, modoVisualizacionAUsar, visAjedrez);
+      glPopMatrix();
+   }
+   if (cilindroActivado) {
+      glPushMatrix();
+      glTranslatef(-100.0,0.0,-80.0);
+      glScalef(60.0,60.0,60.0);
+      cilindro->setColorSolido({0.3,0.0,0.0});
+      cilindro->draw(modoDibujado, modoVisualizacionAUsar, visAjedrez);
+      glPopMatrix();
+   }
+   if(conoActivado) {
+      glPushMatrix();
+      glTranslatef(-220.0,0.0,-150.0);
+      glScalef(60.0,60.0,60.0);
+      cono->setColorSolido({0.35,0.0,0.0});
+      cono->draw(modoDibujado, modoVisualizacionAUsar, visAjedrez);
+      glPopMatrix();
+   }
+   if(esferaActivado) {
+      glPushMatrix();
+      glTranslatef(150.0,30.0,-120.0);
+      glScalef(60.0,60.0,60.0);
+      esfera->setColorSolido({0.40,0.0,0.0});
+      esfera->draw(modoDibujado, modoVisualizacionAUsar, visAjedrez);
+      glPopMatrix();
+   }
+   if(mesaActivado) {
+      glPushMatrix();
+      glScalef(2.0,0.05,2.0);
+      glTranslatef(-22.0,0.0,-5.0);
+      mesa->draw(modoDibujado, modoVisualizacionAUsar, visAjedrez);
+      glPopMatrix();
+   }
+   if(peonBlancoActivado) {
+      glPushMatrix();
+      glScalef(14.0,14.0,14.0);
+      glTranslatef(-0.8,1.7,2.0);
+      peonBlanco->draw(modoDibujado, modoVisualizacionAUsar, visAjedrez);
+      glPopMatrix();
+   }
+   if(peonNegroActivado) {
+      glPushMatrix();
+      glScalef(14.0,14.0,14.0);
+      glTranslatef(2.2,1.7,4.7);
+      peonNegro->draw(modoDibujado, modoVisualizacionAUsar, visAjedrez);
+      glPopMatrix();
+   }
+   if (objmettatonActivado) {
+      glPushMatrix();
+      glScalef(12.0,12.0,12.0);
+      glRotatef(180.0,0,1,0);
+      glTranslatef(-3,5.8,5.0);
+      objmettaton->setColorSolido({0.45,0.0,0.0});
+      objmettaton->draw(modoDibujado, modoVisualizacionAUsar, visAjedrez);
+      glPopMatrix();
+   }
+   if (cuadroActivado) {
+      glPushMatrix();
+      glScalef(50.0,50.0,50.0);
+      glTranslatef(-25.0,-20.0,-20.0);
+      cuadro->setColorSolido({0.5,0.0,0.0});
+      cuadro->draw(modoDibujado, modoVisualizacionAUsar, visAjedrez);
+      glPopMatrix();
+   }
+   if (objetosMarioActivado) {
+      glPushMatrix();
+      glScalef(4.0,4.0,4.0);
+      glTranslatef(10.0,7.0,20.0);
+      glRotatef(90.0,1,0,0);
+      glRotatef(90.0,0,0,1);
+      glRotatef(giroMoneda,0,0,1);
+      monedaMario1->setColorSolido({0.55,0.0,0.0});
+      monedaMario1->draw(modoDibujado, modoVisualizacionAUsar, visAjedrez);
+      glPopMatrix();
+
+      glPushMatrix();
+      glScalef(4.0,4.0,4.0);
+      glTranslatef(23.0,7.0,20.0);
+      glRotatef(90.0,1,0,0);
+      glRotatef(90.0,0,0,1);
+      glRotatef(giroMoneda,0,0,1);
+      monedaMario2->setColorSolido({0.6,0.0,0.0});
+      monedaMario2->draw(modoDibujado, modoVisualizacionAUsar, visAjedrez);
+      glPopMatrix();
+
+      glPushMatrix();
+      glScalef(4.0,4.0,4.0);
+      glTranslatef(36.0,7.0,20.0);
+      glRotatef(90.0,1,0,0);
+      glRotatef(90.0,0,0,1);
+      glRotatef(giroMoneda,0,0,1);
+      monedaMario3->setColorSolido({0.65,0.0,0.0});
+      monedaMario3->draw(modoDibujado, modoVisualizacionAUsar, visAjedrez);
+      glPopMatrix();
+
+
+      glPushMatrix();
+      glScalef(5.0,5.0,5.0);
+      glTranslatef(-15.0,0.0,3.0);
+      glRotatef(30.0,0,1,0);
+      glRotatef(270.0,1,0,0);
+      florMario->setColorSolido({0.7,0.0,0.0});
+      florMario->draw(modoDibujado, modoVisualizacionAUsar, visAjedrez);
+      glPopMatrix();
+
+      glPushMatrix();
+      glScalef(30.0,30.0,30.0);
+      glTranslatef(-5.0,8.0,-5.0);
+      nubeMario->setColorSolido({0.75,0.0,0.0});
+      nubeMario->draw(modoDibujado, modoVisualizacionAUsar, visAjedrez);
+      glPopMatrix();
+   }
+
+   if(!glIsEnabled(GL_DITHER)){
+      glEnable(GL_DITHER);
+   }
+}
+
+void Escena::analizarClick(int x, int y){
+   GLint viewport[4];
+   GLfloat pixel[3];
+   glGetIntegerv(GL_VIEWPORT,viewport);
+   glReadPixels(x,viewport[3]-y,1,1,GL_RGB,GL_FLOAT,pixel);
+
+   Tupla3f color = {pixel[0],pixel[1],pixel[2]};
+
+   if(color(0) > 0.07 && color(0) < 0.12) {
+      cout << "OBJETO SELECCIONADO: Cubo" << endl;
+      camarasEscena[camaraActiva].setObjetoSeleccionado(CUBO);
+      camarasEscena[camaraActiva].mover(100.0,50.0,-80.0);
+   } else if(color(0) > 0.12 && color(0) < 0.17) {
+      cout << "OBJETO SELECCIONADO: Tetraedro" << endl;
+      camarasEscena[camaraActiva].setObjetoSeleccionado(TETRAEDRO);
+      camarasEscena[camaraActiva].mover(-200.0,50.0,-20.0);
+   } else if(color(0) > 0.17 && color(0) < 0.22) {
+      cout << "OBJETO SELECCIONADO: Palmera (Modelo Ply)" << endl;
+      camarasEscena[camaraActiva].setObjetoSeleccionado(MODELOPLY);
+      camarasEscena[camaraActiva].mover(157.0,50.0,-0.0);
+   } else if(color(0) > 0.22 && color(0) < 0.27) {
+      cout << "OBJETO SELECCIONADO: Peón (Objeto Revolución)" << endl;
+      camarasEscena[camaraActiva].setObjetoSeleccionado(OBJREV);
+      camarasEscena[camaraActiva].mover(-0.0,50.0,-150.0);
+   } else if(color(0) > 0.27 && color(0) < 0.32) {
+      cout << "OBJETO SELECCIONADO: Cilindro" << endl;
+      camarasEscena[camaraActiva].setObjetoSeleccionado(CILINDRO);
+      camarasEscena[camaraActiva].mover(-100.0,50.0,-85.0);
+   } else if(color(0) > 0.32 && color(0) < 0.37) {
+      cout << "OBJETO SELECCIONADO: Cono" << endl;
+      camarasEscena[camaraActiva].setObjetoSeleccionado(CONO);
+      camarasEscena[camaraActiva].mover(-230.0,50.0,-145.0);
+   } else if(color(0) > 0.37 && color(0) < 0.42) {
+      cout << "OBJETO SELECCIONADO: Esfera" << endl;
+      camarasEscena[camaraActiva].setObjetoSeleccionado(ESFERA);
+      camarasEscena[camaraActiva].mover(140.0,50.0,-105.0);
+   } else if(color(0) > 0.42 && color(0) < 0.47) {
+      cout << "OBJETO SELECCIONADO: Mettaton (Modelo jerárquico)" << endl;
+      camarasEscena[camaraActiva].setObjetoSeleccionado(METTATON);
+      camarasEscena[camaraActiva].mover(0.0,50.0,-25.0);
+   } else if(color(0) > 0.52 && color(0) < 0.57) {
+      cout << "OBJETO SELECCIONADO: Moneda 1" << endl;
+      camarasEscena[camaraActiva].setObjetoSeleccionado(MONEDA1);
+      camarasEscena[camaraActiva].mover(50.0,50.0,80.0);
+   } else if(color(0) > 0.57 && color(0) < 0.62) {
+      cout << "OBJETO SELECCIONADO: Moneda 2" << endl;
+      camarasEscena[camaraActiva].setObjetoSeleccionado(MONEDA2);
+      camarasEscena[camaraActiva].mover(100.0,50.0,80.0);
+   } else if(color(0) > 0.62 && color(0) < 0.67) {
+      cout << "OBJETO SELECCIONADO: Moneda 3" << endl;
+      camarasEscena[camaraActiva].setObjetoSeleccionado(MONEDA3);
+      camarasEscena[camaraActiva].mover(150.0,50.0,80.0);
+   } else if(color(0) > 0.67 && color(0) < 0.72) {
+      cout << "OBJETO SELECCIONADO: Flor" << endl;
+      camarasEscena[camaraActiva].setObjetoSeleccionado(FLOR);
+      camarasEscena[camaraActiva].mover(-90.0,50.0,10.0);
+   } else if(color(0) > 0.72 && color(0) < 0.77) {
+      cout << "OBJETO SELECCIONADO: Nube" << endl;
+      camarasEscena[camaraActiva].setObjetoSeleccionado(NUBE);
+      camarasEscena[camaraActiva].mover(-170.0,100.0,-145.0);
+   } else {
+      camarasEscena[camaraActiva].setObjetoSeleccionado(NINGUNO);
    }
 }

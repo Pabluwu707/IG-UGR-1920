@@ -17,7 +17,7 @@
 #include "cuadro.h"
 #include "camara.h"
 
-typedef enum {NADA, SELOBJETO,SELVISUALIZACION,SELDIBUJADO, SELILUMINACION, VARALFA, VARBETA, SELANIMACION, GRADOSLIBERTAD} menu;
+typedef enum {NADA, SELOBJETO,SELVISUALIZACION,SELDIBUJADO, SELILUMINACION, SELCAMARA, VARALFA, VARBETA, SELANIMACION, GRADOSLIBERTAD} menu;
 class Escena
 {
 
@@ -92,7 +92,6 @@ class Escena
    LuzPosicional * luzPuntual = nullptr;
    float giroLuz = 0;
    float incrementoLuz = 1;
-
    bool luzPuntualEnMovimiento = false;
 
 
@@ -123,6 +122,9 @@ class Escena
    void pulsarRaton(int boton, int status, int x, int y);
    bool ratonPulsado;
    float x_ant, y_ant;
+
+   void analizarClick(int x, int y);
+   void dibujar_seleccion();
 
 };
 #endif
