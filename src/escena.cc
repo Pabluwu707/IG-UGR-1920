@@ -22,12 +22,11 @@ Escena::Escena()
    // Cámaras
    Camara camara0(Tupla3f(0.0,250.0,600.0),Tupla3f(0.0,50.0,0.0), Tupla3f(0.0,1.0,0.0),
                   ORTOGONAL, Front_plane, Back_plane, -300.0, 300.0, 300.0, -300.0);
+   //camarasEscena.push_back(camara0);
 
-   camarasEscena.push_back(camara0);
-
-   cout << "Datos de la camara:" << endl;
-   cout << "Eye:" << camarasEscena[0].eye << endl;
-
+   Camara camara1(Tupla3f(0.0,250.0,600.0),Tupla3f(0.0,50.0,0.0), Tupla3f(0.0,1.0,0.0),
+                  PERSPECTIVA, Front_plane, Back_plane, -50.0, 50.0, 50.0, -50.0);
+   camarasEscena.push_back(camara1);
 
    // Crear los objetos de la escena....
    cubo = new Cubo(50);
@@ -825,22 +824,24 @@ void Escena::teclaEspecial( int Tecla1, int x, int y )
    switch ( Tecla1 )
    {
 	   case GLUT_KEY_LEFT:
-         Observer_angle_y-- ;
+         camarasEscena[camaraActiva].rotarYExaminar(-2.0*M_PI/180.0);
          break;
 	   case GLUT_KEY_RIGHT:
-         Observer_angle_y++ ;
+         camarasEscena[camaraActiva].rotarYExaminar(2.0*M_PI/180.0);
          break;
 	   case GLUT_KEY_UP:
-         Observer_angle_x-- ;
+         camarasEscena[camaraActiva].rotarXExaminar(2.0*M_PI/180.0);
          break;
 	   case GLUT_KEY_DOWN:
-         Observer_angle_x++ ;
+         camarasEscena[camaraActiva].rotarXExaminar(-2.0*M_PI/180.0);
          break;
 	   case GLUT_KEY_PAGE_UP:
-         Observer_distance *=1.2 ;
+         camarasEscena[camaraActiva].zoom(1/1.2);
+         change_projection(1.0);
          break;
 	   case GLUT_KEY_PAGE_DOWN:
-         Observer_distance /= 1.2 ;
+         camarasEscena[camaraActiva].zoom(1.2);
+         change_projection(1.0);
          break;
 	}
 
@@ -914,5 +915,43 @@ void Escena::animarModeloJerarquico() {
 void Escena::animarLuces() {
    if (luzPuntualEnMovimiento) {
       giroLuz += (incrementoLuz);
+   }
+}
+
+void Escena::moverRaton(int x, int y){
+   if(ratonPulsado){
+      //if(camaras[camaraActiva].getSeleccionado() == NOSEL){
+         camarasEscena[camaraActiva].girar(x-x_ant, y-y_ant);
+      //} else {
+      //   camarasEscena[camaraActiva].rotarXExaminar(-0.25*(y-y_ant)*M_PI/180.0);
+      //   camarasEscena[camaraActiva].rotarYExaminar(-0.25*(x-x_ant)*M_PI/180.0);
+      //}
+      x_ant = x;
+      y_ant = y;
+   }
+}
+
+void Escena::pulsarRaton(int boton, int status, int x, int y){
+   if(boton == GLUT_RIGHT_BUTTON){
+      //Mover primera persona
+      if(status == GLUT_DOWN){
+         x_ant = x;
+         y_ant = y;
+         ratonPulsado = true;
+      } else {
+         ratonPulsado = false;
+      }
+   } else if (boton == GLUT_LEFT_BUTTON){
+      //Seleccionar objeto
+      /*if(status == GLUT_DOWN){
+         dibujar_seleccion();
+         procesar_click(x,y);
+      }*/
+   } else if (boton == 3){
+      camarasEscena[camaraActiva].zoom(1/1.2);
+      change_projection(1.0);
+   } else if (boton == 4){
+      camarasEscena[camaraActiva].zoom(1.2);
+      change_projection(1.0);
    }
 }

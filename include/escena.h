@@ -119,6 +119,10 @@ class Escena
 
    void animarModeloJerarquico();
    void animarLuces();
+   void moverRaton(int x, int y);
+   void pulsarRaton(int boton, int status, int x, int y);
+   bool ratonPulsado;
+   float x_ant, y_ant;
 
 };
 #endif
