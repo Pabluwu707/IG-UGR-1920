@@ -108,6 +108,7 @@ class Escena
 
 	// Dibujar
 	void dibujar() ;
+	void dibujarCorrecto(GLenum modo);
 
    //
    void dibujarUsandoVisualizacion(GLenum modoVisualizacionAUsar, bool visAjedrez);

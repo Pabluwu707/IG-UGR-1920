@@ -178,27 +178,15 @@ void Escena::dibujar() {
 
 
    if (visPuntos) {
-      glDisable(GL_LIGHTING);
-      glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
-      dibujarUsandoVisualizacion(GL_POINT, visAjedrez);
+		dibujarCorrecto(GL_POINTS);
    }
 
    if (visLineas) {
-      glDisable(GL_LIGHTING);
-      glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-      dibujarUsandoVisualizacion(GL_LINE, visAjedrez);
+		dibujarCorrecto(GL_LINES);
    }
 
-   if (visSolido) {
-      glDisable(GL_LIGHTING);
-      glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-      dibujarUsandoVisualizacion(GL_FILL, visAjedrez);
-   }
-
-   if (visAjedrez) {
-      glDisable(GL_LIGHTING);
-      glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-      dibujarUsandoVisualizacion(GL_FILL, visAjedrez);
+   if (visSolido || visAjedrez) {
+		dibujarCorrecto(GL_FILL);
    }
 
    if (visLuces) {
@@ -214,7 +202,11 @@ void Escena::dibujar() {
    }
 }
 
-
+void Escena::dibujarCorrecto(GLenum modo){
+      glDisable(GL_LIGHTING);
+      glPolygonMode(GL_FRONT_AND_BACK, modo);
+      dibujarUsandoVisualizacion(modo, visAjedrez);
+}
 
 void Escena::dibujarUsandoVisualizacion(GLenum modoVisualizacionAUsar, bool visAjedrez) {
    if (cuboActivado) {
